@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.SystemFunctionMapper">
+    <resultMap id="BaseResultMap" type="com.entity.SystemFunction">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="function_code" jdbcType="VARCHAR" property="functionCode"/>
+        <result column="function_name" jdbcType="VARCHAR" property="functionName"/>
+        <result column="function_url" jdbcType="VARCHAR" property="functionUrl"/>
+        <result column="order_field" jdbcType="VARCHAR" property="orderField"/>
+        <result column="status" jdbcType="CHAR" property="status"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="parent_id" jdbcType="VARCHAR" property="parentId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, function_code, function_name, function_url, order_field, status, gmt_create, 
+    gmt_modified, parent_id
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from system_function
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from system_function
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.entity.SystemFunction">
+    insert into system_function (id, function_code, function_name, 
+      function_url, order_field, status, 
+      gmt_create, gmt_modified, parent_id
+      )
+    values (#{id,jdbcType=BIGINT}, #{functionCode,jdbcType=VARCHAR}, #{functionName,jdbcType=VARCHAR}, 
+      #{functionUrl,jdbcType=VARCHAR}, #{orderField,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{parentId,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.entity.SystemFunction">
+        insert into system_function
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="functionCode != null">
+                function_code,
+            </if>
+            <if test="functionName != null">
+                function_name,
+            </if>
+            <if test="functionUrl != null">
+                function_url,
+            </if>
+            <if test="orderField != null">
+                order_field,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create,
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified,
+            </if>
+            <if test="parentId != null">
+                parent_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="functionCode != null">
+                #{functionCode,jdbcType=VARCHAR},
+            </if>
+            <if test="functionName != null">
+                #{functionName,jdbcType=VARCHAR},
+            </if>
+            <if test="functionUrl != null">
+                #{functionUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="orderField != null">
+                #{orderField,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=CHAR},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="parentId != null">
+                #{parentId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.entity.SystemFunction">
+        update system_function
+        <set>
+            <if test="functionCode != null">
+                function_code = #{functionCode,jdbcType=VARCHAR},
+            </if>
+            <if test="functionName != null">
+                function_name = #{functionName,jdbcType=VARCHAR},
+            </if>
+            <if test="functionUrl != null">
+                function_url = #{functionUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="orderField != null">
+                order_field = #{orderField,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=CHAR},
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="parentId != null">
+                parent_id = #{parentId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.entity.SystemFunction">
+    update system_function
+    set function_code = #{functionCode,jdbcType=VARCHAR},
+      function_name = #{functionName,jdbcType=VARCHAR},
+      function_url = #{functionUrl,jdbcType=VARCHAR},
+      order_field = #{orderField,jdbcType=VARCHAR},
+      status = #{status,jdbcType=CHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      parent_id = #{parentId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+    <select id="listSystemFunctionByRoleId" resultMap="BaseResultMap">
+        SELECT
+        id
+        ,function_code
+        ,function_name
+        ,function_url
+        ,parent_id
+        FROM system_function
+        WHERE function_code IN (
+        SELECT function_code FROM role_function WHERE role_id = #{roleId}) AND status = '1'
+        ORDER BY order_field
+    </select>
+</mapper>

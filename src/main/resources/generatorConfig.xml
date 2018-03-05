@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	<!-- 数据库驱动位置 -->
+	<classPathEntry location="D:\mysql-connector-java-5.1.40.jar" />
+
+	<context id="java" targetRuntime="MyBatis3">
+		<!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+		<commentGenerator>
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+		<!-- 数据库连接参数 -->
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://192.168.1.166:1112/bank_data_analysis" userId="root"
+			password="look1980score" />
+		<!--把JDBC DECIMAL 和  NUMERIC 类型解析为java.math.BigDecimal. (默认false，即把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer ) -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+		<!-- entity存放目录 -->
+		<javaModelGenerator targetPackage="com.entity" targetProject="src/main/java" />
+		<!-- mapper xml存放目录 -->
+		<sqlMapGenerator targetPackage="com.mapper" targetProject="src/main/java" />
+		<!-- mapper接口存放目录-->
+		<javaClientGenerator targetPackage="com.dao" targetProject="src/main/java" type="XMLMAPPER" />
+		<!--对应数据库表 mysql可以加入主键自增 字段命名 忽略某字段等-->
+
+        <table tableName="xtsz_wjjx" domainObjectName="XtszWjjx"
+        	enableCountByExample="false"
+            enableDeleteByExample="false"
+            enableSelectByExample="false"
+            enableUpdateByExample="false"
+            selectByExampleQueryId="false"/>
+	</context>
+</generatorConfiguration>

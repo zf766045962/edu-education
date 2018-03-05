@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>高考志愿填报辅导系统</title>
+    <link rel="stylesheet" type="text/css" href="/assets/edu/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="/assets/edu/css/css.css">
+    <script type="text/javascript" src="/assets/edu/jquery-1.11.3.js"></script>
+    <script type="text/javascript" src="/assets/edu/layui/layui.js"></script>
+    <script type="text/javascript" src="/assets/edu/js/index.js?v=201802131400"></script>
+</head>
+<body class="layui-layout-body">
+<form name="ff" method="post">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <ul class="m-right">
+                <li style="line-height: 24px; margin-right: 20px;" id="welUser">欢迎你！<br><span th:text="${session.user.getLoginRoleId()}">操作员</span><span th:text="${session.user.loginNickName}">nbaisino</span></li>
+                <li class="close-container" onclick="loginout()" style="cursor:pointer;"><i class="iconfont m-close">&#xe60d;</i>
+                </li>
+            </ul>
+        </div>
+
+        <div class="layui-side bg-left">
+
+            <div class="left-title">功能菜单</div>
+            <div class="navBar layui-side-scroll" lay-filter="navTree"></div>
+        </div>
+
+        <div class="layui-body layui-form">
+            <div class="layui-tab mar-tb0 m-container " lay-filter="bodyTab" id="top_tabs_box">
+                <ul class="layui-tab-title layui-tab-mtitle top_tab pad-l10 fir-title" id="top_tabs">
+                    <li class="layui-this" lay-id=""><cite>用户管理</cite></li>
+                </ul>
+                <div class="layui-tab-content clildFrame sec-title m-content">
+                    <div class="layui-tab-item layui-show">
+                        <iframe src="/user/" class="mframe" frameborder="no" scrolling="auto"
+                                name="view2"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        var datas = [];
+        layui.config({
+            base: "js/"
+        }).use(['element', 'layer', 'jquery'], function () {
+            var $ = layui.jquery, element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+
+            //加载菜单
+            $(function () {
+                // getUser();
+                $.ajax({
+                    url: "/systemFunction/lisUsertFunction",
+                    type: "get",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code == 90000) {
+                            datas = data.data;
+                            var ulHtml = '<ul class="layui-nav layui-nav-tree" lay-filter="navTree">';
+                            $.each(datas, function (i, e) {
+                                if (e.parentId == '0') {
+                                    var functionCode = e.functionCode;
+                                    ulHtml += '<li class="layui-nav-item">';
+                                    ulHtml += '<a href="javascript:void(0);">';
+                                    ulHtml += '<cite>' + e.functionName + '</cite><span class="layui-nav-more"></span></a>';
+                                    ulHtml += '<dl class="layui-nav-child">';
+                                    $.each(datas, function (j, child) {
+                                        if (functionCode == child.parentId) {
+                                            ulHtml += '<dd><a href="javascript:void(0);" data-url=\"' + child.functionUrl + '\">' +
+                                                '<cite>' + child.functionName + '</cite></a></dd>';
+                                        }
+                                    });
+                                }
+                                ulHtml += '</dl></li>';
+                            });
+                            ulHtml += '<span class="layui-nav-bar"></span></ul>';
+                            $(".navBar").empty().html(ulHtml).height($(window).height() - 245);
+                            //初始化菜单
+                            element.init();
+                            $(window).resize(function () {
+                                $(".navBar").height($(window).height() - 245);
+                            });
+
+                            element.on('nav(navTree)', function (elem) {
+                                if (elem.find("a").attr("data-url")) {
+                                    //如果不存在子级
+                                    if (elem.find("a").siblings().length == 0) {
+                                        addTab(elem.find("a"));
+                                        $("#hrefTab").html('<i class=\"iconfont\">&#xe626;</i>' + elem.find("a").find("cite").text());
+                                        //go(elem.find("a").attr("data-url"));
+                                    }
+                                }
+                            });
+                        }
+                    },
+                    error: function (data) {
+
+                    }
+                })
+            });
+        });
+
+        function getUser() {
+            $.ajax({
+                url: "/user/getUser",
+                type: "get",
+                dataType: "json",
+                data: {
+                    "date": new Date()
+                },
+                success: function (data) {
+                    if (data.code == 90000) {
+                        $("#welUser").html("欢迎你！<br>" + data.data.cnname);
+                    } else if (result.code == 10000) {
+                        layer.msg(result.msg);
+                        top.location.href = "/login";
+                    }
+                },
+                error: function (data) {
+
+                }
+            })
+        }
+
+        function loginout() {
+            layer.confirm('确认要退出吗？', {
+                btn: ['确定', '取消']//按钮
+            }, function (index) {
+                layer.close(index);
+                out();
+            });
+        }
+
+        function out() {
+            $.ajax({
+                url: "/login/logout",
+                type: "get",
+                dataType: "json",
+                success: function (data) {
+                    if (data.code == 90000) {
+                        top.location.href = "/login";
+                    }
+                },
+                error: function (data) {
+
+                }
+            })
+        }
+    </script>
+</form>
+</body>
+</html>

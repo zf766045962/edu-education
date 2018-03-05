@@ -1,0 +1,354 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link type="text/css" th:href="@{/assets/edu/to/topjui/css/topjui.core.min.css}" rel="stylesheet">
+    <link type="text/css" th:href="@{/assets/edu/to/topjui/themes/default/topjui.blue.css}" rel="stylesheet"
+          id="dynamicTheme"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/edu/css/ztree/ztree.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/edu/layui/css/layui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/edu/css/css.css}">
+    <script type="text/javascript" th:src="@{/assets/edu/js/jquery-1.11.3.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/edu/to/static/public/js/topjui.config.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/edu/to/topjui/js/topjui.core.min.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/edu/to/topjui/js/locale/topjui.lang.zh_CN.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/edu/js/ztree/ztree.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/edu/layui/layui.js}"></script>
+</head>
+<body>
+<div class="ztree-container " data-toggle="topjui-layout" data-options="fit:true">
+    <div class="ztree-left" data-options="region:'west',split:true" style="width: 300px">
+        <div id="layui-table-page1">
+            <div class="layui-box layui-laypage layui-laypage-molv" id="layui-laypage-1">
+                &nbsp;&nbsp;&nbsp;
+                <a href="javascript:;" class="layui-laypage-curr" title="" onclick="addRole()"><em
+                        class="layui-laypage-em" style="background-color:#2d5eb7;"></em><em>新增</em></a>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="javascript:;" class="layui-laypage-curr" title="" onclick="delRole()"><em
+                        class="layui-laypage-em" style="background-color:#2d5eb7;"></em><em>删除</em></a>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="javascript:;" class="layui-laypage-curr" title="" onclick="updateRole()"><em
+                        class="layui-laypage-em" style="background-color:#2d5eb7;"></em><em>修改</em></a>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="javascript:;" class="layui-laypage-curr" title="" onclick="sendFunction()"><em
+                        class="layui-laypage-em" style="background-color:#2d5eb7;"></em><em>分配</em></a>
+            </div>
+        </div>
+        <form class="layui-form" name="userForm">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <select id="roleId" name="role" lay-filter="myselect">
+                            <option value="">请选择</option>
+                            <option th:each="role :${roles}" th:value="${role.id}" th:text="${role.roleName}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="ztree-right" data-options="region:'center'">
+        <div class="ztree">
+            <ul class="ztree" id="mt-treeGn"></ul>
+        </div>
+    </div>
+</div>
+<!--弹出层-->
+<div class="m-modal" id="out">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">角色名称</label>
+                <input class="layui-input" type="text" id="roleName">
+                <input class="layui-input" value="" type="hidden" id="hidRoleId">
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    var form;
+    layui.use(['layer', 'form'], function () {
+        form = layui.form;
+        form.on('select(myselect)', function (data) {
+            var roleId = data.value;
+            var zTree_Menu = $.fn.zTree.getZTreeObj("mt-treeGn");
+            zTree_Menu.checkAllNodes(false);
+            if (roleId == null || roleId == "") {
+                return;
+            }
+            $.get("/roleFunction/findFunctionCode", {"roleId": roleId}, function (data) {
+                if (data.code == 90000) {
+                    var list = data.data;
+                    if (list != null && list.length > 0) {
+                        for (var i = 0, l = list.length; i < l; i++) {// 提高效率，不用每次都计算长度
+                            zTree_Menu.checkNode(zTree_Menu.getNodeByParam("id", list[i]), true);
+                            zTreeOnCheck();
+                        }
+                    }
+                }
+            });
+        });
+    });
+
+    function addRole() {
+        insertOrUpdate = "insert";
+        layer.open({
+            title: '添加角色',
+            type: 1,
+            skin: 'layui-layer-demo t-layer-add ', //样式类名
+            closeBtn: 1,
+            anim: 2,
+            shadeClose: true, //开启遮罩关闭
+            content: $("#out"),
+            btn: ['确定', '取消'],
+            yes: function (index, layero) {
+                save(index);
+            }
+        })
+    }
+
+    var insertOrUpdate = "";
+
+    function updateRole() {
+        var roleId = $('#roleId').find('option:selected').val();//选中的值
+        var roleName = $('#roleId').find('option:selected').text();//选中的值
+        if (roleId == "") {
+            layer.msg("请选择角色！", {area: ['150px', '50px']});
+            return false;
+        }
+        insertOrUpdate = "update";
+        $("#hidRoleId").val(roleId);
+        $("#roleName").val(roleName);
+        layer.open({
+            title: '添加角色',
+            type: 1,
+            skin: 'layui-layer-demo t-layer-add ', //样式类名
+            closeBtn: 1,
+            anim: 2,
+            shadeClose: true, //开启遮罩关闭
+            content: $("#out"),
+            btn: ['确定', '取消'],
+            yes: function (index, layero) {
+                save(index);
+            }
+        })
+    }
+
+    $(function () {
+        tree();
+    });
+
+    function sendFunction() {
+        var id = $('#roleId').find('option:selected').val();//选中的值
+        if (id == "" || id == null) {
+            layer.msg("请选择角色！！");
+            return false;
+        }
+        $("#upgn").attr("disabled", "disabled");
+        var treeObj = $.fn.zTree.getZTreeObj("mt-treeGn");
+        var nodes = treeObj.getCheckedNodes(true);
+        var s = "";
+        if (nodes.length != 0) {
+            for (var i = 0, l = nodes.length; i < l; i++) {
+                if (i < nodes.length - 1) {
+                    s += nodes[i].id + ",";
+                }
+                if (i == nodes.length - 1) {
+                    s += nodes[i].id;
+                }
+            }
+        }
+        $.ajax({
+            url: "/roleFunction/updateFunctionCode",
+            type: "post",
+            dataType: "json",
+            data: {
+                "roleId": id,
+                "codes": s
+            },
+            success: function (data) {
+                if (data.code == 90000) {
+                    layer.msg("分配成功！");
+                } else if (data.code == 30002) {
+                    layer.msg(data.msg);
+                    setTimeout(function () {
+                        top.location.href = "/login";
+                    }, 5000);
+                } else {
+                    layer.msg(data.msg);
+                }
+            }
+        })
+    }
+
+    //功能树
+    var settings = {
+        check: {
+            enable: true,
+            chkboxType: {"Y": "ps", "N": "ps"},
+            chkStyle: "checkbox"
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        },
+        callback: {
+            onCheck: this.zTreeOnCheck
+        }
+    };
+
+    function zTreeOnCheck(event, treeId, treeNode) {
+        var zTree = $.fn.zTree.getZTreeObj("mt-treeGn"),
+            nodes = zTree.getCheckedNodes(true),
+            v = "";
+        for (var i = 0, l = nodes.length; i < l; i++) {
+            v += nodes[i].name + ",";
+        }
+    }
+
+    function tree() {
+        $.ajax({
+            url: "/systemFunction/tree",
+            type: "get",
+            dataType: "json",
+            success: function (data) {
+                if (data.code == 90000) {
+                    var nodes = data.data;
+                    $.fn.zTree.init($("#mt-treeGn"), settings, nodes);
+                } else if (data.code == 30002) {
+                    layer.msg(data.msg);
+                    setTimeout(function () {
+                        top.location.href = "/login";
+                    }, 5000);
+                } else {
+                    layer.msg(data.msg);
+                }
+
+            },
+            error: function (data) {
+
+            }
+        })
+    }
+
+    function getRole() {
+        $.ajax({
+            url: "/role/listRole",
+            type: "get",
+            dataType: "json",
+            success: function (data) {
+                if (data.code == 90000) {
+                    var list = data.data;
+                    var html = "";
+                    $.each(list, function (i, c) {
+                        html += '<option value="' + c.id + '">' + c.roleName + '</option>';
+                    });
+                    $('#roleId').html(html);
+                    form.render('select');
+                } else if (data.code == 30002) {
+                    layer.msg(data.msg);
+                    setTimeout(function () {
+                        top.location.href = "/login";
+                    }, 5000);
+                } else {
+                    layer.msg(data.msg);
+                }
+            }
+        });
+    }
+
+    function save(index) {
+        var roleName = $("#roleName").val();
+        if (roleName == "" || roleName == null) {
+            layer.msg("请输入角色名称！！");
+            return false;
+        }
+        if (insertOrUpdate == "insert") {
+            $.post("/role/addRole", {"roleName": roleName}, function (data) {
+                if (data.code == 90000) {
+                    getRole();
+                    closeDiv();
+                    layer.msg("添加成功!!");
+                    layer.close(index);
+                } else if (data.code == 30002) {
+                    layer.msg(data.msg);
+                    setTimeout(function () {
+                        top.location.href = "/login";
+                    }, 5000);
+                } else {
+                    layer.msg(data.msg);
+                }
+            });
+        } else {
+            $.post("/role/updateRole", {
+                    "roleName": roleName
+                    , "id": $("#hidRoleId").val()
+                }
+                , function (data) {
+                    if (data.code == 90000) {
+                        getRole();
+                        layer.msg("修改成功!!");
+                        closeDiv();
+                        var treeObj = $.fn.zTree.getZTreeObj("mt-treeGn");
+                        treeObj.checkAllNodes(false);
+                        layer.close(index);
+                    } else if (data.code == 30002) {
+                        layer.msg(data.msg);
+                        setTimeout(function () {
+                            top.location.href = "/login";
+                        }, 5000);
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                });
+        }
+    }
+
+    function closeDiv() {
+        $("#hidRoleId").val("");
+        $("#roleName").val("");
+    }
+
+    function delRole() {
+        var roleId = $('#roleId').find('option:selected').val();//选中的值
+        if (roleId == "" || roleId == null) {
+            layer.msg("请选择角色！！");
+            return false;
+        }
+        layer.confirm('确定要删除角色吗？', {
+            btn: ['确定', '取消']
+        }, function (index, layero) {
+            $.ajax({
+                url: "/role/del",
+                type: "post",
+                dataType: "json",
+                data: {
+                    "roleId": roleId
+                },
+                success: function (data) {
+                    if (data.code == 90000) {
+                        layer.msg("删除成功!!");
+                        var treeObj = $.fn.zTree.getZTreeObj("mt-treeGn");
+                        treeObj.checkAllNodes(false);
+                        getRole();
+                    } else if (data.code == 30002) {
+                        layer.msg(data.msg);
+                        setTimeout(function () {
+                            top.location.href = "/login";
+                        }, 5000);
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                },
+                error: function (data) {
+                    layer.msg("服务异常")
+                }
+            });
+        });
+    }
+</script>
+</body>
+</html>

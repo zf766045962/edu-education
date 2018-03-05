@@ -1,0 +1,348 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/edu/layui/css/layui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/edu/css/css.css}">
+    <script type="text/javascript" th:src="@{/assets/edu/js/jquery-1.11.3.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/edu/layui/layui.js}"></script>
+</head>
+<body th:inline="none">
+<div class="pad10">
+    <div class="layui-form" action="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="search_user_name">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">中文名</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="search_nick_name">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label"></label>
+                <button class="layui-btn" data-type="reload">搜索</button>
+            </div>
+        </div>
+    </div>
+    <div class="line">
+        <span class=line-title>查询结果</span>
+    </div>
+    <div class="gkwh-tb">
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-primary  layui-btn-sm" data-type="add"><i
+                    class="iconfont">&#xe651;</i>新增
+            </button>
+            <button class="layui-btn layui-btn-primary  layui-btn-sm" data-type="update"><i
+                    class="iconfont">&#xe738;</i>修改
+            </button>
+            <button class="layui-btn layui-btn-primary  layui-btn-sm" data-type="del"><i class="iconfont">&#xe61e;</i>删除
+            </button>
+            <button class="layui-btn layui-btn-primary  layui-btn-sm" data-type="reset"><i class="iconfont">&#xe61e;</i>密码重置
+            </button>
+        </div>
+        <table id="gkwh-list"></table>
+    </div>
+</div>
+<div class="m-modal" id="asd" style="display: none">
+    <form class="layui-form" name="userForm">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-inline">
+                    <input class="layui-input" value="" type="text" id="user_name">
+                    <input class="layui-input" value="" type="hidden" id="userId">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">角色</label>
+                <div class="layui-input-inline">
+                    <select lay-filter="role" id="roleId" name="role">
+                        <option value="">请选择</option>
+                        <option th:each="role :${roleList}" th:value="${role.id}" th:text="${role.roleName}"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+
+            <div class="layui-inline">
+                <label class="layui-form-label">中文名</label>
+                <div class="layui-input-inline">
+                    <input class="layui-input" value="" type="text" id="nick_name">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use(['table', 'form'], function () {
+        var $ = layui.jquery
+            , table = layui.table
+            , form = layui.form;
+        var roleId = "";
+        form.on('select(role)', function (data) {
+            roleId = data.value;
+        });
+        table.render({
+            elem: '#gkwh-list'
+            , url: '/user/listUser'
+            , cols: [[
+                {field: 'id', title: 'ID', checkbox: true, sort: true}
+                , {field: 'userName', width: 100, title: '用户名'}
+                , {field: 'nickName', title: '中文名', sort: true}
+                , {field: 'roleName', title: '角色'}
+                , {field: 'lastLoginDate', title: '最近登录时间', sort: true}
+
+            ]]
+            , id: 'idTest'
+            , request: {
+                pageName: 'currentPage' //页码的参数名称，默认：page
+                , limitName: 'pageSize' //每页数据量的参数名，默认：limit
+            }
+            , response: {
+                statusCode: 90000 //成功的状态码，默认：0
+                , countName: 'count' //数据总数的字段名称，默认：count
+                , dataName: 'data' //数据列表的字段名称，默认：data
+            }
+            , even: true
+            , page: {theme: '#2d5eb7'}
+            , done: function (res, curr, count) {
+                if (res.code == 30002) {
+                    layer.msg(res.msg);
+                    setTimeout(function () {
+                        top.location.href = "/login";
+                    }, 5000);
+                } else if (res.code != 90000) {
+                    layer.msg(res.msg);
+                }
+            }
+        });
+        var active = {
+            reload: function () {
+                var userName = $("#search_user_name").val();
+                var nickName = $("#search_nick_name").val();
+                table.reload('idTest', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        "userName": userName
+                        , "nickName": nickName
+                    }
+                });
+            }
+            , add: function () {
+                layer.open({
+                    type: 1
+                    , skin: 'layui-layer-demo t-layer-add' //样式类名
+                    , closeBtn: 1
+                    , anim: 2
+                    , area: '800px'
+                    , btn: ['确定', '取消']
+                    , content: $("#asd")
+                    , yes: function (index, layero) {
+                        addUser(active, index, roleId);
+                    }
+                    , cancel: function (index, layero) {
+                        layer.close(index);
+                    }
+                });
+            }
+            , update: function () {
+                var checkStatus = table.checkStatus('idTest')
+                    , data = checkStatus.data;
+                if (data.length == 0) {
+                    layer.msg("请选择一个用户！！");
+                    return false;
+                }
+                if (data.length > 1) {
+                    layer.msg("只能选择一个用户！！");
+                    return false;
+                }
+                $.get("/user/getUser", {"id": data[0].id}, function (data) {
+                    if (data.code != 90000) {
+                        layer.msg("查询失败");
+                    } else {
+                        $("#user_name").val(data.data.userName);
+                        $("#nick_name").val(data.data.nickName);
+                        $("#userId").val(data.data.id);
+                        $("select[name=role]").next().find("dd[lay-value='" + data.data.roleId + "']").click();
+                        layer.open({
+                            type: 1
+                            , skin: 'layui-layer-demo t-layer-add' //样式类名
+                            , closeBtn: 1
+                            , anim: 2
+                            , area: '800px'
+                            , btn: ['确定', '取消']
+                            , content: $("#asd")
+                            , yes: function (index, layero) {
+                                editUser(active, index, roleId);
+                            }
+                            , cancel: function (index, layero) {
+                                layer.close(index);
+                            }
+                        });
+                    }
+                });
+            }
+            , del: function () {
+                var checkStatus = table.checkStatus('idTest')
+                    , data = checkStatus.data;
+                if (data.length == 0) {
+                    layer.msg("请选择一个用户！！");
+                    return false;
+                }
+                if (data.length > 1) {
+                    layer.msg("只能选择一个用户！！");
+                    return false;
+                }
+                delUser(data[0].id, active);
+            }
+            , reset: function () {
+                var checkStatus = table.checkStatus('idTest')
+                    , data = checkStatus.data;
+                if (data.length == 0) {
+                    layer.msg("请选择一个用户！！");
+                    return false;
+                }
+                if (data.length > 1) {
+                    layer.msg("只能选择一个用户！！");
+                    return false;
+                }
+                resetPassword(data[0].id);
+            }
+        };
+
+        $('.layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+
+    });
+
+    function resetPassword(id) {
+        layer.confirm('确定要重置当前用户的密码吗？', {
+            btn: ['确定', '取消']
+        }, function (index, layero) {
+            $.post("/user/resetPassword", {"id": id}, function (data) {
+                if (data.code != 90000) {
+                    layer.msg("重置密码失败");
+                } else {
+                    layer.msg("重置密码成功");
+                }
+            });
+        });
+    }
+
+    function getUser(id, roleId, active) {
+
+    }
+
+    function addUser(active, index, roleId) {
+        var userName = $("#user_name").val();
+        var nickName = $("#nick_name").val();
+        if (userName == null || userName == "" || roleId == null || roleId == "") {
+            layer.msg("用户名或角色不能为空");
+            return;
+        }
+        $.ajax({
+            url: "/user/addUser"
+            , type: "post"
+            , dataType: "json"
+            , data: {
+                "userName": userName
+                , "nickName": nickName
+                , "roleId": roleId
+            }
+            , beforeSend: function () {
+                layer.load();
+            }
+            , success: function (result) {
+                layer.closeAll('loading');
+                if (result.code == 30002) {
+                    layer.msg(result.msg);
+                    setTimeout(function () {
+                        top.location.href = "/login";
+                    }, 5000);
+                } else if (result.code == 90000) {
+                    layer.msg("保存成功");
+                    layer.close(index);
+                    active.reload();
+                } else {
+                    layer.msg(result.msg);
+                }
+            }
+            , error: function () {
+                layer.closeAll('loading');
+                layer.msg("保存成功");
+            }
+        });
+    }
+
+    function editUser(active, index, roleId) {
+        var userName = $("#user_name").val();
+        var nickName = $("#nick_name").val();
+        var userId = $("#userId").val();
+        if (userName == null || userName == "" || roleId == null || roleId == "") {
+            layer.msg("用户名或角色不能为空");
+            return;
+        }
+        $.ajax({
+            url: "/user/editUser"
+            , type: "post"
+            , dataType: "json"
+            , data: {
+                "nickName": nickName
+                , "roleId": roleId
+                , "userName": userName
+                , "id": userId
+            }
+            , beforeSend: function () {
+                layer.load();
+            }
+            , success: function (result) {
+                layer.closeAll('loading');
+                if (result.code == 30002) {
+                    layer.msg(result.msg);
+                    setTimeout(function () {
+                        top.location.href = "/login";
+                    }, 5000);
+                } else if (result.code == 90000) {
+                    layer.msg("保存成功");
+                    layer.close(index);
+                    active.reload();
+                } else {
+                    layer.msg(result.msg);
+                }
+            }
+            , error: function () {
+                layer.closeAll('loading');
+            }
+        });
+    }
+
+    function delUser(id, active) {
+        layer.confirm('确定要删除当前用户吗!', {
+            btn: ['确定', '取消']
+        }, function (index, layero) {
+            $.post("/user/delUser", {"id": id}, function (result) {
+                if (result.code == 90000) {
+                    layer.msg("删除成功");
+                    active.reload();
+                } else {
+                    layer.msg(result.msg);
+                }
+            });
+        });
+    }
+</script>
+</body>
+</html>

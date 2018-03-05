@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>登录</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!-- jquery -->
+    <script type="text/javascript" th:src="@{/assets/edu/js/jquery.min.js}"></script>
+    <!-- layer -->
+    <script type="text/javascript" th:src="@{/assets/edu/layui/layui.js}"></script>
+    <!-- md5.js -->
+    <script type="text/javascript" th:src="@{/assets/edu/js/md5.min.js}"></script>
+    <!-- common.js -->
+    <script type="text/javascript" th:src="@{/assets/edu/js/common.js}"></script>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/edu/layui/css/layui.css}">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/edu/css/css.css}">
+</head>
+<body>
+<div class="login-contaner">
+    <form id="loginForm" name="loginForm" method="post">
+        <div class="login-box">
+            <div class="login-title">高考志愿填报辅导系统</div>
+            <div class="login-tb-container">
+                <table class="login-tb">
+                    <tbody>
+                    <tr>
+                        <td>用户名</td>
+                        <td><input type="text" class="login-input" id="username" name="username" placeholder="用户名"></td>
+                    </tr>
+                    <tr>
+                        <td>密码</td>
+                        <td><input type="password" class="login-input" id="password" name="password" placeholder="密码"
+                                   minlength="6" maxlength="16"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><a class="m-btn bg-white login-qk" onclick="reset()" th:text="重置"></a>
+                            <a class="m-btn bg-login" onclick="login()" th:text="登录"></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+<script>
+    layui.use(['layer'], function () {
+        var layer = layui.layer;
+    });
+
+    $(document).keyup(function (e) {//捕获文档对象的按键弹起事件
+        if (e.keyCode == 13) {//按键信息对象以参数的形式传递进来了
+            login();
+        }
+    });
+
+    function login() {
+        doLogin()
+    }
+
+    function reset() {
+        $("#username").val("");
+        $("#password").val("");
+    }
+
+    function doLogin() {
+        var userName = $("#username").val();
+        var inputPass = $("#password").val();
+        if (userName == null || userName == "" || inputPass == null || inputPass == "") {
+            layer.msg("用户名或密码不能为空");
+            return;
+        }
+        var salt = g_passsword_salt;
+        var str = "" + salt.charAt(0) + salt.charAt(2) + inputPass + salt.charAt(5) + salt.charAt(4);
+        var password = md5(str);
+        layer.load();
+        $.ajax({
+            url: "/login/do_login",
+            type: "POST",
+            data: {
+                "userName": userName,
+                "password": password
+            },
+            success: function (data) {
+                layer.closeAll();
+                if (data.code == 90000) {
+                    layer.msg("成功");
+                    window.location.href = "/index";
+                } else {
+                    layer.msg(data.msg);
+                }
+            },
+            error: function () {
+                layer.closeAll();
+                layer.msg("服务异常");
+            }
+        });
+    }
+</script>
+</html>
