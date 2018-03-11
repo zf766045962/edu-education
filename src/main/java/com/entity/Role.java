@@ -14,6 +14,7 @@ import java.util.Date;
  * @since 1.0.0
  */
 public class Role implements Serializable {
+    private static final long serialVersionUID = 2719213985120189161L;
     private Long id;
     @NotNull
     @Length(max = 50, message = "角色名最大长度为50")
