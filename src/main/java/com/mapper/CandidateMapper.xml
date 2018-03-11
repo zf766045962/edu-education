@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.CandidateMapper" >
+  <resultMap id="BaseResultMap" type="com.entity.Candidate" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="total_score" property="totalScore" jdbcType="INTEGER" />
+    <result column="ranking" property="ranking" jdbcType="INTEGER" />
+    <result column="physics" property="physics" jdbcType="INTEGER" />
+    <result column="chemistry" property="chemistry" jdbcType="INTEGER" />
+    <result column="biology" property="biology" jdbcType="INTEGER" />
+    <result column="technology" property="technology" jdbcType="INTEGER" />
+    <result column="history" property="history" jdbcType="INTEGER" />
+    <result column="geography" property="geography" jdbcType="INTEGER" />
+    <result column="politics" property="politics" jdbcType="INTEGER" />
+    <result column="contact_number" property="contactNumber" jdbcType="VARCHAR" />
+    <result column="consultant_id" property="consultantId" jdbcType="BIGINT" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, total_score, ranking, physics, chemistry, biology, technology, history, 
+    geography, politics, contact_number, consultant_id, gmt_create, gmt_modified
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from candidate
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from candidate
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.entity.Candidate" >
+    insert into candidate (id, name, total_score, 
+      ranking, physics, chemistry, 
+      biology, technology, history, 
+      geography, politics, contact_number, 
+      consultant_id, gmt_create, gmt_modified
+      )
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{totalScore,jdbcType=INTEGER}, 
+      #{ranking,jdbcType=INTEGER}, #{physics,jdbcType=INTEGER}, #{chemistry,jdbcType=INTEGER}, 
+      #{biology,jdbcType=INTEGER}, #{technology,jdbcType=INTEGER}, #{history,jdbcType=INTEGER}, 
+      #{geography,jdbcType=INTEGER}, #{politics,jdbcType=INTEGER}, #{contactNumber,jdbcType=VARCHAR}, 
+      #{consultantId,jdbcType=BIGINT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.entity.Candidate" >
+    insert into candidate
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="totalScore != null" >
+        total_score,
+      </if>
+      <if test="ranking != null" >
+        ranking,
+      </if>
+      <if test="physics != null" >
+        physics,
+      </if>
+      <if test="chemistry != null" >
+        chemistry,
+      </if>
+      <if test="biology != null" >
+        biology,
+      </if>
+      <if test="technology != null" >
+        technology,
+      </if>
+      <if test="history != null" >
+        history,
+      </if>
+      <if test="geography != null" >
+        geography,
+      </if>
+      <if test="politics != null" >
+        politics,
+      </if>
+      <if test="contactNumber != null" >
+        contact_number,
+      </if>
+      <if test="consultantId != null" >
+        consultant_id,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="totalScore != null" >
+        #{totalScore,jdbcType=INTEGER},
+      </if>
+      <if test="ranking != null" >
+        #{ranking,jdbcType=INTEGER},
+      </if>
+      <if test="physics != null" >
+        #{physics,jdbcType=INTEGER},
+      </if>
+      <if test="chemistry != null" >
+        #{chemistry,jdbcType=INTEGER},
+      </if>
+      <if test="biology != null" >
+        #{biology,jdbcType=INTEGER},
+      </if>
+      <if test="technology != null" >
+        #{technology,jdbcType=INTEGER},
+      </if>
+      <if test="history != null" >
+        #{history,jdbcType=INTEGER},
+      </if>
+      <if test="geography != null" >
+        #{geography,jdbcType=INTEGER},
+      </if>
+      <if test="politics != null" >
+        #{politics,jdbcType=INTEGER},
+      </if>
+      <if test="contactNumber != null" >
+        #{contactNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="consultantId != null" >
+        #{consultantId,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.entity.Candidate" >
+    update candidate
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="totalScore != null" >
+        total_score = #{totalScore,jdbcType=INTEGER},
+      </if>
+      <if test="ranking != null" >
+        ranking = #{ranking,jdbcType=INTEGER},
+      </if>
+      <if test="physics != null" >
+        physics = #{physics,jdbcType=INTEGER},
+      </if>
+      <if test="chemistry != null" >
+        chemistry = #{chemistry,jdbcType=INTEGER},
+      </if>
+      <if test="biology != null" >
+        biology = #{biology,jdbcType=INTEGER},
+      </if>
+      <if test="technology != null" >
+        technology = #{technology,jdbcType=INTEGER},
+      </if>
+      <if test="history != null" >
+        history = #{history,jdbcType=INTEGER},
+      </if>
+      <if test="geography != null" >
+        geography = #{geography,jdbcType=INTEGER},
+      </if>
+      <if test="politics != null" >
+        politics = #{politics,jdbcType=INTEGER},
+      </if>
+      <if test="contactNumber != null" >
+        contact_number = #{contactNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="consultantId != null" >
+        consultant_id = #{consultantId,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.entity.Candidate" >
+    update candidate
+    set name = #{name,jdbcType=VARCHAR},
+      total_score = #{totalScore,jdbcType=INTEGER},
+      ranking = #{ranking,jdbcType=INTEGER},
+      physics = #{physics,jdbcType=INTEGER},
+      chemistry = #{chemistry,jdbcType=INTEGER},
+      biology = #{biology,jdbcType=INTEGER},
+      technology = #{technology,jdbcType=INTEGER},
+      history = #{history,jdbcType=INTEGER},
+      geography = #{geography,jdbcType=INTEGER},
+      politics = #{politics,jdbcType=INTEGER},
+      contact_number = #{contactNumber,jdbcType=VARCHAR},
+      consultant_id = #{consultantId,jdbcType=BIGINT},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
