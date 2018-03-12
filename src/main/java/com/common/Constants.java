@@ -6,9 +6,9 @@ package com.common;
  * @author pgs
  */
 public class Constants {
-    public static final String simplifyTimestampPattern = "yyyyMMddHHmmss";
+    public static final String SIMPLIFY_TIMESTAMP_PATTERN = "yyyyMMddHHmmss";
 
-    public static final String timestampPattern = "yyyy-MM-dd HH:mm:ss";
+    public static final String TIMESTAMP_PATTERN = "yyyy-MM-dd HH:mm:ss";
     /**
      * session name
      */
@@ -25,4 +25,12 @@ public class Constants {
      * 文件域名称
      */
     public static final String FILE_NAME = "file";
+    /**
+     * 普高计划数据
+     */
+    public static final String FILE_TYPE_PLAN = "1";
+    /**
+     * 投档数据
+     */
+    public static final String FILE_TYPE_SUBMIT = "2";
 }
