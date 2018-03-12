@@ -4,11 +4,11 @@ import com.common.Constants;
 import com.common.result.CodeMsg;
 import com.common.result.Result;
 import com.entity.SystemOpeningTime;
-import com.entity.User;
 import com.service.SystemOpeningTimeService;
 import com.service.UserService;
 import com.util.MD5Util;
 import com.vo.LoginUser;
+import com.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,7 +47,7 @@ public class LoginController {
             @RequestParam("userName") String userName
             , @RequestParam("password") String password
             , HttpSession session) {
-        User user = userService.getUserByName(userName);
+        UserVo user = userService.getUserByName(userName);
         if (user == null) {
             return Result.error(CodeMsg.USER_NOT_EXISTS);
         }
@@ -73,6 +73,7 @@ public class LoginController {
         loginUser.setLoginRoleId(user.getRoleId());
         loginUser.setLoginId(user.getId());
         loginUser.setLoginUserName(userName);
+        loginUser.setLoginRoleName(user.getRoleName());
         session.setAttribute(Constants.SESSION_NAME, loginUser);
         //更新登录时间
         userService.updateLastLoginDate(user.getId());
