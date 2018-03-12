@@ -3,6 +3,8 @@ package com.dao;
 import com.entity.Candidate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 考生表repository
  *
@@ -14,13 +16,17 @@ import org.springframework.stereotype.Repository;
 public interface CandidateMapper {
     int deleteByPrimaryKey(Long id);
 
-    int insert(Candidate record);
-
     int insertSelective(Candidate record);
 
     Candidate selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(Candidate record);
 
-    int updateByPrimaryKey(Candidate record);
+    /**
+     * 考生集合
+     *
+     * @param candidate
+     * @return
+     */
+    List<Candidate> listCandidateByCondition(Candidate candidate);
 }
