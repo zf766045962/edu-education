@@ -15,7 +15,7 @@
         <div class="layui-header">
             <ul class="m-right">
                 <li style="line-height: 24px; margin-right: 20px;" id="welUser">欢迎你！<br><span
-                        th:text="${session.user.getLoginRoleId()}">操作员</span><span
+                        th:text="${session.user.loginRoleName}">操作员</span><span
                         th:text="${session.user.loginNickName}">nbaisino</span></li>
                 <li class="close-container" onclick="loginout()" style="cursor:pointer;"><i class="iconfont m-close">&#xe60d;</i>
                 </li>
