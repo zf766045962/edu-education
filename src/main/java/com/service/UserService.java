@@ -56,7 +56,7 @@ public interface UserService {
      * @param userName 用户名
      * @return 用户信息
      */
-    User getUserByName(String userName);
+    UserVo getUserByName(String userName);
 
     /**
      * 更新登录时间
