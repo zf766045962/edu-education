@@ -13,33 +13,40 @@
         <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
         <result column="status" property="status" jdbcType="CHAR"/>
     </resultMap>
+    <resultMap id="BaseResultMapVo" type="com.vo.UserVo" extends="BaseResultMap">
+        <result column="roleName" property="roleName" jdbcType="VARCHAR"/>
+    </resultMap>
     <sql id="Base_Column_List">
-    id, user_name, nick_name, password, salt, role_id, last_login_date, gmt_create, gmt_modified, 
-    status
-  </sql>
+        id, user_name, nick_name, password, salt, role_id, last_login_date, gmt_create, gmt_modified,
+        status
+    </sql>
     <select id="getUserById" resultMap="BaseResultMap" parameterType="java.lang.Long">
-        select
-         id
-         , user_name
-         , nick_name
-         , role_id
-        from user
-        where id = #{id,jdbcType=BIGINT}
-    </select>
-    <select id="getUserByName" resultMap="BaseResultMap" parameterType="java.lang.String">
         SELECT
-        id
-        ,user_name
-        ,nick_name
-        ,password
-        ,salt
-        ,role_id
-        FROM user WHERE user_name = #{userName}
+            id,
+            user_name,
+            nick_name,
+            role_id
+        FROM user
+        WHERE id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="getUserByName" resultMap="BaseResultMapVo" parameterType="java.lang.String">
+        SELECT
+            id,
+            user_name,
+            nick_name,
+            password,
+            salt,
+            role_id,
+            (SELECT role_name
+             FROM role
+             WHERE role.id = role_id) AS RoleName
+        FROM user
+        WHERE user_name = #{userName}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from user
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
+        DELETE FROM user
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
     <select id="listUser" resultType="com.vo.UserVo">
         SELECT
         id
@@ -159,16 +166,16 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.entity.User">
-    update user
-    set user_name = #{userName,jdbcType=VARCHAR},
-      nick_name = #{nickName,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
-      salt = #{salt,jdbcType=CHAR},
-      role_id = #{roleId,jdbcType=BIGINT},
-      last_login_date = #{lastLoginDate,jdbcType=TIMESTAMP},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=CHAR}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+        UPDATE user
+        SET user_name       = #{userName,jdbcType=VARCHAR},
+            nick_name       = #{nickName,jdbcType=VARCHAR},
+            password        = #{password,jdbcType=VARCHAR},
+            salt            = #{salt,jdbcType=CHAR},
+            role_id         = #{roleId,jdbcType=BIGINT},
+            last_login_date = #{lastLoginDate,jdbcType=TIMESTAMP},
+            gmt_create      = #{gmtCreate,jdbcType=TIMESTAMP},
+            gmt_modified    = #{gmtModified,jdbcType=TIMESTAMP},
+            status          = #{status,jdbcType=CHAR}
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
 </mapper>
