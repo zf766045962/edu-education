@@ -1,0 +1,109 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta content="" name="description"/>
+    <meta content="webthemez" name="author"/>
+    <script type="text/javascript" th:src="@{/assets/edu/js/jquery-1.11.3.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/edu/layui/css/layui.css}">
+    <script type="text/javascript" th:src="@{/assets/edu/layui/layui.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/edu/css/css.css}">
+    <title>Excel导入页</title>
+</head>
+<body>
+<div class="pad10">
+    <div class="line">
+        <span class=line-title>数据处理</span>
+    </div>
+    <div class="gkwh-tb">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">数据类型</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="upload_type" value="1" lay-filter="file_type" title="普高计划库"
+                           lay-skin="primary" checked>
+                    <input type="radio" name="upload_type" value="2" lay-filter="file_type" title="投档数据"
+                           lay-skin="primary">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-upload">
+                    <button type="button" class="layui-btn layui-btn-normal" id="upload-file">选择文件
+                    </button>
+                    <div class="layui-upload-list">
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th>文件名</th>
+                                <th>文件类型</th>
+                                <th>大小</th>
+                                <th>状态</th>
+                            </tr>
+                            </thead>
+                            <tbody id="demoList"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    layui.use(['upload', 'form', 'element'], function () {
+        var $ = layui.jquery
+            , upload = layui.upload
+            , form = layui.form;
+        var fileType = "1";
+        var fileTypeName = "普高计划库";
+        form.on('radio(file_type)', function (data) {
+            fileType = data.value;
+            fileTypeName = data.elem.title;
+        });
+        var demoListView = $('#demoList');
+        var j = 1;
+        upload.render({
+            elem: '#upload-file'
+            , url: '/upload/excel'
+            , accept: 'file'
+            , exts: 'xls|xlsx'
+            , before: function (obj) {
+                layer.load();
+                this.data = {
+                    "fileType": fileType
+                };
+                this.files = obj.pushFile();
+                obj.preview(function (index, file, result) {
+                    j = index;
+                    var tr = $(['<tr id="upload-' + index + '">'
+                        , '<td>' + file.name + '</td>'
+                        , '<td>' + fileTypeName + '</td>'
+                        , '<td>' + (file.size / 1014).toFixed(1) + 'kb</td>'
+                        , '<td>等待上传</td>'
+                        , '</tr>'].join(''));
+                    demoListView.append(tr);
+                });
+            }
+            , done: function (res, index) {
+                layer.closeAll('loading');
+                if (res.code === 90000) {
+                    var tr = demoListView.find('tr#upload-' + index)
+                        , tds = tr.children();
+                    tds.eq(3).html('<span style="color: #5FB878;">上传成功</span>');
+                } else {
+                    var tr = demoListView.find('tr#upload-' + index)
+                        , tds = tr.children();
+                    tds.eq(3).html('<span style="color: #FF5722;">' + res.msg + '</span>');
+                }
+                return delete this.files[index];
+            }
+            , error: function () {
+                var tr = demoListView.find('tr#upload-' + j)
+                    , tds = tr.children();
+                tds.eq(3).html('<span style="color: #FF5722;">上传失败</span>');
+                layer.closeAll('loading');
+            }
+        });
+    });
+</script>
+</body>
+</html>
