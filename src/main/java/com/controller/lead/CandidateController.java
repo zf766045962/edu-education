@@ -54,4 +54,17 @@ public class CandidateController {
         PageInfo<Candidate> pageInfo = new PageInfo<>(candidates);
         return Result.page(pageInfo.getList(), pageInfo.getTotal());
     }
+
+    /**
+     * 删除考生信息
+     *
+     * @param id 考生id
+     * @return
+     */
+    @RequestMapping("/del")
+    @ResponseBody
+    public Result deleteCandidate(@RequestParam("id") Long id) {
+        candidateService.deleteById(id);
+        return Result.success(true);
+    }
 }

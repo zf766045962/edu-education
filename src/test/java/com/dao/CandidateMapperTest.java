@@ -5,6 +5,7 @@ import com.entity.Candidate;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,5 +25,11 @@ public class CandidateMapperTest extends SpringBaseTest {
         candidate.setName("潘");
         List<Candidate> candidates = candidateMapper.listCandidateByCondition(candidate);
         Assert.assertEquals(0, candidates.size());
+    }
+
+    @Test
+    @Transactional
+    public void deleteById() {
+        candidateMapper.deleteById(1L);
     }
 }

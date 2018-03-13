@@ -22,4 +22,9 @@ public class CandidateServiceImpl implements CandidateService {
     public List<Candidate> listCandidateByCondition(Candidate candidate) {
         return candidateMapper.listCandidateByCondition(candidate);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        candidateMapper.deleteById(id);
+    }
 }

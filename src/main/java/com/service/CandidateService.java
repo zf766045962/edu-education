@@ -17,4 +17,11 @@ public interface CandidateService {
      * @return
      */
     List<Candidate> listCandidateByCondition(Candidate candidate);
+
+    /**
+     * 删除考生信息
+     *
+     * @param id 考生id
+     */
+    void deleteById(Long id);
 }

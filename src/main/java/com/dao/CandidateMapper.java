@@ -1,6 +1,8 @@
 package com.dao;
 
 import com.entity.Candidate;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,11 +16,7 @@ import java.util.List;
  */
 @Repository
 public interface CandidateMapper {
-    int deleteByPrimaryKey(Long id);
-
     int insertSelective(Candidate record);
-
-    Candidate selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(Candidate record);
 
@@ -29,4 +27,12 @@ public interface CandidateMapper {
      * @return
      */
     List<Candidate> listCandidateByCondition(Candidate candidate);
+
+    /**
+     * 删除考生信息
+     *
+     * @param id 考生主键
+     */
+    @Delete("delete from candidate where id=#{id}")
+    void deleteById(@Param("id") Long id);
 }

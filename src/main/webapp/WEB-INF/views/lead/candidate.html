@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>高考志愿填报辅导系统</title>
     <link rel="stylesheet" type="text/css" th:href="@{/assets/edu/layui/css/layui.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/assets/bank/css/css.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/edu/css/css.css}">
     <script type="text/javascript" th:src="@{/assets/edu/js/jquery-1.11.3.js}"></script>
     <script type="text/javascript" th:src="@{/assets/edu/layui/layui.js}"></script>
 </head>
@@ -38,7 +38,7 @@
     <div class="gkwh-tb">
         <div class="layui-btn-group">
             <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="addShow"><i class="iconfont">&#xe651;</i>录入</a>
-            <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="deleteUser"><i class="iconfont">&#xe60d;</i>删除</a>
+            <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="del"><i class="iconfont">&#xe60d;</i>删除</a>
         </div>
         <table id="wh-list"></table>
     </div>
@@ -94,12 +94,43 @@
                     , where: {"name": name}
                 });
             }
+            , del: function () {
+                var checkStatus = table.checkStatus('idTest');
+                var data = checkStatus.data;
+                if (data.length <= 0 || data.length > 1) {
+                    layer.msg("请选择一条数据");
+                    return;
+                }
+                layer.confirm('确定要删除吗?', {
+                    btn: ['确定', '取消']
+                }, function (index, layero) {
+                    delUser(data[0].id, active);
+                }, function (index) {
+
+                });
+            }
         };
         $('.layui-btn').on('click', function () {
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';
         });
     });
+
+    function delUser(id, active) {
+        $.post("/candidate/del", {"id": id}, function (res) {
+            if (res.code == 30002) {
+                layer.msg(res.msg);
+                setTimeout(function () {
+                    top.location.href = "/login";
+                }, 5000);
+            } else if (res.code != 90000) {
+                layer.msg(res.msg);
+            } else {
+                active.reload();
+                layer.msg("删除成功");
+            }
+        });
+    }
 </script>
 </body>
 </html>
