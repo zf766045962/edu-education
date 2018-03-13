@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>高考志愿填报辅导系统</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/edu/layui/css/layui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/bank/css/css.css}">
+    <script type="text/javascript" th:src="@{/assets/edu/js/jquery-1.11.3.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/edu/layui/layui.js}"></script>
+</head>
+<body th:inline="none">
+<div class="pad10">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="name">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-inline">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label"></label>
+                <a href="javascript:;" class="layui-btn ayui-btn-normal bg-blue " data-type="reload">
+                    <i class="iconfont">&#xe606;</i> 查询</a>
+            </div>
+        </div>
+
+
+    </form>
+    <div class="line">
+        <span class=line-title>查询结果</span>
+    </div>
+    <div class="gkwh-tb">
+        <div class="layui-btn-group">
+            <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="addShow"><i class="iconfont">&#xe651;</i>录入</a>
+            <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="deleteUser"><i class="iconfont">&#xe60d;</i>删除</a>
+        </div>
+        <table id="wh-list"></table>
+    </div>
+</div>
+<script>
+    layui.use(['table'], function () {
+        var $ = layui.jquery
+            , table = layui.table
+            , $2 = layui.$;
+        table.render({
+            elem: '#wh-list'
+            , url: '/candidate/list'
+            , cols: [[
+                {field: 'id', title: 'id', checkbox: true, sort: true}
+                , {field: 'name', title: '姓名', sort: true}
+                , {field: 'totalScore', title: '总分', sort: true}
+                , {field: 'ranking', title: '排名', sort: true}
+                , {field: 'contactNumber', title: '联系电话', sort: true}
+            ]]
+            , id: 'idTest'
+            , request: {
+                pageName: 'currentPage' //页码的参数名称，默认：page
+                , limitName: 'pageSize' //每页数据量的参数名，默认：limit
+            }
+            , response: {
+                statusCode: 90000 //成功的状态码，默认：0
+                , countName: 'count' //数据总数的字段名称，默认：count
+                , dataName: 'data' //数据列表的字段名称，默认：data
+            }
+            , even: true
+            , page: {theme: '#2d5eb7'}
+            , done: function (res, curr, count) {
+                if (res.code == 30002) {
+                    layer.msg(res.msg);
+                    setTimeout(function () {
+                        top.location.href = "/login";
+                    }, 5000);
+                } else if (res.code != 90000) {
+                    layer.msg(res.msg);
+                }
+
+            }
+
+        });
+        var active = {
+            reload: function () {
+                var name = $("#name").val();
+                //执行重载
+                table.reload('idTest', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {"name": name}
+                });
+            }
+        };
+        $('.layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+</script>
+</body>
+</html>

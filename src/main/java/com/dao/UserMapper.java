@@ -64,7 +64,7 @@ public interface UserMapper {
      * @param userName 用户名
      * @return
      */
-    User getUserByName(String userName);
+    UserVo getUserByName(String userName);
 
     /**
      * 更新登录时间

@@ -1,4 +1,4 @@
-package com.controller;
+package com.controller.systemsetup;
 
 import com.common.result.Result;
 import com.entity.SystemOpeningTime;

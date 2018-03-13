@@ -11,12 +11,16 @@ import java.io.Serializable;
  */
 public class LoginUser implements Serializable {
     private static final long serialVersionUID = -5574220368476664539L;
+
     private long loginId;
+
     private String loginUserName;
 
     private long loginRoleId;
 
     private String loginNickName;
+
+    private String loginRoleName;
 
     public String getLoginUserName() {
         return loginUserName;
@@ -50,6 +54,14 @@ public class LoginUser implements Serializable {
         this.loginId = loginId;
     }
 
+    public String getLoginRoleName() {
+        return loginRoleName;
+    }
+
+    public void setLoginRoleName(String loginRoleName) {
+        this.loginRoleName = loginRoleName;
+    }
+
     @Override
     public String toString() {
         return "LoginUser{" +
@@ -57,6 +69,7 @@ public class LoginUser implements Serializable {
                 ", loginUserName='" + loginUserName + '\'' +
                 ", loginRoleId=" + loginRoleId +
                 ", loginNickName='" + loginNickName + '\'' +
+                ", loginRoleName='" + loginRoleName + '\'' +
                 '}';
     }
 }

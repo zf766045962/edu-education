@@ -1,4 +1,4 @@
-package com.controller;
+package com.controller.systemsetup;
 
 import com.common.result.CodeMsg;
 import com.common.result.Result;
