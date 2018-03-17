@@ -1,5 +1,8 @@
 package com.entity;
 
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,57 +19,61 @@ public class Candidate implements Serializable {
     /**
      * 姓名
      */
+    @NotNull
+    @Length(max = 50, message = "姓名长度不能超过50")
     private String name;
     /**
-     *总分
+     * 总分
      */
+    @NotNull
     private Integer totalScore;
     /**
-     *排名
+     * 排名
      */
+    @NotNull
     private Integer ranking;
     /**
-     *物理
+     * 物理
      */
     private Integer physics;
     /**
-     *化学
+     * 化学
      */
     private Integer chemistry;
     /**
-     *生物
+     * 生物
      */
     private Integer biology;
     /**
-     *技术
+     * 技术
      */
     private Integer technology;
     /**
-     *历史
+     * 历史
      */
     private Integer history;
     /**
-     *地理
+     * 地理
      */
     private Integer geography;
     /**
-     *政治
+     * 政治
      */
     private Integer politics;
     /**
-     *联系电话
+     * 联系电话
      */
     private String contactNumber;
     /**
-     *咨询专家ID
+     * 咨询专家ID
      */
     private Long consultantId;
     /**
-     *创建时间
+     * 创建时间
      */
     private Date gmtCreate;
     /**
-     *修改时间
+     * 修改时间
      */
     private Date gmtModified;
 
