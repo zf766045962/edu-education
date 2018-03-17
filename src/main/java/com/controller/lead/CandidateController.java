@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -65,6 +67,22 @@ public class CandidateController {
     @ResponseBody
     public Result deleteCandidate(@RequestParam("id") Long id) {
         candidateService.deleteById(id);
+        return Result.success(true);
+    }
+
+    /**
+     * 新增考生信息
+     *
+     * @param candidate 考生对象
+     * @param loginUser 登录用户
+     * @return result
+     */
+    @RequestMapping("/add")
+    @ResponseBody
+    public Result addCandidate(@Valid Candidate candidate, LoginUser loginUser) {
+        candidate.setConsultantId(loginUser.getLoginId());
+        candidate.setGmtCreate(new Date());
+        candidateService.saveCandidate(candidate);
         return Result.success(true);
     }
 }
