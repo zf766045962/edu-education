@@ -1,474 +1,482 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.dao.RecruitStudentsPlanMapper" >
-  <resultMap id="BaseResultMap" type="com.entity.RecruitStudentsPlan" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="yxdm" property="yxdm" jdbcType="VARCHAR" />
-    <result column="yxdh" property="yxdh" jdbcType="VARCHAR" />
-    <result column="yxdhmc" property="yxdhmc" jdbcType="VARCHAR" />
-    <result column="szd" property="szd" jdbcType="VARCHAR" />
-    <result column="sf985" property="sf985" jdbcType="INTEGER" />
-    <result column="sf211" property="sf211" jdbcType="INTEGER" />
-    <result column="bxlxdm" property="bxlxdm" jdbcType="INTEGER" />
-    <result column="bxlxmc" property="bxlxmc" jdbcType="VARCHAR" />
-    <result column="ssdm" property="ssdm" jdbcType="INTEGER" />
-    <result column="ssmc" property="ssmc" jdbcType="VARCHAR" />
-    <result column="zgdm" property="zgdm" jdbcType="INTEGER" />
-    <result column="zgmc" property="zgmc" jdbcType="VARCHAR" />
-    <result column="ccdm" property="ccdm" jdbcType="INTEGER" />
-    <result column="ccmc" property="ccmc" jdbcType="VARCHAR" />
-    <result column="zydm" property="zydm" jdbcType="VARCHAR" />
-    <result column="sbdm2" property="sbdm2" jdbcType="VARCHAR" />
-    <result column="zymc" property="zymc" jdbcType="VARCHAR" />
-    <result column="xzdmxg" property="xzdmxg" jdbcType="VARCHAR" />
-    <result column="xzdm" property="xzdm" jdbcType="CHAR" />
-    <result column="xzmc" property="xzmc" jdbcType="VARCHAR" />
-    <result column="sfbz" property="sfbz" jdbcType="VARCHAR" />
-    <result column="kldm" property="kldm" jdbcType="VARCHAR" />
-    <result column="ksklmc" property="ksklmc" jdbcType="VARCHAR" />
-    <result column="pcdm" property="pcdm" jdbcType="VARCHAR" />
-    <result column="pcmc" property="pcmc" jdbcType="VARCHAR" />
-    <result column="kslxdm" property="kslxdm" jdbcType="VARCHAR" />
-    <result column="kslxmc" property="kslxmc" jdbcType="VARCHAR" />
-    <result column="xkkmyq" property="xkkmyq" jdbcType="VARCHAR" />
-    <result column="xkkmyqzw" property="xkkmyqzw" jdbcType="VARCHAR" />
-    <result column="zsjhs" property="zsjhs" jdbcType="INTEGER" />
-    <result column="bz" property="bz" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, yxdm, yxdh, yxdhmc, szd, sf985, sf211, bxlxdm, bxlxmc, ssdm, ssmc, zgdm, zgmc, 
-    ccdm, ccmc, zydm, sbdm2, zymc, xzdmxg, xzdm, xzmc, sfbz, kldm, ksklmc, pcdm, pcmc, 
-    kslxdm, kslxmc, xkkmyq, xkkmyqzw, zsjhs, bz, gmt_create, gmt_modified
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from recruit_students_plan
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <insert id="insertRecruitStudentsPlanBatch" parameterType="java.util.List" >
-    insert into recruit_students_plan (
-      yxdm
-      , yxdh
-      , yxdhmc
-      , szd
-      , sf985
-      , sf211
-      , bxlxdm
-      , bxlxmc
-      , ssdm
-      , ssmc
-      , zgdm
-      , zgmc
-      , ccdm
-      , ccmc
-      , zydm
-      , sbdm2
-      , zymc
-      , xzdmxg
-      , xzdm
-      , xzmc
-      , sfbz
-      , kldm
-      , ksklmc
-      , pcdm
-      , pcmc
-      , kslxdm
-      , kslxmc
-      , xkkmyq
-      , xkkmyqzw
-      , zsjhs
-      , bz)
-    values
-      <foreach collection="list" item="item" separator=",">
-        (
-        #{item.yxdm,jdbcType=VARCHAR}
-        , #{item.yxdh,jdbcType=VARCHAR}
-        , #{item.yxdhmc,jdbcType=VARCHAR}
-        , #{item.szd,jdbcType=VARCHAR}
-        , #{item.sf985,jdbcType=INTEGER}
-        , #{item.sf211,jdbcType=INTEGER}
-        , #{item.bxlxdm,jdbcType=INTEGER}
-        , #{item.bxlxmc,jdbcType=VARCHAR}
-        , #{item.ssdm,jdbcType=INTEGER}
-        , #{item.ssmc,jdbcType=VARCHAR}
-        , #{item.zgdm,jdbcType=INTEGER}
-        , #{item.zgmc,jdbcType=VARCHAR}
-        , #{item.ccdm,jdbcType=INTEGER}
-        , #{item.ccmc,jdbcType=VARCHAR}
-        , #{item.zydm,jdbcType=VARCHAR}
-        , #{item.sbdm2,jdbcType=VARCHAR}
-        , #{item.zymc,jdbcType=VARCHAR}
-        , #{item.xzdmxg,jdbcType=VARCHAR}
-        , #{item.xzdm,jdbcType=CHAR}
-        , #{item.xzmc,jdbcType=VARCHAR}
-        , #{item.sfbz,jdbcType=VARCHAR}
-        , #{item.kldm,jdbcType=VARCHAR}
-        , #{item.ksklmc,jdbcType=VARCHAR}
-        , #{item.pcdm,jdbcType=VARCHAR}
-        , #{item.pcmc,jdbcType=VARCHAR}
-        , #{item.kslxdm,jdbcType=VARCHAR}
-        , #{item.kslxmc,jdbcType=VARCHAR}
-        , #{item.xkkmyq,jdbcType=VARCHAR}
-        , #{item.xkkmyqzw,jdbcType=VARCHAR}
-        , #{item.zsjhs,jdbcType=INTEGER}
-        , #{item.bz,jdbcType=VARCHAR}
-        )
-      </foreach>
-  </insert>
-  <insert id="insertSelective" parameterType="com.entity.RecruitStudentsPlan" >
-    insert into recruit_students_plan
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="yxdm != null" >
-        yxdm,
-      </if>
-      <if test="yxdh != null" >
-        yxdh,
-      </if>
-      <if test="yxdhmc != null" >
-        yxdhmc,
-      </if>
-      <if test="szd != null" >
-        szd,
-      </if>
-      <if test="sf985 != null" >
-        sf985,
-      </if>
-      <if test="sf211 != null" >
-        sf211,
-      </if>
-      <if test="bxlxdm != null" >
-        bxlxdm,
-      </if>
-      <if test="bxlxmc != null" >
-        bxlxmc,
-      </if>
-      <if test="ssdm != null" >
-        ssdm,
-      </if>
-      <if test="ssmc != null" >
-        ssmc,
-      </if>
-      <if test="zgdm != null" >
-        zgdm,
-      </if>
-      <if test="zgmc != null" >
-        zgmc,
-      </if>
-      <if test="ccdm != null" >
-        ccdm,
-      </if>
-      <if test="ccmc != null" >
-        ccmc,
-      </if>
-      <if test="zydm != null" >
-        zydm,
-      </if>
-      <if test="sbdm2 != null" >
-        sbdm2,
-      </if>
-      <if test="zymc != null" >
-        zymc,
-      </if>
-      <if test="xzdmxg != null" >
-        xzdmxg,
-      </if>
-      <if test="xzdm != null" >
-        xzdm,
-      </if>
-      <if test="xzmc != null" >
-        xzmc,
-      </if>
-      <if test="sfbz != null" >
-        sfbz,
-      </if>
-      <if test="kldm != null" >
-        kldm,
-      </if>
-      <if test="ksklmc != null" >
-        ksklmc,
-      </if>
-      <if test="pcdm != null" >
-        pcdm,
-      </if>
-      <if test="pcmc != null" >
-        pcmc,
-      </if>
-      <if test="kslxdm != null" >
-        kslxdm,
-      </if>
-      <if test="kslxmc != null" >
-        kslxmc,
-      </if>
-      <if test="xkkmyq != null" >
-        xkkmyq,
-      </if>
-      <if test="xkkmyqzw != null" >
-        xkkmyqzw,
-      </if>
-      <if test="zsjhs != null" >
-        zsjhs,
-      </if>
-      <if test="bz != null" >
-        bz,
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create,
-      </if>
-      <if test="gmtModified != null" >
-        gmt_modified,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="yxdm != null" >
-        #{yxdm,jdbcType=VARCHAR},
-      </if>
-      <if test="yxdh != null" >
-        #{yxdh,jdbcType=VARCHAR},
-      </if>
-      <if test="yxdhmc != null" >
-        #{yxdhmc,jdbcType=VARCHAR},
-      </if>
-      <if test="szd != null" >
-        #{szd,jdbcType=VARCHAR},
-      </if>
-      <if test="sf985 != null" >
-        #{sf985,jdbcType=INTEGER},
-      </if>
-      <if test="sf211 != null" >
-        #{sf211,jdbcType=INTEGER},
-      </if>
-      <if test="bxlxdm != null" >
-        #{bxlxdm,jdbcType=INTEGER},
-      </if>
-      <if test="bxlxmc != null" >
-        #{bxlxmc,jdbcType=VARCHAR},
-      </if>
-      <if test="ssdm != null" >
-        #{ssdm,jdbcType=INTEGER},
-      </if>
-      <if test="ssmc != null" >
-        #{ssmc,jdbcType=VARCHAR},
-      </if>
-      <if test="zgdm != null" >
-        #{zgdm,jdbcType=INTEGER},
-      </if>
-      <if test="zgmc != null" >
-        #{zgmc,jdbcType=VARCHAR},
-      </if>
-      <if test="ccdm != null" >
-        #{ccdm,jdbcType=INTEGER},
-      </if>
-      <if test="ccmc != null" >
-        #{ccmc,jdbcType=VARCHAR},
-      </if>
-      <if test="zydm != null" >
-        #{zydm,jdbcType=VARCHAR},
-      </if>
-      <if test="sbdm2 != null" >
-        #{sbdm2,jdbcType=VARCHAR},
-      </if>
-      <if test="zymc != null" >
-        #{zymc,jdbcType=VARCHAR},
-      </if>
-      <if test="xzdmxg != null" >
-        #{xzdmxg,jdbcType=VARCHAR},
-      </if>
-      <if test="xzdm != null" >
-        #{xzdm,jdbcType=CHAR},
-      </if>
-      <if test="xzmc != null" >
-        #{xzmc,jdbcType=VARCHAR},
-      </if>
-      <if test="sfbz != null" >
-        #{sfbz,jdbcType=VARCHAR},
-      </if>
-      <if test="kldm != null" >
-        #{kldm,jdbcType=VARCHAR},
-      </if>
-      <if test="ksklmc != null" >
-        #{ksklmc,jdbcType=VARCHAR},
-      </if>
-      <if test="pcdm != null" >
-        #{pcdm,jdbcType=VARCHAR},
-      </if>
-      <if test="pcmc != null" >
-        #{pcmc,jdbcType=VARCHAR},
-      </if>
-      <if test="kslxdm != null" >
-        #{kslxdm,jdbcType=VARCHAR},
-      </if>
-      <if test="kslxmc != null" >
-        #{kslxmc,jdbcType=VARCHAR},
-      </if>
-      <if test="xkkmyq != null" >
-        #{xkkmyq,jdbcType=VARCHAR},
-      </if>
-      <if test="xkkmyqzw != null" >
-        #{xkkmyqzw,jdbcType=VARCHAR},
-      </if>
-      <if test="zsjhs != null" >
-        #{zsjhs,jdbcType=INTEGER},
-      </if>
-      <if test="bz != null" >
-        #{bz,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null" >
-        #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModified != null" >
-        #{gmtModified,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.entity.RecruitStudentsPlan" >
-    update recruit_students_plan
-    <set >
-      <if test="yxdm != null" >
-        yxdm = #{yxdm,jdbcType=VARCHAR},
-      </if>
-      <if test="yxdh != null" >
-        yxdh = #{yxdh,jdbcType=VARCHAR},
-      </if>
-      <if test="yxdhmc != null" >
-        yxdhmc = #{yxdhmc,jdbcType=VARCHAR},
-      </if>
-      <if test="szd != null" >
-        szd = #{szd,jdbcType=VARCHAR},
-      </if>
-      <if test="sf985 != null" >
-        sf985 = #{sf985,jdbcType=INTEGER},
-      </if>
-      <if test="sf211 != null" >
-        sf211 = #{sf211,jdbcType=INTEGER},
-      </if>
-      <if test="bxlxdm != null" >
-        bxlxdm = #{bxlxdm,jdbcType=INTEGER},
-      </if>
-      <if test="bxlxmc != null" >
-        bxlxmc = #{bxlxmc,jdbcType=VARCHAR},
-      </if>
-      <if test="ssdm != null" >
-        ssdm = #{ssdm,jdbcType=INTEGER},
-      </if>
-      <if test="ssmc != null" >
-        ssmc = #{ssmc,jdbcType=VARCHAR},
-      </if>
-      <if test="zgdm != null" >
-        zgdm = #{zgdm,jdbcType=INTEGER},
-      </if>
-      <if test="zgmc != null" >
-        zgmc = #{zgmc,jdbcType=VARCHAR},
-      </if>
-      <if test="ccdm != null" >
-        ccdm = #{ccdm,jdbcType=INTEGER},
-      </if>
-      <if test="ccmc != null" >
-        ccmc = #{ccmc,jdbcType=VARCHAR},
-      </if>
-      <if test="zydm != null" >
-        zydm = #{zydm,jdbcType=VARCHAR},
-      </if>
-      <if test="sbdm2 != null" >
-        sbdm2 = #{sbdm2,jdbcType=VARCHAR},
-      </if>
-      <if test="zymc != null" >
-        zymc = #{zymc,jdbcType=VARCHAR},
-      </if>
-      <if test="xzdmxg != null" >
-        xzdmxg = #{xzdmxg,jdbcType=VARCHAR},
-      </if>
-      <if test="xzdm != null" >
-        xzdm = #{xzdm,jdbcType=CHAR},
-      </if>
-      <if test="xzmc != null" >
-        xzmc = #{xzmc,jdbcType=VARCHAR},
-      </if>
-      <if test="sfbz != null" >
-        sfbz = #{sfbz,jdbcType=VARCHAR},
-      </if>
-      <if test="kldm != null" >
-        kldm = #{kldm,jdbcType=VARCHAR},
-      </if>
-      <if test="ksklmc != null" >
-        ksklmc = #{ksklmc,jdbcType=VARCHAR},
-      </if>
-      <if test="pcdm != null" >
-        pcdm = #{pcdm,jdbcType=VARCHAR},
-      </if>
-      <if test="pcmc != null" >
-        pcmc = #{pcmc,jdbcType=VARCHAR},
-      </if>
-      <if test="kslxdm != null" >
-        kslxdm = #{kslxdm,jdbcType=VARCHAR},
-      </if>
-      <if test="kslxmc != null" >
-        kslxmc = #{kslxmc,jdbcType=VARCHAR},
-      </if>
-      <if test="xkkmyq != null" >
-        xkkmyq = #{xkkmyq,jdbcType=VARCHAR},
-      </if>
-      <if test="xkkmyqzw != null" >
-        xkkmyqzw = #{xkkmyqzw,jdbcType=VARCHAR},
-      </if>
-      <if test="zsjhs != null" >
-        zsjhs = #{zsjhs,jdbcType=INTEGER},
-      </if>
-      <if test="bz != null" >
-        bz = #{bz,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null" >
-        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtModified != null" >
-        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.entity.RecruitStudentsPlan" >
-    update recruit_students_plan
-    set yxdm = #{yxdm,jdbcType=VARCHAR},
-      yxdh = #{yxdh,jdbcType=VARCHAR},
-      yxdhmc = #{yxdhmc,jdbcType=VARCHAR},
-      szd = #{szd,jdbcType=VARCHAR},
-      sf985 = #{sf985,jdbcType=INTEGER},
-      sf211 = #{sf211,jdbcType=INTEGER},
-      bxlxdm = #{bxlxdm,jdbcType=INTEGER},
-      bxlxmc = #{bxlxmc,jdbcType=VARCHAR},
-      ssdm = #{ssdm,jdbcType=INTEGER},
-      ssmc = #{ssmc,jdbcType=VARCHAR},
-      zgdm = #{zgdm,jdbcType=INTEGER},
-      zgmc = #{zgmc,jdbcType=VARCHAR},
-      ccdm = #{ccdm,jdbcType=INTEGER},
-      ccmc = #{ccmc,jdbcType=VARCHAR},
-      zydm = #{zydm,jdbcType=VARCHAR},
-      sbdm2 = #{sbdm2,jdbcType=VARCHAR},
-      zymc = #{zymc,jdbcType=VARCHAR},
-      xzdmxg = #{xzdmxg,jdbcType=VARCHAR},
-      xzdm = #{xzdm,jdbcType=CHAR},
-      xzmc = #{xzmc,jdbcType=VARCHAR},
-      sfbz = #{sfbz,jdbcType=VARCHAR},
-      kldm = #{kldm,jdbcType=VARCHAR},
-      ksklmc = #{ksklmc,jdbcType=VARCHAR},
-      pcdm = #{pcdm,jdbcType=VARCHAR},
-      pcmc = #{pcmc,jdbcType=VARCHAR},
-      kslxdm = #{kslxdm,jdbcType=VARCHAR},
-      kslxmc = #{kslxmc,jdbcType=VARCHAR},
-      xkkmyq = #{xkkmyq,jdbcType=VARCHAR},
-      xkkmyqzw = #{xkkmyqzw,jdbcType=VARCHAR},
-      zsjhs = #{zsjhs,jdbcType=INTEGER},
-      bz = #{bz,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+<mapper namespace="com.dao.RecruitStudentsPlanMapper">
+    <resultMap id="BaseResultMap" type="com.entity.RecruitStudentsPlan">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="yxdm" property="yxdm" jdbcType="VARCHAR"/>
+        <result column="yxdh" property="yxdh" jdbcType="VARCHAR"/>
+        <result column="yxdhmc" property="yxdhmc" jdbcType="VARCHAR"/>
+        <result column="szd" property="szd" jdbcType="VARCHAR"/>
+        <result column="sf985" property="sf985" jdbcType="INTEGER"/>
+        <result column="sf211" property="sf211" jdbcType="INTEGER"/>
+        <result column="bxlxdm" property="bxlxdm" jdbcType="INTEGER"/>
+        <result column="bxlxmc" property="bxlxmc" jdbcType="VARCHAR"/>
+        <result column="ssdm" property="ssdm" jdbcType="INTEGER"/>
+        <result column="ssmc" property="ssmc" jdbcType="VARCHAR"/>
+        <result column="zgdm" property="zgdm" jdbcType="INTEGER"/>
+        <result column="zgmc" property="zgmc" jdbcType="VARCHAR"/>
+        <result column="ccdm" property="ccdm" jdbcType="INTEGER"/>
+        <result column="ccmc" property="ccmc" jdbcType="VARCHAR"/>
+        <result column="zydm" property="zydm" jdbcType="VARCHAR"/>
+        <result column="sbdm2" property="sbdm2" jdbcType="VARCHAR"/>
+        <result column="zymc" property="zymc" jdbcType="VARCHAR"/>
+        <result column="xzdmxg" property="xzdmxg" jdbcType="VARCHAR"/>
+        <result column="xzdm" property="xzdm" jdbcType="CHAR"/>
+        <result column="xzmc" property="xzmc" jdbcType="VARCHAR"/>
+        <result column="sfbz" property="sfbz" jdbcType="VARCHAR"/>
+        <result column="kldm" property="kldm" jdbcType="VARCHAR"/>
+        <result column="ksklmc" property="ksklmc" jdbcType="VARCHAR"/>
+        <result column="pcdm" property="pcdm" jdbcType="VARCHAR"/>
+        <result column="pcmc" property="pcmc" jdbcType="VARCHAR"/>
+        <result column="kslxdm" property="kslxdm" jdbcType="VARCHAR"/>
+        <result column="kslxmc" property="kslxmc" jdbcType="VARCHAR"/>
+        <result column="xkkmyq" property="xkkmyq" jdbcType="VARCHAR"/>
+        <result column="xkkmyqzw" property="xkkmyqzw" jdbcType="VARCHAR"/>
+        <result column="zsjhs" property="zsjhs" jdbcType="INTEGER"/>
+        <result column="bz" property="bz" jdbcType="VARCHAR"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+        <result column="km1" property="km1" jdbcType="VARCHAR"/>
+        <result column="km2" property="km2" jdbcType="VARCHAR"/>
+        <result column="km3" property="km3" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, yxdm, yxdh, yxdhmc, szd, sf985, sf211, bxlxdm, bxlxmc, ssdm, ssmc, zgdm, zgmc,
+        ccdm, ccmc, zydm, sbdm2, zymc, xzdmxg, xzdm, xzmc, sfbz, kldm, ksklmc, pcdm, pcmc,
+        kslxdm, kslxmc, xkkmyq, xkkmyqzw, zsjhs, bz, gmt_create, gmt_modified, km1, km2, km3
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from recruit_students_plan
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <insert id="insertRecruitStudentsPlanBatch" parameterType="java.util.List">
+        insert into recruit_students_plan (
+        yxdm
+        , yxdh
+        , yxdhmc
+        , szd
+        , sf985
+        , sf211
+        , bxlxdm
+        , bxlxmc
+        , ssdm
+        , ssmc
+        , zgdm
+        , zgmc
+        , ccdm
+        , ccmc
+        , zydm
+        , sbdm2
+        , zymc
+        , xzdmxg
+        , xzdm
+        , xzmc
+        , sfbz
+        , kldm
+        , ksklmc
+        , pcdm
+        , pcmc
+        , kslxdm
+        , kslxmc
+        , xkkmyq
+        , xkkmyqzw
+        , zsjhs
+        , bz
+        ,km1
+        ,km2
+        ,km3)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.yxdm,jdbcType=VARCHAR}
+            , #{item.yxdh,jdbcType=VARCHAR}
+            , #{item.yxdhmc,jdbcType=VARCHAR}
+            , #{item.szd,jdbcType=VARCHAR}
+            , #{item.sf985,jdbcType=INTEGER}
+            , #{item.sf211,jdbcType=INTEGER}
+            , #{item.bxlxdm,jdbcType=INTEGER}
+            , #{item.bxlxmc,jdbcType=VARCHAR}
+            , #{item.ssdm,jdbcType=INTEGER}
+            , #{item.ssmc,jdbcType=VARCHAR}
+            , #{item.zgdm,jdbcType=INTEGER}
+            , #{item.zgmc,jdbcType=VARCHAR}
+            , #{item.ccdm,jdbcType=INTEGER}
+            , #{item.ccmc,jdbcType=VARCHAR}
+            , #{item.zydm,jdbcType=VARCHAR}
+            , #{item.sbdm2,jdbcType=VARCHAR}
+            , #{item.zymc,jdbcType=VARCHAR}
+            , #{item.xzdmxg,jdbcType=VARCHAR}
+            , #{item.xzdm,jdbcType=CHAR}
+            , #{item.xzmc,jdbcType=VARCHAR}
+            , #{item.sfbz,jdbcType=VARCHAR}
+            , #{item.kldm,jdbcType=VARCHAR}
+            , #{item.ksklmc,jdbcType=VARCHAR}
+            , #{item.pcdm,jdbcType=VARCHAR}
+            , #{item.pcmc,jdbcType=VARCHAR}
+            , #{item.kslxdm,jdbcType=VARCHAR}
+            , #{item.kslxmc,jdbcType=VARCHAR}
+            , #{item.xkkmyq,jdbcType=VARCHAR}
+            , #{item.xkkmyqzw,jdbcType=VARCHAR}
+            , #{item.zsjhs,jdbcType=INTEGER}
+            , #{item.km1,jdbcType=VARCHAR}
+            , #{item.km2,jdbcType=VARCHAR}
+            , #{item.km3,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+    <insert id="insertSelective" parameterType="com.entity.RecruitStudentsPlan">
+        insert into recruit_students_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="yxdm != null">
+                yxdm,
+            </if>
+            <if test="yxdh != null">
+                yxdh,
+            </if>
+            <if test="yxdhmc != null">
+                yxdhmc,
+            </if>
+            <if test="szd != null">
+                szd,
+            </if>
+            <if test="sf985 != null">
+                sf985,
+            </if>
+            <if test="sf211 != null">
+                sf211,
+            </if>
+            <if test="bxlxdm != null">
+                bxlxdm,
+            </if>
+            <if test="bxlxmc != null">
+                bxlxmc,
+            </if>
+            <if test="ssdm != null">
+                ssdm,
+            </if>
+            <if test="ssmc != null">
+                ssmc,
+            </if>
+            <if test="zgdm != null">
+                zgdm,
+            </if>
+            <if test="zgmc != null">
+                zgmc,
+            </if>
+            <if test="ccdm != null">
+                ccdm,
+            </if>
+            <if test="ccmc != null">
+                ccmc,
+            </if>
+            <if test="zydm != null">
+                zydm,
+            </if>
+            <if test="sbdm2 != null">
+                sbdm2,
+            </if>
+            <if test="zymc != null">
+                zymc,
+            </if>
+            <if test="xzdmxg != null">
+                xzdmxg,
+            </if>
+            <if test="xzdm != null">
+                xzdm,
+            </if>
+            <if test="xzmc != null">
+                xzmc,
+            </if>
+            <if test="sfbz != null">
+                sfbz,
+            </if>
+            <if test="kldm != null">
+                kldm,
+            </if>
+            <if test="ksklmc != null">
+                ksklmc,
+            </if>
+            <if test="pcdm != null">
+                pcdm,
+            </if>
+            <if test="pcmc != null">
+                pcmc,
+            </if>
+            <if test="kslxdm != null">
+                kslxdm,
+            </if>
+            <if test="kslxmc != null">
+                kslxmc,
+            </if>
+            <if test="xkkmyq != null">
+                xkkmyq,
+            </if>
+            <if test="xkkmyqzw != null">
+                xkkmyqzw,
+            </if>
+            <if test="zsjhs != null">
+                zsjhs,
+            </if>
+            <if test="bz != null">
+                bz,
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create,
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="yxdm != null">
+                #{yxdm,jdbcType=VARCHAR},
+            </if>
+            <if test="yxdh != null">
+                #{yxdh,jdbcType=VARCHAR},
+            </if>
+            <if test="yxdhmc != null">
+                #{yxdhmc,jdbcType=VARCHAR},
+            </if>
+            <if test="szd != null">
+                #{szd,jdbcType=VARCHAR},
+            </if>
+            <if test="sf985 != null">
+                #{sf985,jdbcType=INTEGER},
+            </if>
+            <if test="sf211 != null">
+                #{sf211,jdbcType=INTEGER},
+            </if>
+            <if test="bxlxdm != null">
+                #{bxlxdm,jdbcType=INTEGER},
+            </if>
+            <if test="bxlxmc != null">
+                #{bxlxmc,jdbcType=VARCHAR},
+            </if>
+            <if test="ssdm != null">
+                #{ssdm,jdbcType=INTEGER},
+            </if>
+            <if test="ssmc != null">
+                #{ssmc,jdbcType=VARCHAR},
+            </if>
+            <if test="zgdm != null">
+                #{zgdm,jdbcType=INTEGER},
+            </if>
+            <if test="zgmc != null">
+                #{zgmc,jdbcType=VARCHAR},
+            </if>
+            <if test="ccdm != null">
+                #{ccdm,jdbcType=INTEGER},
+            </if>
+            <if test="ccmc != null">
+                #{ccmc,jdbcType=VARCHAR},
+            </if>
+            <if test="zydm != null">
+                #{zydm,jdbcType=VARCHAR},
+            </if>
+            <if test="sbdm2 != null">
+                #{sbdm2,jdbcType=VARCHAR},
+            </if>
+            <if test="zymc != null">
+                #{zymc,jdbcType=VARCHAR},
+            </if>
+            <if test="xzdmxg != null">
+                #{xzdmxg,jdbcType=VARCHAR},
+            </if>
+            <if test="xzdm != null">
+                #{xzdm,jdbcType=CHAR},
+            </if>
+            <if test="xzmc != null">
+                #{xzmc,jdbcType=VARCHAR},
+            </if>
+            <if test="sfbz != null">
+                #{sfbz,jdbcType=VARCHAR},
+            </if>
+            <if test="kldm != null">
+                #{kldm,jdbcType=VARCHAR},
+            </if>
+            <if test="ksklmc != null">
+                #{ksklmc,jdbcType=VARCHAR},
+            </if>
+            <if test="pcdm != null">
+                #{pcdm,jdbcType=VARCHAR},
+            </if>
+            <if test="pcmc != null">
+                #{pcmc,jdbcType=VARCHAR},
+            </if>
+            <if test="kslxdm != null">
+                #{kslxdm,jdbcType=VARCHAR},
+            </if>
+            <if test="kslxmc != null">
+                #{kslxmc,jdbcType=VARCHAR},
+            </if>
+            <if test="xkkmyq != null">
+                #{xkkmyq,jdbcType=VARCHAR},
+            </if>
+            <if test="xkkmyqzw != null">
+                #{xkkmyqzw,jdbcType=VARCHAR},
+            </if>
+            <if test="zsjhs != null">
+                #{zsjhs,jdbcType=INTEGER},
+            </if>
+            <if test="bz != null">
+                #{bz,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.entity.RecruitStudentsPlan">
+        update recruit_students_plan
+        <set>
+            <if test="yxdm != null">
+                yxdm = #{yxdm,jdbcType=VARCHAR},
+            </if>
+            <if test="yxdh != null">
+                yxdh = #{yxdh,jdbcType=VARCHAR},
+            </if>
+            <if test="yxdhmc != null">
+                yxdhmc = #{yxdhmc,jdbcType=VARCHAR},
+            </if>
+            <if test="szd != null">
+                szd = #{szd,jdbcType=VARCHAR},
+            </if>
+            <if test="sf985 != null">
+                sf985 = #{sf985,jdbcType=INTEGER},
+            </if>
+            <if test="sf211 != null">
+                sf211 = #{sf211,jdbcType=INTEGER},
+            </if>
+            <if test="bxlxdm != null">
+                bxlxdm = #{bxlxdm,jdbcType=INTEGER},
+            </if>
+            <if test="bxlxmc != null">
+                bxlxmc = #{bxlxmc,jdbcType=VARCHAR},
+            </if>
+            <if test="ssdm != null">
+                ssdm = #{ssdm,jdbcType=INTEGER},
+            </if>
+            <if test="ssmc != null">
+                ssmc = #{ssmc,jdbcType=VARCHAR},
+            </if>
+            <if test="zgdm != null">
+                zgdm = #{zgdm,jdbcType=INTEGER},
+            </if>
+            <if test="zgmc != null">
+                zgmc = #{zgmc,jdbcType=VARCHAR},
+            </if>
+            <if test="ccdm != null">
+                ccdm = #{ccdm,jdbcType=INTEGER},
+            </if>
+            <if test="ccmc != null">
+                ccmc = #{ccmc,jdbcType=VARCHAR},
+            </if>
+            <if test="zydm != null">
+                zydm = #{zydm,jdbcType=VARCHAR},
+            </if>
+            <if test="sbdm2 != null">
+                sbdm2 = #{sbdm2,jdbcType=VARCHAR},
+            </if>
+            <if test="zymc != null">
+                zymc = #{zymc,jdbcType=VARCHAR},
+            </if>
+            <if test="xzdmxg != null">
+                xzdmxg = #{xzdmxg,jdbcType=VARCHAR},
+            </if>
+            <if test="xzdm != null">
+                xzdm = #{xzdm,jdbcType=CHAR},
+            </if>
+            <if test="xzmc != null">
+                xzmc = #{xzmc,jdbcType=VARCHAR},
+            </if>
+            <if test="sfbz != null">
+                sfbz = #{sfbz,jdbcType=VARCHAR},
+            </if>
+            <if test="kldm != null">
+                kldm = #{kldm,jdbcType=VARCHAR},
+            </if>
+            <if test="ksklmc != null">
+                ksklmc = #{ksklmc,jdbcType=VARCHAR},
+            </if>
+            <if test="pcdm != null">
+                pcdm = #{pcdm,jdbcType=VARCHAR},
+            </if>
+            <if test="pcmc != null">
+                pcmc = #{pcmc,jdbcType=VARCHAR},
+            </if>
+            <if test="kslxdm != null">
+                kslxdm = #{kslxdm,jdbcType=VARCHAR},
+            </if>
+            <if test="kslxmc != null">
+                kslxmc = #{kslxmc,jdbcType=VARCHAR},
+            </if>
+            <if test="xkkmyq != null">
+                xkkmyq = #{xkkmyq,jdbcType=VARCHAR},
+            </if>
+            <if test="xkkmyqzw != null">
+                xkkmyqzw = #{xkkmyqzw,jdbcType=VARCHAR},
+            </if>
+            <if test="zsjhs != null">
+                zsjhs = #{zsjhs,jdbcType=INTEGER},
+            </if>
+            <if test="bz != null">
+                bz = #{bz,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.entity.RecruitStudentsPlan">
+        UPDATE recruit_students_plan
+        SET yxdm         = #{yxdm,jdbcType=VARCHAR},
+            yxdh         = #{yxdh,jdbcType=VARCHAR},
+            yxdhmc       = #{yxdhmc,jdbcType=VARCHAR},
+            szd          = #{szd,jdbcType=VARCHAR},
+            sf985        = #{sf985,jdbcType=INTEGER},
+            sf211        = #{sf211,jdbcType=INTEGER},
+            bxlxdm       = #{bxlxdm,jdbcType=INTEGER},
+            bxlxmc       = #{bxlxmc,jdbcType=VARCHAR},
+            ssdm         = #{ssdm,jdbcType=INTEGER},
+            ssmc         = #{ssmc,jdbcType=VARCHAR},
+            zgdm         = #{zgdm,jdbcType=INTEGER},
+            zgmc         = #{zgmc,jdbcType=VARCHAR},
+            ccdm         = #{ccdm,jdbcType=INTEGER},
+            ccmc         = #{ccmc,jdbcType=VARCHAR},
+            zydm         = #{zydm,jdbcType=VARCHAR},
+            sbdm2        = #{sbdm2,jdbcType=VARCHAR},
+            zymc         = #{zymc,jdbcType=VARCHAR},
+            xzdmxg       = #{xzdmxg,jdbcType=VARCHAR},
+            xzdm         = #{xzdm,jdbcType=CHAR},
+            xzmc         = #{xzmc,jdbcType=VARCHAR},
+            sfbz         = #{sfbz,jdbcType=VARCHAR},
+            kldm         = #{kldm,jdbcType=VARCHAR},
+            ksklmc       = #{ksklmc,jdbcType=VARCHAR},
+            pcdm         = #{pcdm,jdbcType=VARCHAR},
+            pcmc         = #{pcmc,jdbcType=VARCHAR},
+            kslxdm       = #{kslxdm,jdbcType=VARCHAR},
+            kslxmc       = #{kslxmc,jdbcType=VARCHAR},
+            xkkmyq       = #{xkkmyq,jdbcType=VARCHAR},
+            xkkmyqzw     = #{xkkmyqzw,jdbcType=VARCHAR},
+            zsjhs        = #{zsjhs,jdbcType=INTEGER},
+            bz           = #{bz,jdbcType=VARCHAR},
+            gmt_create   = #{gmtCreate,jdbcType=TIMESTAMP},
+            gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
 </mapper>
