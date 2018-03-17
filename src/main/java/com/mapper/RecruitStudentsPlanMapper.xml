@@ -120,6 +120,7 @@
             , #{item.xkkmyq,jdbcType=VARCHAR}
             , #{item.xkkmyqzw,jdbcType=VARCHAR}
             , #{item.zsjhs,jdbcType=INTEGER}
+            , #{item.bz,jdbcType=VARCHAR}
             , #{item.km1,jdbcType=VARCHAR}
             , #{item.km2,jdbcType=VARCHAR}
             , #{item.km3,jdbcType=VARCHAR}
