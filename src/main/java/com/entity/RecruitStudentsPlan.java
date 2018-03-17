@@ -115,6 +115,18 @@ public class RecruitStudentsPlan implements Serializable {
     private Date gmtCreate;
 
     private Date gmtModified;
+    /**
+     * 科目1
+     */
+    private String km1;
+    /**
+     * 科目2
+     */
+    private String km2;
+    /**
+     * 科目3
+     */
+    private String km3;
 
     public Long getId() {
         return id;
@@ -426,5 +438,29 @@ public class RecruitStudentsPlan implements Serializable {
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
                 '}';
+    }
+
+    public String getKm1() {
+        return km1;
+    }
+
+    public void setKm1(String km1) {
+        this.km1 = km1;
+    }
+
+    public String getKm2() {
+        return km2;
+    }
+
+    public void setKm2(String km2) {
+        this.km2 = km2;
+    }
+
+    public String getKm3() {
+        return km3;
+    }
+
+    public void setKm3(String km3) {
+        this.km3 = km3;
     }
 }
