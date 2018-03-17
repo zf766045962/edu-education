@@ -55,6 +55,103 @@
             </if>
         </where>
     </select>
+    <insert id="saveCandidate" parameterType="com.entity.Candidate">
+        insert into candidate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="totalScore != null">
+                total_score,
+            </if>
+            <if test="ranking != null">
+                ranking,
+            </if>
+            <if test="physics != null">
+                physics,
+            </if>
+            <if test="chemistry != null">
+                chemistry,
+            </if>
+            <if test="biology != null">
+                biology,
+            </if>
+            <if test="technology != null">
+                technology,
+            </if>
+            <if test="history != null">
+                history,
+            </if>
+            <if test="geography != null">
+                geography,
+            </if>
+            <if test="politics != null">
+                politics,
+            </if>
+            <if test="contactNumber != null">
+                contact_number,
+            </if>
+            <if test="consultantId != null">
+                consultant_id,
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create,
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="totalScore != null">
+                #{totalScore,jdbcType=INTEGER},
+            </if>
+            <if test="ranking != null">
+                #{ranking,jdbcType=INTEGER},
+            </if>
+            <if test="physics != null">
+                #{physics,jdbcType=INTEGER},
+            </if>
+            <if test="chemistry != null">
+                #{chemistry,jdbcType=INTEGER},
+            </if>
+            <if test="biology != null">
+                #{biology,jdbcType=INTEGER},
+            </if>
+            <if test="technology != null">
+                #{technology,jdbcType=INTEGER},
+            </if>
+            <if test="history != null">
+                #{history,jdbcType=INTEGER},
+            </if>
+            <if test="geography != null">
+                #{geography,jdbcType=INTEGER},
+            </if>
+            <if test="politics != null">
+                #{politics,jdbcType=INTEGER},
+            </if>
+            <if test="contactNumber != null">
+                #{contactNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="consultantId != null">
+                #{consultantId,jdbcType=BIGINT},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
     <insert id="insert" parameterType="com.entity.Candidate">
         INSERT INTO candidate (id, name, total_score,
                                ranking, physics, chemistry,

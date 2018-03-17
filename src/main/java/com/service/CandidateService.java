@@ -24,4 +24,11 @@ public interface CandidateService {
      * @param id 考生id
      */
     void deleteById(Long id);
+
+    /**
+     * 保存考生信息
+     *
+     * @param candidate 考生对象
+     */
+    void saveCandidate(Candidate candidate);
 }

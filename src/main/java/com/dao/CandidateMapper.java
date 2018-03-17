@@ -35,4 +35,11 @@ public interface CandidateMapper {
      */
     @Delete("delete from candidate where id=#{id}")
     void deleteById(@Param("id") Long id);
+
+    /**
+     * 新增考生信息
+     *
+     * @param candidate 考生对象
+     */
+    void saveCandidate(Candidate candidate);
 }

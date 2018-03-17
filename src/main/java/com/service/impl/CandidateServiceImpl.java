@@ -27,4 +27,9 @@ public class CandidateServiceImpl implements CandidateService {
     public void deleteById(Long id) {
         candidateMapper.deleteById(id);
     }
+
+    @Override
+    public void saveCandidate(Candidate candidate) {
+        candidateMapper.saveCandidate(candidate);
+    }
 }
