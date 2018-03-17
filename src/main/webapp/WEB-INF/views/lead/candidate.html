@@ -3,10 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>高考志愿填报辅导系统</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/assets/edu/layui/css/layui.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/assets/edu/css/css.css}">
-    <script type="text/javascript" th:src="@{/assets/edu/js/jquery-1.11.3.js}"></script>
-    <script type="text/javascript" th:src="@{/assets/edu/layui/layui.js}"></script>
+    <link rel="stylesheet" type="text/css" href="../../../assets/edu/layui/css/layui.css"
+          th:href="@{/assets/edu/layui/css/layui.css}">
+    <link rel="stylesheet" type="text/css" href="../../../assets/edu/css/css.css" th:href="@{/assets/edu/css/css.css}">
+    <script type="text/javascript" src="../../../assets/edu/js/jquery-1.11.3.js"
+            th:src="@{/assets/edu/js/jquery-1.11.3.js}"></script>
+    <script type="text/javascript" src="../../../assets/edu/layui/layui.js"
+            th:src="@{/assets/edu/layui/layui.js}"></script>
+    <script type="text/javascript" src="../../../assets/edu/js/common.js"
+            th:src="@{/assets/edu/js/common.js?v=201803171720}"></script>
 </head>
 <body th:inline="none">
 <div class="pad10">
@@ -29,25 +34,81 @@
                     <i class="iconfont">&#xe606;</i> 查询</a>
             </div>
         </div>
-
-
     </form>
     <div class="line">
         <span class=line-title>查询结果</span>
     </div>
     <div class="gkwh-tb">
         <div class="layui-btn-group">
-            <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="addShow"><i class="iconfont">&#xe651;</i>录入</a>
+            <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="add"><i class="iconfont">&#xe651;</i>录入</a>
+            <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="search"><i class="iconfont"></i>查询志愿</a>
+            <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="export"><i class="iconfont"></i>候选志愿导出</a>
             <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="del"><i class="iconfont">&#xe60d;</i>删除</a>
         </div>
         <table id="wh-list"></table>
     </div>
 </div>
+<!--弹出层-->
+<div class="m-modal" id="edit" style="display: none;">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="title" id="c_name" required lay-verify="required" placeholder="请输入考生姓名"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">联系电话</label>
+            <div class="layui-input-inline">
+                <input type="text" id="c_phone" required lay-verify="required" placeholder="请输入联系电话"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">高考位次</label>
+            <div class="layui-input-inline">
+                <input type="text" id="c_ranking" required lay-verify="required" placeholder="请输入高考位次"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">高考总分</label>
+            <div class="layui-input-inline">
+                <input type="text" id="c_totalScore" required lay-verify="required" placeholder="请输入高考总分"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">科目筛选:</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="km" value="1" title="物理">
+                <input type="checkbox" name="km" value="2" title="化学">
+                <input type="checkbox" name="km" value="3" title="生物">
+                <input type="checkbox" name="km" value="4" title="技术">
+                <input type="checkbox" name="km" value="5" title="历史">
+                <input type="checkbox" name="km" value="6" title="政治">
+                <input type="checkbox" name="km" value="7" title="地理">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">提示:</label>
+            <br>
+            1.请同时输入分数、位次号、选考科目。<span style="color: red">输入机会还剩0次，请慎重填写！</span>（位次号示例：5-167475，请输入167475）
+            <br>
+            2.其他功能可无限次调整使用
+        </div>
+    </form>
+</div>
 <script>
-    layui.use(['table'], function () {
+    layui.use(['table', 'form'], function () {
         var $ = layui.jquery
             , table = layui.table
-            , $2 = layui.$;
+            , $2 = layui.$
+            , form = layui.form;
         table.render({
             elem: '#wh-list'
             , url: '/candidate/list'
@@ -109,6 +170,22 @@
 
                 });
             }
+            , add: function () {
+                layer.open({
+                    title: '新增考生',
+                    type: 1,
+                    skin: 'layui-layer-demo t-layer-add ', //样式类名
+                    closeBtn: 1,
+                    anim: 2,
+                    area: '600px',
+                    shadeClose: true, //开启遮罩关闭
+                    content: $("#edit"),
+                    btn: ['确定', '取消'],
+                    yes: function (index, layero) {
+                        addCandidate(active, index);
+                    }
+                })
+            }
         };
         $('.layui-btn').on('click', function () {
             var type = $(this).data('type');
@@ -130,6 +207,90 @@
                 layer.msg("删除成功");
             }
         });
+    }
+
+    function addCandidate(active, index) {
+        var name = $("#c_name").val();
+        var phone = $("#c_phone").val();
+        var ranking = $("#c_ranking").val();
+        var totalScore = $("#c_totalScore").val();
+        if (isEmpty(name)) {
+            layer.msg("姓名不能为空!");
+            return;
+        }
+        if (isEmpty(phone)) {
+            layer.msg("联系电话不能为空!");
+            return;
+        }
+        if (isEmpty(ranking)) {
+            layer.msg("高考位次不能为空!");
+            return;
+        }
+        if (isEmpty(totalScore)) {
+            layer.msg("总分不能为空!");
+            return;
+        }
+        var physics = 0;
+        var chemistry = 0;
+        var biology = 0;
+        var technology = 0;
+        var history = 0;
+        var geography = 0;
+        var politics = 0;
+        var t = [];
+        $("input:checkbox[name='km']:checked").each(function () {
+            var v = $(this).val();
+            if (v == 1) {
+                physics = 1;
+            } else if (v == 2) {
+                chemistry = 1;
+            } else if (v == 3) {
+                biology = 1;
+            } else if (v == 4) {
+                technology = 1;
+            } else if (v == 5) {
+                history = 1;
+            } else if (v == 6) {
+                geography = 1;
+            } else {
+                politics = 1;
+            }
+            t.push($(this).val());
+        });
+        if (t.length == 0) {
+            layer.msg("请选择科目");
+            return;
+        }
+        if (t.length != 3) {
+            layer.msg("请选择三个科目");
+            return;
+        }
+        $.post("/candidate/add", {
+            "name": name
+            , "contactNumber": phone
+            , "ranking": ranking
+            , "totalScore": totalScore
+            , "physics": physics
+            , "chemistry": chemistry
+            , "biology": biology
+            , "technology": technology
+            , "history": history
+            , "geography": geography
+            , "politics": politics
+        }, function (res) {
+            if (res.code == 30002) {
+                layer.msg(res.msg);
+                setTimeout(function () {
+                    top.location.href = "/login";
+                }, 5000);
+            } else if (res.code != 90000) {
+                layer.msg(res.msg);
+            } else {
+                layer.close(index);
+                active.reload();
+                layer.msg("新增考生成功");
+            }
+        })
     }
 </script>
 </body>
