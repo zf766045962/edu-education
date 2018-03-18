@@ -163,6 +163,7 @@ public class RecruitStudentsPlanServiceImpl implements RecruitStudentsPlanServic
             if (temp.size() > 0) {
                 recruitStudentsPlanMapper.insertRecruitStudentsPlanBatch(temp);
             }
+            temp.clear();
         }
         if (inp != null) {
             inp.close();
