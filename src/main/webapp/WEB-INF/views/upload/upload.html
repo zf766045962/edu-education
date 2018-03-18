@@ -25,6 +25,10 @@
                     <input type="radio" name="upload_type" value="2" lay-filter="file_type" title="投档数据"
                            lay-skin="primary">
                 </div>
+                <label class="layui-form-label" id="year_mc">年份</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="year">
+                </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-upload">
@@ -49,12 +53,19 @@
     </div>
 </div>
 <script>
-    layui.use(['upload', 'form', 'element'], function () {
+    layui.use(['upload', 'form', 'element', 'laydate'], function () {
         var $ = layui.jquery
             , upload = layui.upload
-            , form = layui.form;
+            , form = layui.form
+            , laydate = layui.laydate;
         var fileType = "1";
         var fileTypeName = "普高计划库";
+        laydate.render({
+            elem: '#year'
+            , type: 'year'
+            , format: 'yyyy'
+            , max: 0//可任意组合
+        });
         form.on('radio(file_type)', function (data) {
             fileType = data.value;
             fileTypeName = data.elem.title;
@@ -67,9 +78,17 @@
             , accept: 'file'
             , exts: 'xls|xlsx'
             , before: function (obj) {
+                var year = $("#year").val();
+                if (fileType == '2') {
+                    if (year == null || year == "") {
+                        layer.msg("上传往年投档情况数据时，请输入年份");
+                        return;
+                    }
+                }
                 layer.load();
                 this.data = {
                     "fileType": fileType
+                    , "year": year
                 };
                 this.files = obj.pushFile();
                 obj.preview(function (index, file, result) {
