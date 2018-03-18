@@ -4,6 +4,7 @@ import com.common.Constants;
 import com.common.result.CodeMsg;
 import com.common.result.Result;
 import com.service.RecruitStudentsPlanService;
+import com.service.WntdqkService;
 import com.util.exception.CustomException;
 import com.util.normal.StringUtils;
 import com.vo.LoginUser;
@@ -29,6 +30,9 @@ public class UploadController {
     @Autowired
     private RecruitStudentsPlanService recruitStudentsPlanService;
 
+    @Autowired
+    private WntdqkService wntdqkService;
+
     @RequestMapping("/")
     public String toUpload() {
         return "upload/upload";
@@ -46,7 +50,7 @@ public class UploadController {
      */
     @RequestMapping("/excel")
     @ResponseBody
-    public Result upload(HttpServletRequest request, LoginUser loginUser, @RequestParam("fileType") String fileType) throws IOException, CustomException {
+    public Result upload(HttpServletRequest request, LoginUser loginUser, @RequestParam("fileType") String fileType, String year) throws IOException, CustomException {
         DefaultMultipartHttpServletRequest defaultRequest = (DefaultMultipartHttpServletRequest) request;
         MultipartFile file = defaultRequest.getFile(Constants.FILE_NAME);
         if (null == file) {
@@ -55,11 +59,12 @@ public class UploadController {
         String fileName = file.getOriginalFilename();
         if (StringUtils.isEmpty(fileName)) {
             return Result.error(CodeMsg.FILE_DATA_EMPTY);
-        } else {
-            //todo 投档数据导入
         }
         if (Constants.FILE_TYPE_PLAN.equals(fileType)) {
             recruitStudentsPlanService.uploadData(file);
+        }
+        if (Constants.FILE_TYPE_SUBMIT.equals(fileType)) {
+            wntdqkService.uploadData(file, year);
         }
         return Result.success(true);
     }
