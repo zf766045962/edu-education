@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.WntdqkMapper">
+    <resultMap id="BaseResultMap" type="com.entity.Wntdqk">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="schoole_code" property="schooleCode" jdbcType="VARCHAR"/>
+        <result column="school_name" property="schoolName" jdbcType="VARCHAR"/>
+        <result column="zydm" property="zydm" jdbcType="VARCHAR"/>
+        <result column="zymc" property="zymc" jdbcType="VARCHAR"/>
+        <result column="kl" property="kl" jdbcType="VARCHAR"/>
+        <result column="nf" property="nf" jdbcType="VARCHAR"/>
+        <result column="tdrs" property="tdrs" jdbcType="INTEGER"/>
+        <result column="pjf" property="pjf" jdbcType="INTEGER"/>
+        <result column="zdf" property="zdf" jdbcType="INTEGER"/>
+        <result column="tdmc" property="tdmc" jdbcType="INTEGER"/>
+        <result column="pc" property="pc" jdbcType="INTEGER"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+        <result column="ckzs" property="ckzs" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, schoole_code, school_name, zydm, zymc, kl, nf, tdrs, pjf, zdf, tdmc, pc, gmt_create,
+        gmt_modified, zkzs
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from wntdqk
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM wntdqk
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insertWntdqkBatch" parameterType="java.util.List">
+        insert into wntdqk (
+        schoole_code
+        , school_name
+        ,zydm
+        , zymc
+        , kl
+        , nf
+        , tdrs
+        , pjf
+        , zdf
+        , tdmc
+        , pc
+        ,ckzs
+        , gmt_create
+        )
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.schooleCode,jdbcType=VARCHAR}
+            , #{item.schoolName,jdbcType=VARCHAR}
+            ,#{item.zydm,jdbcType=VARCHAR}
+            , #{item.zymc,jdbcType=VARCHAR}
+            , #{item.kl,jdbcType=VARCHAR}
+            , #{item.nf,jdbcType=VARCHAR}
+            , #{item.tdrs,jdbcType=INTEGER}
+            , #{item.pjf,jdbcType=INTEGER}
+            , #{item.zdf,jdbcType=INTEGER}
+            , #{item.tdmc,jdbcType=INTEGER}
+            , #{item.pc,jdbcType=INTEGER}
+            , #{item.ckzs,jdbcType=VARCHAR}
+            , #{item.gmtCreate,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+    <insert id="insertSelective" parameterType="com.entity.Wntdqk">
+        insert into wntdqk
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="schooleCode != null">
+                schoole_code,
+            </if>
+            <if test="schoolName != null">
+                school_name,
+            </if>
+            <if test="zydm != null">
+                zydm,
+            </if>
+            <if test="zymc != null">
+                zymc,
+            </if>
+            <if test="kl != null">
+                kl,
+            </if>
+            <if test="nf != null">
+                nf,
+            </if>
+            <if test="tdrs != null">
+                tdrs,
+            </if>
+            <if test="pjf != null">
+                pjf,
+            </if>
+            <if test="zdf != null">
+                zdf,
+            </if>
+            <if test="tdmc != null">
+                tdmc,
+            </if>
+            <if test="pc != null">
+                pc,
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create,
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="schooleCode != null">
+                #{schooleCode,jdbcType=VARCHAR},
+            </if>
+            <if test="schoolName != null">
+                #{schoolName,jdbcType=VARCHAR},
+            </if>
+            <if test="zydm != null">
+                #{zydm,jdbcType=VARCHAR},
+            </if>
+            <if test="zymc != null">
+                #{zymc,jdbcType=VARCHAR},
+            </if>
+            <if test="kl != null">
+                #{kl,jdbcType=VARCHAR},
+            </if>
+            <if test="nf != null">
+                #{nf,jdbcType=VARCHAR},
+            </if>
+            <if test="tdrs != null">
+                #{tdrs,jdbcType=INTEGER},
+            </if>
+            <if test="pjf != null">
+                #{pjf,jdbcType=INTEGER},
+            </if>
+            <if test="zdf != null">
+                #{zdf,jdbcType=INTEGER},
+            </if>
+            <if test="tdmc != null">
+                #{tdmc,jdbcType=INTEGER},
+            </if>
+            <if test="pc != null">
+                #{pc,jdbcType=INTEGER},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.entity.Wntdqk">
+        update wntdqk
+        <set>
+            <if test="schooleCode != null">
+                schoole_code = #{schooleCode,jdbcType=VARCHAR},
+            </if>
+            <if test="schoolName != null">
+                school_name = #{schoolName,jdbcType=VARCHAR},
+            </if>
+            <if test="zydm != null">
+                zydm = #{zydm,jdbcType=VARCHAR},
+            </if>
+            <if test="zymc != null">
+                zymc = #{zymc,jdbcType=VARCHAR},
+            </if>
+            <if test="kl != null">
+                kl = #{kl,jdbcType=VARCHAR},
+            </if>
+            <if test="nf != null">
+                nf = #{nf,jdbcType=VARCHAR},
+            </if>
+            <if test="tdrs != null">
+                tdrs = #{tdrs,jdbcType=INTEGER},
+            </if>
+            <if test="pjf != null">
+                pjf = #{pjf,jdbcType=INTEGER},
+            </if>
+            <if test="zdf != null">
+                zdf = #{zdf,jdbcType=INTEGER},
+            </if>
+            <if test="tdmc != null">
+                tdmc = #{tdmc,jdbcType=INTEGER},
+            </if>
+            <if test="pc != null">
+                pc = #{pc,jdbcType=INTEGER},
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.entity.Wntdqk">
+        UPDATE wntdqk
+        SET schoole_code = #{schooleCode,jdbcType=VARCHAR},
+            school_name  = #{schoolName,jdbcType=VARCHAR},
+            zydm         = #{zydm,jdbcType=VARCHAR},
+            zymc         = #{zymc,jdbcType=VARCHAR},
+            kl           = #{kl,jdbcType=VARCHAR},
+            nf           = #{nf,jdbcType=VARCHAR},
+            tdrs         = #{tdrs,jdbcType=INTEGER},
+            pjf          = #{pjf,jdbcType=INTEGER},
+            zdf          = #{zdf,jdbcType=INTEGER},
+            tdmc         = #{tdmc,jdbcType=INTEGER},
+            pc           = #{pc,jdbcType=INTEGER},
+            gmt_create   = #{gmtCreate,jdbcType=TIMESTAMP},
+            gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>
