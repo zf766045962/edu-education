@@ -60,7 +60,7 @@ public abstract class AbstractExcelUtil {
         }
         CellType cellType = cell.getCellTypeEnum();
         if (cellType.equals(CellType.NUMERIC)) {
-            DecimalFormat df = new DecimalFormat("0.00");
+            DecimalFormat df = new DecimalFormat("0.0000");
             return String.valueOf(df.format(cell.getNumericCellValue()));
         }
         if (cellType.equals(CellType.STRING)) {
@@ -71,7 +71,7 @@ public abstract class AbstractExcelUtil {
         }
         if (cellType.equals(CellType.FORMULA)) {
             try {
-                DecimalFormat df = new DecimalFormat("0.00");
+                DecimalFormat df = new DecimalFormat("0.0000");
                 return String.valueOf(df.format(cell.getNumericCellValue()));
             } catch (IllegalStateException e) {
                 return String.valueOf(cell.getRichStringCellValue());
