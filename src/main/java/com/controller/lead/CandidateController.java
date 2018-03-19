@@ -8,6 +8,8 @@ import com.service.CandidateService;
 import com.vo.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,6 +34,13 @@ public class CandidateController {
     @RequestMapping("/")
     public String toCandidate() {
         return "lead/candidate";
+    }
+
+    @RequestMapping("/search/{id}")
+    public String toSearch(@PathVariable("id") Long id, Model model) {
+        Candidate candidate = candidateService.getCandidateById(id);
+        model.addAttribute("candidate", candidate);
+        return "/lead/search";
     }
 
     /**
@@ -83,6 +92,34 @@ public class CandidateController {
         candidate.setConsultantId(loginUser.getLoginId());
         candidate.setGmtCreate(new Date());
         candidateService.saveCandidate(candidate);
+        return Result.success(true);
+    }
+
+    /**
+     * 查询志愿
+     *
+     * @param c_min 冲位次最小值
+     * @param c_max 冲位次最大值
+     * @param w_min 稳位次最小值
+     * @param w_max 稳位次最大值
+     * @param b_min 保位次最小值
+     * @param b_max 保位次最大值
+     * @param id    考生id
+     * @return 志愿
+     */
+    @RequestMapping("/application")
+    public Result searchApplication(
+            @RequestParam("c_min") int c_min
+            , @RequestParam("c_max") int c_max
+            , @RequestParam("w_min") int w_min
+            , @RequestParam("w_max") int w_max
+            , @RequestParam("b_min") int b_min
+            , @RequestParam("b_max") int b_max
+            , @RequestParam("id") Long id) {
+        //todo 查询考生信息
+        //todo 查询冲志愿
+        //todo 查询稳志愿
+        //todo 查询保志愿
         return Result.success(true);
     }
 }
