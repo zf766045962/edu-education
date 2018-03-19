@@ -32,4 +32,9 @@ public class CandidateServiceImpl implements CandidateService {
     public void saveCandidate(Candidate candidate) {
         candidateMapper.saveCandidate(candidate);
     }
+
+    @Override
+    public Candidate getCandidateById(Long id) {
+        return candidateMapper.getCandidateById(id);
+    }
 }
