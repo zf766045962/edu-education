@@ -22,7 +22,7 @@
         id, name, total_score, ranking, physics, chemistry, biology, technology, history,
         geography, politics, contact_number, consultant_id, gmt_create, gmt_modified
     </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    <select id="getCandidateById" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
         from candidate
