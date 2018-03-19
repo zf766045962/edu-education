@@ -186,6 +186,15 @@
                     }
                 })
             }
+            , search: function () {
+                var checkStatus = table.checkStatus('idTest');
+                var data = checkStatus.data;
+                if (data.length <= 0 || data.length > 1) {
+                    layer.msg("请选择一条数据");
+                    return;
+                }
+                window.open("/candidate/search/" + data[0].id);
+            }
         };
         $('.layui-btn').on('click', function () {
             var type = $(this).data('type');
