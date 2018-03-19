@@ -42,4 +42,12 @@ public interface CandidateMapper {
      * @param candidate 考生对象
      */
     void saveCandidate(Candidate candidate);
+
+    /**
+     * 通过id获取考生信息
+     *
+     * @param id id
+     * @return 考生信息
+     */
+    Candidate getCandidateById(Long id);
 }
