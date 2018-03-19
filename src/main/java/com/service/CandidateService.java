@@ -31,4 +31,12 @@ public interface CandidateService {
      * @param candidate 考生对象
      */
     void saveCandidate(Candidate candidate);
+
+    /**
+     * 用过id获取考生信息
+     *
+     * @param id id
+     * @return 考生信息
+     */
+    Candidate getCandidateById(Long id);
 }
