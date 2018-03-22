@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +69,7 @@ public class WntdqkServiceImpl implements WntdqkService {
                         wntdqk.setTdmc(CommonUtils.convertStringToInteger(v));
                         break;
                     case 9:
-                        wntdqk.setCkzs(v);
+                        wntdqk.setCkzs(new BigDecimal(v));
                         break;
                     default:
                         break;
