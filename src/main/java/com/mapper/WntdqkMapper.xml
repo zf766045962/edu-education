@@ -16,7 +16,7 @@
         <result column="pc" property="pc" jdbcType="INTEGER"/>
         <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
         <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
-        <result column="ckzs" property="ckzs" jdbcType="VARCHAR"/>
+        <result column="ckzs" property="ckzs" jdbcType="DECIMAL"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, schoole_code, school_name, zydm, zymc, kl, nf, tdrs, pjf, zdf, tdmc, pc, gmt_create,
@@ -62,7 +62,7 @@
             , #{item.zdf,jdbcType=INTEGER}
             , #{item.tdmc,jdbcType=INTEGER}
             , #{item.pc,jdbcType=INTEGER}
-            , #{item.ckzs,jdbcType=VARCHAR}
+            , #{item.ckzs,jdbcType=DECIMAL}
             , #{item.gmtCreate,jdbcType=TIMESTAMP}
             )
         </foreach>
