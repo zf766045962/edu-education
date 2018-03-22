@@ -3,7 +3,9 @@ package com.normal;
 import com.SpringBaseTest;
 import com.common.Constants;
 import com.dao.RecruitStudentsPlanMapper;
+import com.dao.WntdqkMapper;
 import com.entity.RecruitStudentsPlan;
+import com.entity.Wntdqk;
 import com.util.excel.AbstractExcelUtil;
 import com.util.normal.CommonUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -11,11 +13,13 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +31,8 @@ import java.util.List;
 public class ExcelRead extends SpringBaseTest {
     @Autowired
     private RecruitStudentsPlanMapper recruitStudentsPlanMapper;
+    @Autowired
+    private WntdqkMapper wntdqkMapper;
 
     @Test
     public void testPlan() throws IOException {
@@ -178,5 +184,79 @@ public class ExcelRead extends SpringBaseTest {
         String str = "50";
         String[] strs = str.split("\\.");
         System.out.println(Integer.parseInt(strs[0]));
+    }
+
+    @Test
+    public void testOldPlan() throws IOException {
+        String file = "D:\\work\\高考志愿填报辅助系统\\2014-2017投档数据.xlsx";
+        FileInputStream fileInput = new FileInputStream(file);
+        Workbook workbook = AbstractExcelUtil.getExcel(fileInput, file);
+        Assert.assertNotNull(workbook);
+        Sheet sheet = workbook.getSheetAt(1);
+        Row row;
+        List<Wntdqk> list = new ArrayList<>();
+        Wntdqk wntdqk;
+        for (int i = 1, len = sheet.getLastRowNum(); i <= len; i++) {
+            row = sheet.getRow(i);
+            wntdqk = new Wntdqk();
+            for (int j = 0, jLen = row.getLastCellNum(); j < jLen; j++) {
+                String v = AbstractExcelUtil.getCellByType(row.getCell(j));
+                switch (j) {
+                    case 0:
+                        wntdqk.setNf(v == null ? "" : v.split("\\.")[0]);
+                        break;
+                    case 2:
+                        wntdqk.setPc(CommonUtils.convertStringToInteger(v));
+                        break;
+                    case 4:
+                        wntdqk.setSchooleCode(v);
+                        break;
+                    case 5:
+                        wntdqk.setSchoolName(v);
+                        break;
+                    case 7:
+                        wntdqk.setZymc(v);
+                        break;
+                    case 8:
+                        wntdqk.setKl(v);
+                        break;
+                    case 10:
+                        wntdqk.setPjf(CommonUtils.convertStringToInteger(v));
+                        break;
+                    case 11:
+                        wntdqk.setZdf(CommonUtils.convertStringToInteger(v));
+                        break;
+                    case 12:
+                        wntdqk.setTdmc(CommonUtils.convertStringToInteger(v));
+                        break;
+                    case 14:
+                        wntdqk.setTdrs(CommonUtils.convertStringToInteger(v));
+                    case 15:
+                        wntdqk.setCkzs(new BigDecimal(v));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            list.add(wntdqk);
+        }
+        if (list.size() > 0) {
+            int len = list.size();
+            if (len <= Constants.EXCEL_BATCH_SIZE) {
+                wntdqkMapper.insertWntdqkBatch(list);
+            }
+            List<Wntdqk> temp = new ArrayList<>(Constants.EXCEL_BATCH_SIZE);
+            for (int i = 0; i < len; i++) {
+                if (i > 0 && i % Constants.EXCEL_BATCH_SIZE == 0) {
+                    wntdqkMapper.insertWntdqkBatch(temp);
+                    temp.clear();
+                }
+                temp.add(list.get(i));
+            }
+            if (temp.size() > 0) {
+                wntdqkMapper.insertWntdqkBatch(temp);
+            }
+            temp.clear();
+        }
     }
 }
