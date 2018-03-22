@@ -16,7 +16,7 @@ public class Constants {
     /**
      * excel批量插入条数
      */
-    public static final int EXCEL_BATCH_SIZE = 50;
+    public static final int EXCEL_BATCH_SIZE = 500;
     /**
      * 超级用户前缀 admin
      */
