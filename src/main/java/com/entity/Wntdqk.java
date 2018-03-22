@@ -1,6 +1,7 @@
 package com.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -60,7 +61,7 @@ public class Wntdqk implements Serializable {
     /**
      * 参考指数
      */
-    private String ckzs;
+    private BigDecimal ckzs;
 
     private Date gmtCreate;
 
@@ -178,11 +179,32 @@ public class Wntdqk implements Serializable {
         this.gmtModified = gmtModified;
     }
 
-    public String getCkzs() {
+    public BigDecimal getCkzs() {
         return ckzs;
     }
 
-    public void setCkzs(String ckzs) {
+    public void setCkzs(BigDecimal ckzs) {
         this.ckzs = ckzs;
+    }
+
+    @Override
+    public String toString() {
+        return "Wntdqk{" +
+                "id=" + id +
+                ", schooleCode='" + schooleCode + '\'' +
+                ", schoolName='" + schoolName + '\'' +
+                ", zydm='" + zydm + '\'' +
+                ", zymc='" + zymc + '\'' +
+                ", kl='" + kl + '\'' +
+                ", nf='" + nf + '\'' +
+                ", tdrs=" + tdrs +
+                ", pjf=" + pjf +
+                ", zdf=" + zdf +
+                ", tdmc=" + tdmc +
+                ", pc=" + pc +
+                ", ckzs='" + ckzs + '\'' +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
+                '}';
     }
 }
