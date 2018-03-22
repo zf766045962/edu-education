@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.HxzyMapper">
+    <resultMap id="BaseResultMap" type="com.entity.Hxzy">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="candidate_id" property="candidateId" jdbcType="BIGINT"/>
+        <result column="school_code" property="schoolCode" jdbcType="VARCHAR"/>
+        <result column="school_name" property="schoolName" jdbcType="VARCHAR"/>
+        <result column="major_code" property="majorCode" jdbcType="VARCHAR"/>
+        <result column="major_name" property="majorName" jdbcType="VARCHAR"/>
+        <result column="reference_index" property="referenceIndex" jdbcType="DECIMAL"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, candidate_id, school_code, school_name, major_code, major_name, reference_index,
+        status, gmt_create, gmt_modified
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from hxzy
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM hxzy
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insertSelective" parameterType="com.entity.Hxzy">
+        insert into hxzy
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="candidateId != null">
+                candidate_id,
+            </if>
+            <if test="schoolCode != null">
+                school_code,
+            </if>
+            <if test="schoolName != null">
+                school_name,
+            </if>
+            <if test="majorCode != null">
+                major_code,
+            </if>
+            <if test="majorName != null">
+                major_name,
+            </if>
+            <if test="referenceIndex != null">
+                reference_index,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create,
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="candidateId != null">
+                #{candidateId,jdbcType=BIGINT},
+            </if>
+            <if test="schoolCode != null">
+                #{schoolCode,jdbcType=VARCHAR},
+            </if>
+            <if test="schoolName != null">
+                #{schoolName,jdbcType=VARCHAR},
+            </if>
+            <if test="majorCode != null">
+                #{majorCode,jdbcType=VARCHAR},
+            </if>
+            <if test="majorName != null">
+                #{majorName,jdbcType=VARCHAR},
+            </if>
+            <if test="referenceIndex != null">
+                #{referenceIndex,jdbcType=DECIMAL},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <select id="listHxzyByCandidateId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM hxzy WHERE candidate_id=#{candidateId}
+    </select>
+    <select id="deleteAllByCandidateId">
+        DELETE FROM hxzy
+        WHERE candidate_id = #{candidateId}
+    </select>
+    <select id="deleteByIds">
+        DELETE FROM hxzy WHERE id IN (
+        <foreach collection="list" separator="," item="item">
+            #{item}
+        </foreach>
+        )
+    </select>
+</mapper>
