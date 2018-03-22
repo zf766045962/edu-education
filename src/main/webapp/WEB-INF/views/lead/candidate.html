@@ -42,6 +42,7 @@
         <div class="layui-btn-group">
             <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="add"><i class="iconfont">&#xe651;</i>录入</a>
             <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="search"><i class="iconfont"></i>查询志愿</a>
+            <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="searchHx"><i class="iconfont"></i>候选志愿查看</a>
             <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="export"><i class="iconfont"></i>候选志愿导出</a>
             <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="del"><i class="iconfont">&#xe60d;</i>删除</a>
         </div>
@@ -194,6 +195,15 @@
                     return;
                 }
                 window.open("/candidate/search/" + data[0].id);
+            }
+            , searchHx: function () {
+                var checkStatus = table.checkStatus('idTest');
+                var data = checkStatus.data;
+                if (data.length <= 0 || data.length > 1) {
+                    layer.msg("请选择一条数据");
+                    return;
+                }
+                window.open("/hxzy/searchHx/" + data[0].id);
             }
         };
         $('.layui-btn').on('click', function () {
