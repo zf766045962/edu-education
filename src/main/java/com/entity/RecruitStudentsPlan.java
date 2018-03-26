@@ -127,6 +127,10 @@ public class RecruitStudentsPlan implements Serializable {
      * 科目3
      */
     private String km3;
+    /**
+     * 专业代码与省代码2合成在一起
+     */
+    private String zydmNew;
 
     public Long getId() {
         return id;
@@ -462,5 +466,13 @@ public class RecruitStudentsPlan implements Serializable {
 
     public void setKm3(String km3) {
         this.km3 = km3;
+    }
+
+    public String getZydmNew() {
+        return zydmNew;
+    }
+
+    public void setZydmNew(String zydmNew) {
+        this.zydmNew = zydmNew;
     }
 }
