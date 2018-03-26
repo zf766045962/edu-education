@@ -59,6 +59,11 @@ public class CodeMsg {
 
     public static CodeMsg EMPTY_FUNCTION_CODE = new CodeMsg(40003, "系统功能为空");
 
+    /**
+     * 考生异常 500xx
+     */
+    public static CodeMsg CANDIDATE_NOT_EXISTS = new CodeMsg(50001, "考生不存在");
+
 
     private CodeMsg(int code, String msg) {
         this.code = code;
