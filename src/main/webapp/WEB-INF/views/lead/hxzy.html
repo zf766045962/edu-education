@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>候选志愿查看</title>
+    <link rel="stylesheet" type="text/css" href="../../../assets/edu/layui/css/layui.css"
+          th:href="@{/assets/edu/layui/css/layui.css}">
+    <link rel="stylesheet" type="text/css" href="../../../assets/edu/css/css.css" th:href="@{/assets/edu/css/css.css}">
+    <script type="text/javascript" src="../../../assets/edu/js/jquery-1.11.3.js"
+            th:src="@{/assets/edu/js/jquery-1.11.3.js}"></script>
+    <script type="text/javascript" src="../../../assets/edu/layui/layui.js"
+            th:src="@{/assets/edu/layui/layui.js}"></script>
+    <script type="text/javascript" src="../../../assets/edu/js/common.js"
+            th:src="@{/assets/edu/js/common.js?v=201803171720}"></script>
+</head>
+<body th:inline="none">
+<div class="pad10">
+    <input type="hidden" th:value="${candidateId}" id="hid_id">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">学校名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="schoolName">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">专业名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="majorName">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label"></label>
+                <a href="javascript:;" class="layui-btn ayui-btn-normal bg-blue " data-type="reload">
+                    <i class="iconfont">&#xe606;</i> 查询</a>
+            </div>
+        </div>
+    </form>
+    <div class="line">
+        <span class=line-title>查询结果</span>
+    </div>
+    <div class="gkwh-tb">
+        <div class="layui-btn-group">
+            <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="del"><i class="iconfont"></i>删除志愿</a>
+            <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="clear"><i class="iconfont"></i>清空志愿</a>
+            <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="export"><i class="iconfont"></i>候选志愿导出</a>
+        </div>
+        <table id="wh-list"></table>
+    </div>
+</div>
+<script>
+    layui.use(['table', 'form'], function () {
+        var $ = layui.jquery
+            , table = layui.table
+            , form = layui.form;
+        table.render({
+            elem: '#wh-list'
+            , url: '/hxzy/search'
+            , cols: [[
+                {field: 'id', title: 'id', checkbox: true, sort: true}
+                , {field: 'schoolName', title: '学校名称', sort: true}
+                , {field: 'schoolCode', title: '学校代码', sort: true}
+                , {field: 'majorName', title: '专业名称', sort: true}
+                , {field: 'majorCode', title: '专业代码', sort: true}
+                , {field: 'referenceIndexName', title: '参考指数', sort: true}
+                , {field: 'statusName', title: '志愿类型', sort: true}
+            ]]
+            , where: {
+                "candidateId": $("#hid_id").val()
+            }
+            , id: 'idTest'
+            , request: {
+                pageName: 'currentPage' //页码的参数名称，默认：page
+                , limitName: 'pageSize' //每页数据量的参数名，默认：limit
+            }
+            , response: {
+                statusCode: 90000 //成功的状态码，默认：0
+                , countName: 'count' //数据总数的字段名称，默认：count
+                , dataName: 'data' //数据列表的字段名称，默认：data
+            }
+            , even: true
+            , page: {theme: '#2d5eb7'}
+            , done: function (res, curr, count) {
+                if (res.code == 30002) {
+                    layer.msg(res.msg);
+                    setTimeout(function () {
+                        top.location.href = "/login";
+                    }, 5000);
+                } else if (res.code != 90000) {
+                    layer.msg(res.msg);
+                }
+            }
+        });
+        var active = {
+            del: function () {
+                var checkStatus = table.checkStatus('idTest');
+                var data = checkStatus.data;
+                if (data.length <= 0) {
+                    layer.msg("请选择数据");
+                    return;
+                }
+                var ids = "";
+                for (var i in data) {
+                    ids += data[i].id + ",";
+                }
+                ids = ids.substring(0, ids.length - 1);
+                layer.confirm('确定要删除吗?', {
+                    btn: ['确定', '取消']
+                }, function (index, layero) {
+                    delZy(ids, active);
+                }, function (index) {
+
+                });
+            }
+            , reload: function () {
+                var schoolName = $("#schoolName").val();
+                var majorName = $("#majorName").val();
+                //执行重载
+                table.reload('idTest', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        "schoolName": schoolName,
+                        "majorName": majorName
+                    }
+                });
+            }
+            , clear: function () {
+                layer.confirm('确定要清空志愿吗?', {
+                    btn: ['确定', '取消']
+                }, function (index, layero) {
+                    clearZy(active);
+                }, function (index) {
+
+                });
+            }
+            , export: function () {
+                var id = $("#hid_id").val();
+                window.location.href = '/hxzy/export?candidateId=' + id;
+            }
+        };
+        $('.layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+
+    function delZy(ids, active) {
+        $.post("/hxzy/delete", {
+            "ids": ids
+        }, function (res) {
+            if (res.code == 30002) {
+                layer.msg(res.msg);
+                setTimeout(function () {
+                    top.location.href = "/login";
+                }, 5000);
+            } else if (res.code != 90000) {
+                layer.msg(res.msg);
+            } else {
+                layer.msg("删除成功");
+                active.reload();
+            }
+        });
+    }
+
+    function clearZy(active) {
+        $.post("/hxzy/clear", {"candidateId": $("#hid_id").val()}, function (res) {
+            if (res.code == 30002) {
+                layer.msg(res.msg);
+                setTimeout(function () {
+                    top.location.href = "/login";
+                }, 5000);
+            } else if (res.code != 90000) {
+                layer.msg(res.msg);
+            } else {
+                layer.msg("清空成功");
+                active.reload();
+            }
+        })
+    }
+</script>
+</body>
+</html>
