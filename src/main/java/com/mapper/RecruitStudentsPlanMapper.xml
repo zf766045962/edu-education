@@ -39,11 +39,12 @@
         <result column="km1" property="km1" jdbcType="VARCHAR"/>
         <result column="km2" property="km2" jdbcType="VARCHAR"/>
         <result column="km3" property="km3" jdbcType="VARCHAR"/>
+        <result column="zydmNew" property="zydmNew" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, yxdm, yxdh, yxdhmc, szd, sf985, sf211, bxlxdm, bxlxmc, ssdm, ssmc, zgdm, zgmc,
         ccdm, ccmc, zydm, sbdm2, zymc, xzdmxg, xzdm, xzmc, sfbz, kldm, ksklmc, pcdm, pcmc,
-        kslxdm, kslxmc, xkkmyq, xkkmyqzw, zsjhs, bz, gmt_create, gmt_modified, km1, km2, km3
+        kslxdm, kslxmc, xkkmyq, xkkmyqzw, zsjhs, bz, gmt_create, gmt_modified, km1, km2, km3, zydmNew
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -86,7 +87,8 @@
         , bz
         ,km1
         ,km2
-        ,km3)
+        ,km3
+        ,zydm_new)
         values
         <foreach collection="list" item="item" separator=",">
             (
@@ -124,360 +126,82 @@
             , #{item.km1,jdbcType=VARCHAR}
             , #{item.km2,jdbcType=VARCHAR}
             , #{item.km3,jdbcType=VARCHAR}
+            , #{item.zydmNew,jdbcType=VARCHAR}
             )
         </foreach>
     </insert>
-    <insert id="insertSelective" parameterType="com.entity.RecruitStudentsPlan">
-        insert into recruit_students_plan
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
-            <if test="yxdm != null">
-                yxdm,
-            </if>
-            <if test="yxdh != null">
-                yxdh,
-            </if>
-            <if test="yxdhmc != null">
-                yxdhmc,
-            </if>
-            <if test="szd != null">
-                szd,
-            </if>
-            <if test="sf985 != null">
-                sf985,
-            </if>
-            <if test="sf211 != null">
-                sf211,
-            </if>
-            <if test="bxlxdm != null">
-                bxlxdm,
-            </if>
-            <if test="bxlxmc != null">
-                bxlxmc,
-            </if>
-            <if test="ssdm != null">
-                ssdm,
-            </if>
-            <if test="ssmc != null">
-                ssmc,
-            </if>
-            <if test="zgdm != null">
-                zgdm,
-            </if>
-            <if test="zgmc != null">
-                zgmc,
-            </if>
-            <if test="ccdm != null">
-                ccdm,
-            </if>
-            <if test="ccmc != null">
-                ccmc,
-            </if>
-            <if test="zydm != null">
-                zydm,
-            </if>
-            <if test="sbdm2 != null">
-                sbdm2,
-            </if>
-            <if test="zymc != null">
-                zymc,
-            </if>
-            <if test="xzdmxg != null">
-                xzdmxg,
-            </if>
-            <if test="xzdm != null">
-                xzdm,
-            </if>
-            <if test="xzmc != null">
-                xzmc,
-            </if>
-            <if test="sfbz != null">
-                sfbz,
-            </if>
-            <if test="kldm != null">
-                kldm,
-            </if>
-            <if test="ksklmc != null">
-                ksklmc,
-            </if>
-            <if test="pcdm != null">
-                pcdm,
-            </if>
-            <if test="pcmc != null">
-                pcmc,
-            </if>
-            <if test="kslxdm != null">
-                kslxdm,
-            </if>
-            <if test="kslxmc != null">
-                kslxmc,
-            </if>
-            <if test="xkkmyq != null">
-                xkkmyq,
-            </if>
-            <if test="xkkmyqzw != null">
-                xkkmyqzw,
-            </if>
-            <if test="zsjhs != null">
-                zsjhs,
-            </if>
-            <if test="bz != null">
-                bz,
-            </if>
-            <if test="gmtCreate != null">
-                gmt_create,
-            </if>
-            <if test="gmtModified != null">
-                gmt_modified,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=BIGINT},
-            </if>
-            <if test="yxdm != null">
-                #{yxdm,jdbcType=VARCHAR},
-            </if>
-            <if test="yxdh != null">
-                #{yxdh,jdbcType=VARCHAR},
-            </if>
-            <if test="yxdhmc != null">
-                #{yxdhmc,jdbcType=VARCHAR},
-            </if>
-            <if test="szd != null">
-                #{szd,jdbcType=VARCHAR},
-            </if>
-            <if test="sf985 != null">
-                #{sf985,jdbcType=INTEGER},
-            </if>
-            <if test="sf211 != null">
-                #{sf211,jdbcType=INTEGER},
-            </if>
-            <if test="bxlxdm != null">
-                #{bxlxdm,jdbcType=INTEGER},
-            </if>
-            <if test="bxlxmc != null">
-                #{bxlxmc,jdbcType=VARCHAR},
-            </if>
-            <if test="ssdm != null">
-                #{ssdm,jdbcType=INTEGER},
-            </if>
-            <if test="ssmc != null">
-                #{ssmc,jdbcType=VARCHAR},
-            </if>
-            <if test="zgdm != null">
-                #{zgdm,jdbcType=INTEGER},
-            </if>
-            <if test="zgmc != null">
-                #{zgmc,jdbcType=VARCHAR},
-            </if>
-            <if test="ccdm != null">
-                #{ccdm,jdbcType=INTEGER},
-            </if>
-            <if test="ccmc != null">
-                #{ccmc,jdbcType=VARCHAR},
-            </if>
-            <if test="zydm != null">
-                #{zydm,jdbcType=VARCHAR},
-            </if>
-            <if test="sbdm2 != null">
-                #{sbdm2,jdbcType=VARCHAR},
-            </if>
-            <if test="zymc != null">
-                #{zymc,jdbcType=VARCHAR},
-            </if>
-            <if test="xzdmxg != null">
-                #{xzdmxg,jdbcType=VARCHAR},
-            </if>
-            <if test="xzdm != null">
-                #{xzdm,jdbcType=CHAR},
-            </if>
-            <if test="xzmc != null">
-                #{xzmc,jdbcType=VARCHAR},
-            </if>
-            <if test="sfbz != null">
-                #{sfbz,jdbcType=VARCHAR},
-            </if>
-            <if test="kldm != null">
-                #{kldm,jdbcType=VARCHAR},
-            </if>
-            <if test="ksklmc != null">
-                #{ksklmc,jdbcType=VARCHAR},
-            </if>
-            <if test="pcdm != null">
-                #{pcdm,jdbcType=VARCHAR},
-            </if>
-            <if test="pcmc != null">
-                #{pcmc,jdbcType=VARCHAR},
-            </if>
-            <if test="kslxdm != null">
-                #{kslxdm,jdbcType=VARCHAR},
-            </if>
-            <if test="kslxmc != null">
-                #{kslxmc,jdbcType=VARCHAR},
-            </if>
-            <if test="xkkmyq != null">
-                #{xkkmyq,jdbcType=VARCHAR},
-            </if>
-            <if test="xkkmyqzw != null">
-                #{xkkmyqzw,jdbcType=VARCHAR},
-            </if>
-            <if test="zsjhs != null">
-                #{zsjhs,jdbcType=INTEGER},
-            </if>
-            <if test="bz != null">
-                #{bz,jdbcType=VARCHAR},
-            </if>
-            <if test="gmtCreate != null">
-                #{gmtCreate,jdbcType=TIMESTAMP},
-            </if>
-            <if test="gmtModified != null">
-                #{gmtModified,jdbcType=TIMESTAMP},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.entity.RecruitStudentsPlan">
-        update recruit_students_plan
-        <set>
-            <if test="yxdm != null">
-                yxdm = #{yxdm,jdbcType=VARCHAR},
-            </if>
-            <if test="yxdh != null">
-                yxdh = #{yxdh,jdbcType=VARCHAR},
-            </if>
-            <if test="yxdhmc != null">
-                yxdhmc = #{yxdhmc,jdbcType=VARCHAR},
-            </if>
-            <if test="szd != null">
-                szd = #{szd,jdbcType=VARCHAR},
-            </if>
-            <if test="sf985 != null">
-                sf985 = #{sf985,jdbcType=INTEGER},
-            </if>
-            <if test="sf211 != null">
-                sf211 = #{sf211,jdbcType=INTEGER},
-            </if>
-            <if test="bxlxdm != null">
-                bxlxdm = #{bxlxdm,jdbcType=INTEGER},
-            </if>
-            <if test="bxlxmc != null">
-                bxlxmc = #{bxlxmc,jdbcType=VARCHAR},
-            </if>
-            <if test="ssdm != null">
-                ssdm = #{ssdm,jdbcType=INTEGER},
-            </if>
-            <if test="ssmc != null">
-                ssmc = #{ssmc,jdbcType=VARCHAR},
-            </if>
-            <if test="zgdm != null">
-                zgdm = #{zgdm,jdbcType=INTEGER},
-            </if>
-            <if test="zgmc != null">
-                zgmc = #{zgmc,jdbcType=VARCHAR},
-            </if>
-            <if test="ccdm != null">
-                ccdm = #{ccdm,jdbcType=INTEGER},
-            </if>
-            <if test="ccmc != null">
-                ccmc = #{ccmc,jdbcType=VARCHAR},
-            </if>
-            <if test="zydm != null">
-                zydm = #{zydm,jdbcType=VARCHAR},
-            </if>
-            <if test="sbdm2 != null">
-                sbdm2 = #{sbdm2,jdbcType=VARCHAR},
-            </if>
-            <if test="zymc != null">
-                zymc = #{zymc,jdbcType=VARCHAR},
-            </if>
-            <if test="xzdmxg != null">
-                xzdmxg = #{xzdmxg,jdbcType=VARCHAR},
-            </if>
-            <if test="xzdm != null">
-                xzdm = #{xzdm,jdbcType=CHAR},
-            </if>
-            <if test="xzmc != null">
-                xzmc = #{xzmc,jdbcType=VARCHAR},
-            </if>
-            <if test="sfbz != null">
-                sfbz = #{sfbz,jdbcType=VARCHAR},
-            </if>
-            <if test="kldm != null">
-                kldm = #{kldm,jdbcType=VARCHAR},
-            </if>
-            <if test="ksklmc != null">
-                ksklmc = #{ksklmc,jdbcType=VARCHAR},
-            </if>
-            <if test="pcdm != null">
-                pcdm = #{pcdm,jdbcType=VARCHAR},
-            </if>
-            <if test="pcmc != null">
-                pcmc = #{pcmc,jdbcType=VARCHAR},
-            </if>
-            <if test="kslxdm != null">
-                kslxdm = #{kslxdm,jdbcType=VARCHAR},
-            </if>
-            <if test="kslxmc != null">
-                kslxmc = #{kslxmc,jdbcType=VARCHAR},
-            </if>
-            <if test="xkkmyq != null">
-                xkkmyq = #{xkkmyq,jdbcType=VARCHAR},
-            </if>
-            <if test="xkkmyqzw != null">
-                xkkmyqzw = #{xkkmyqzw,jdbcType=VARCHAR},
-            </if>
-            <if test="zsjhs != null">
-                zsjhs = #{zsjhs,jdbcType=INTEGER},
-            </if>
-            <if test="bz != null">
-                bz = #{bz,jdbcType=VARCHAR},
-            </if>
-            <if test="gmtCreate != null">
-                gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-            </if>
-            <if test="gmtModified != null">
-                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-            </if>
-        </set>
-        where id = #{id,jdbcType=BIGINT}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.entity.RecruitStudentsPlan">
-        UPDATE recruit_students_plan
-        SET yxdm         = #{yxdm,jdbcType=VARCHAR},
-            yxdh         = #{yxdh,jdbcType=VARCHAR},
-            yxdhmc       = #{yxdhmc,jdbcType=VARCHAR},
-            szd          = #{szd,jdbcType=VARCHAR},
-            sf985        = #{sf985,jdbcType=INTEGER},
-            sf211        = #{sf211,jdbcType=INTEGER},
-            bxlxdm       = #{bxlxdm,jdbcType=INTEGER},
-            bxlxmc       = #{bxlxmc,jdbcType=VARCHAR},
-            ssdm         = #{ssdm,jdbcType=INTEGER},
-            ssmc         = #{ssmc,jdbcType=VARCHAR},
-            zgdm         = #{zgdm,jdbcType=INTEGER},
-            zgmc         = #{zgmc,jdbcType=VARCHAR},
-            ccdm         = #{ccdm,jdbcType=INTEGER},
-            ccmc         = #{ccmc,jdbcType=VARCHAR},
-            zydm         = #{zydm,jdbcType=VARCHAR},
-            sbdm2        = #{sbdm2,jdbcType=VARCHAR},
-            zymc         = #{zymc,jdbcType=VARCHAR},
-            xzdmxg       = #{xzdmxg,jdbcType=VARCHAR},
-            xzdm         = #{xzdm,jdbcType=CHAR},
-            xzmc         = #{xzmc,jdbcType=VARCHAR},
-            sfbz         = #{sfbz,jdbcType=VARCHAR},
-            kldm         = #{kldm,jdbcType=VARCHAR},
-            ksklmc       = #{ksklmc,jdbcType=VARCHAR},
-            pcdm         = #{pcdm,jdbcType=VARCHAR},
-            pcmc         = #{pcmc,jdbcType=VARCHAR},
-            kslxdm       = #{kslxdm,jdbcType=VARCHAR},
-            kslxmc       = #{kslxmc,jdbcType=VARCHAR},
-            xkkmyq       = #{xkkmyq,jdbcType=VARCHAR},
-            xkkmyqzw     = #{xkkmyqzw,jdbcType=VARCHAR},
-            zsjhs        = #{zsjhs,jdbcType=INTEGER},
-            bz           = #{bz,jdbcType=VARCHAR},
-            gmt_create   = #{gmtCreate,jdbcType=TIMESTAMP},
-            gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
-        WHERE id = #{id,jdbcType=BIGINT}
-    </update>
+    <select id="countSchool" resultType="int">
+        SELECT count(*)
+        FROM (
+        SELECT count(*)
+        FROM recruit_students_plan a, wntdqk b
+        WHERE b.nf = #{nf}
+        AND a.yxdh = b.schoole_code
+        AND a.zymc = b.zymc
+        AND b.tdmc &lt;=#{max} AND tdmc &gt;=#{min}
+        AND
+        (a.km1 = '00' OR
+        a.km1
+        IN
+        (
+        <foreach collection="list" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+        OR a.km2 IN (
+        <foreach collection="list" item="item" separator=",">
+            #{item}
+        </foreach>
+        ) OR a.km3 IN
+        (
+        <foreach collection="list" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+        )
+        <if test="szd != null">
+            AND szd IN (
+            <foreach collection="szds" item="item" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        GROUP BY yxdh
+        ) t
+    </select>
+    <select id="countMajor" resultType="int">
+        SELECT count(*)
+        FROM recruit_students_plan a, wntdqk b
+        WHERE b.nf = #{nf}
+        AND a.yxdh = b.schoole_code
+        AND a.zymc = b.zymc
+        AND b.tdmc &lt;=#{max} AND tdmc &gt;=#{min}
+        AND
+        (a.km1 = '00' OR
+        a.km1
+        IN
+        (
+        <foreach collection="list" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+        OR a.km2 IN (
+        <foreach collection="list" item="item" separator=",">
+            #{item}
+        </foreach>
+        ) OR a.km3 IN
+        (
+        <foreach collection="list" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+        )
+        <if test="szd != null">
+            AND szd IN (
+            <foreach collection="szds" item="item" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+    </select>
 </mapper>
