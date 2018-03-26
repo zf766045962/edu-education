@@ -8,6 +8,7 @@ import com.service.RecruitStudentsPlanService;
 import com.util.excel.AbstractExcelUtil;
 import com.util.exception.CustomException;
 import com.util.normal.CommonUtils;
+import com.vo.RecruitStudentsPlanVo;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 潘根山
@@ -46,7 +48,7 @@ public class RecruitStudentsPlanServiceImpl implements RecruitStudentsPlanServic
             row = sheet.getRow(i);
             recruitStudentsPlan = new RecruitStudentsPlan();
             for (int j = 0; j < 31; j++) {
-                String v = AbstractExcelUtil.getCellByType(row.getCell(j));
+                String v = AbstractExcelUtil.getCellByType2(row.getCell(j));
                 switch (j) {
                     case 0:
                         recruitStudentsPlan.setYxdm(v);
@@ -130,6 +132,26 @@ public class RecruitStudentsPlanServiceImpl implements RecruitStudentsPlanServic
                         recruitStudentsPlan.setKslxmc(v);
                         break;
                     case 27:
+                        if ("00".equals(v)) {
+                            recruitStudentsPlan.setKm1("00");
+                            recruitStudentsPlan.setKm2("00");
+                            recruitStudentsPlan.setKm3("00");
+                        } else {
+                            String[] strs = v.split("\\+");
+                            if (strs.length == 3) {
+                                recruitStudentsPlan.setKm1(strs[0].trim());
+                                recruitStudentsPlan.setKm2(strs[1].trim());
+                                recruitStudentsPlan.setKm3(strs[2].trim());
+                            } else if (strs.length == 2) {
+                                recruitStudentsPlan.setKm1(strs[0].trim());
+                                recruitStudentsPlan.setKm2(strs[1].trim());
+                                recruitStudentsPlan.setKm3("no");
+                            } else {
+                                recruitStudentsPlan.setKm1(strs[0].trim());
+                                recruitStudentsPlan.setKm2("no");
+                                recruitStudentsPlan.setKm3("no");
+                            }
+                        }
                         recruitStudentsPlan.setXkkmyq(v);
                         break;
                     case 28:
@@ -145,6 +167,7 @@ public class RecruitStudentsPlanServiceImpl implements RecruitStudentsPlanServic
                         break;
                 }
             }
+            recruitStudentsPlan.setZydmNew(recruitStudentsPlan.getZydm() + "" + recruitStudentsPlan.getSbdm2());
             recruitStudentsPlans.add(recruitStudentsPlan);
         }
         if (recruitStudentsPlans.size() > 0) {
@@ -168,5 +191,20 @@ public class RecruitStudentsPlanServiceImpl implements RecruitStudentsPlanServic
         if (inp != null) {
             inp.close();
         }
+    }
+
+    @Override
+    public int countSchool(Map<String, Object> map) {
+        return recruitStudentsPlanMapper.countSchool(map);
+    }
+
+    @Override
+    public int countMajor(Map<String, Object> map) {
+        return recruitStudentsPlanMapper.countMajor(map);
+    }
+
+    @Override
+    public List<RecruitStudentsPlanVo> listRecruitStudentsPlan(Map<String, Object> map) {
+        return recruitStudentsPlanMapper.listRecruitStudentsPlan(map);
     }
 }
