@@ -31,11 +31,11 @@
         <div class="layui-body layui-form">
             <div class="layui-tab mar-tb0 m-container " lay-filter="bodyTab" id="top_tabs_box">
                 <ul class="layui-tab-title layui-tab-mtitle top_tab pad-l10 fir-title" id="top_tabs">
-                    <li class="layui-this" lay-id=""><cite>用户管理</cite></li>
+                    <li class="layui-this" lay-id=""><cite>考生管理</cite></li>
                 </ul>
                 <div class="layui-tab-content clildFrame sec-title m-content">
                     <div class="layui-tab-item layui-show">
-                        <iframe src="/user/" class="mframe" frameborder="no" scrolling="auto"
+                        <iframe src="/candidate/" class="mframe" frameborder="no" scrolling="auto"
                                 name="view2"></iframe>
                     </div>
                 </div>
@@ -52,7 +52,6 @@
 
             //加载菜单
             $(function () {
-                // getUser();
                 $.ajax({
                     url: "/systemFunction/lisUsertFunction",
                     type: "get",
@@ -102,28 +101,6 @@
                 })
             });
         });
-
-        function getUser() {
-            $.ajax({
-                url: "/user/getUser",
-                type: "get",
-                dataType: "json",
-                data: {
-                    "date": new Date()
-                },
-                success: function (data) {
-                    if (data.code == 90000) {
-                        $("#welUser").html("欢迎你！<br>" + data.data.cnname);
-                    } else if (result.code == 10000) {
-                        layer.msg(result.msg);
-                        top.location.href = "/login";
-                    }
-                },
-                error: function (data) {
-
-                }
-            })
-        }
 
         function loginout() {
             layer.confirm('确认要退出吗？', {
