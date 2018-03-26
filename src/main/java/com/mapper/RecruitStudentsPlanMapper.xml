@@ -204,4 +204,58 @@
             )
         </if>
     </select>
+    <select id="listRecruitStudentsPlan" resultType="com.vo.RecruitStudentsPlanVo">
+        SELECT
+        a.zydm_new,
+        a.zymc,
+        a.xzdm,
+        a.sfbz,
+        a.xkkmyqzw,
+        a.ccmc,
+        a.szd,
+        a.bxlxmc,
+        b.ckzs,
+        a.zsjhs,
+        a.yxdh,
+        a.yxdhmc,
+        a.bz,
+        CASE (SELECT hxzy.id
+        FROM hxzy
+        WHERE a.yxdh = yxdh AND a.zydm = a.zydm_new)
+        WHEN NULL
+        THEN '1'
+        ELSE '0' END AS sfsc
+        FROM recruit_students_plan a, wntdqk b
+        WHERE b.nf = #{nf}
+        AND a.yxdh = b.schoole_code
+        AND a.zymc = b.zymc
+        AND b.tdmc &lt;= 30000 AND tdmc &gt;= 20000
+        AND
+        (a.km1 = '00' OR
+        a.km1
+        IN
+        (
+        <foreach collection="list" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+        OR a.km2 IN (
+        <foreach collection="list" item="item" separator=",">
+            #{item}
+        </foreach>
+        ) OR a.km3 IN
+        (
+        <foreach collection="list" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+        )
+        <if test="szd != null">
+            AND szd IN (
+            <foreach collection="szds" item="item" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+    </select>
 </mapper>
