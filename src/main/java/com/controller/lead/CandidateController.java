@@ -1,11 +1,14 @@
 package com.controller.lead;
 
+import com.common.result.CodeMsg;
 import com.common.result.Result;
 import com.entity.Candidate;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.service.CandidateService;
+import com.service.RecruitStudentsPlanService;
 import com.vo.LoginUser;
+import com.vo.RecruitStudentsPlanVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
-import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 考生控制器
@@ -30,6 +33,8 @@ import java.util.List;
 public class CandidateController {
     @Autowired
     private CandidateService candidateService;
+    @Autowired
+    private RecruitStudentsPlanService recruitStudentsPlanService;
 
     @RequestMapping("/")
     public String toCandidate() {
@@ -108,6 +113,7 @@ public class CandidateController {
      * @return 志愿
      */
     @RequestMapping("/application")
+    @ResponseBody
     public Result searchApplication(
             @RequestParam("c_min") int cMin
             , @RequestParam("c_max") int cMax
@@ -116,11 +122,111 @@ public class CandidateController {
             , @RequestParam("b_min") int bMin
             , @RequestParam("b_max") int bMax
             , @RequestParam("id") Long id) {
-        //todo 查询考生信息
-        //todo 查询冲志愿
-        //todo 查询稳志愿
-        //todo 查询保志愿
-        //todo 根据过去三年的名次平均值进行计算
-        return Result.success(true);
+        // 查询考生信息
+        Candidate candidate = candidateService.getCandidateById(id);
+        if (candidate == null) {
+            return Result.error(CodeMsg.CANDIDATE_NOT_EXISTS);
+        }
+        List<String> kms = dealWithKms(candidate);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
+        String s = simpleDateFormat.format(new Date());
+        String nf = (Integer.valueOf(s) - 1) + "";
+        Map<String, Object> map = new HashMap<>(4);
+        map.put("nf", nf);
+        map.put("list", kms);
+        map.put("min", cMin);
+        map.put("max", cMax);
+        // 查询冲志愿
+        int cSchool = recruitStudentsPlanService.countSchool(map);
+        int cMajor = recruitStudentsPlanService.countMajor(map);
+        // 查询稳志愿
+        map.put("min", wMin);
+        map.put("max", wMax);
+        int wSchool = recruitStudentsPlanService.countSchool(map);
+        int wMajor = recruitStudentsPlanService.countMajor(map);
+        // 查询保志愿
+        map.put("min", bMin);
+        map.put("max", bMax);
+        int bSchool = recruitStudentsPlanService.countSchool(map);
+        int bMajor = recruitStudentsPlanService.countMajor(map);
+        map.clear();
+        map.put("cSchool", cSchool);
+        map.put("cMajor", cMajor);
+        map.put("wSchool", wSchool);
+        map.put("wMajor", wMajor);
+        map.put("bSchool", bSchool);
+        map.put("bMajor", bMajor);
+        // 根据过去三年的名次平均值进行计算
+        return Result.success(map);
+    }
+
+    @RequestMapping("/searchDetail")
+    public String toDetail(@RequestParam("min") int min, @RequestParam("max") int max, @RequestParam("id") Long id, Model model) {
+        model.addAttribute("min", min);
+        model.addAttribute("max", max);
+        model.addAttribute("id", id);
+        return "/lead/detail";
+    }
+
+    /**
+     * 查询冲稳保 中一种
+     *
+     * @param min 最小名次
+     * @param max 最大名次
+     * @param id  考生编号
+     * @return 专业详情
+     */
+    @RequestMapping("/detail")
+    public Result searchDetail(@RequestParam("min") int min, @RequestParam("max") int max, @RequestParam("id") Long id) {
+        // 查询考生信息
+        Candidate candidate = candidateService.getCandidateById(id);
+        if (candidate == null) {
+            return Result.error(CodeMsg.CANDIDATE_NOT_EXISTS);
+        }
+        List<String> kms = dealWithKms(candidate);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
+        String s = simpleDateFormat.format(new Date());
+        String nf = (Integer.valueOf(s) - 1) + "";
+        Map<String, Object> map = new HashMap<>(4);
+        map.put("nf", nf);
+        map.put("list", kms);
+        map.put("min", min);
+        map.put("max", max);
+        //显示符合条件的志愿
+        List<RecruitStudentsPlanVo> recruitStudentsPlanList = recruitStudentsPlanService.listRecruitStudentsPlan(map);
+        return Result.success(recruitStudentsPlanList);
+    }
+
+    private List<String> dealWithKms(Candidate candidate) {
+        List<String> kms = new ArrayList<>();
+        //生物
+        if (candidate.getBiology() == 0) {
+            kms.add("06");
+        }
+        //化学
+        if (candidate.getChemistry() == 0) {
+            kms.add("05");
+        }
+        //历史
+        if (candidate.getHistory() == 0) {
+            kms.add("08");
+        }
+        //物理
+        if (candidate.getPhysics() == 0) {
+            kms.add("04");
+        }
+        //思想政治
+        if (candidate.getPolitics() == 0) {
+            kms.add("07");
+        }
+        //技术
+        if (candidate.getTechnology() == 0) {
+            kms.add("13");
+        }
+        //地理
+        if (candidate.getGeography() == 0) {
+            kms.add("09");
+        }
+        return kms;
     }
 }
