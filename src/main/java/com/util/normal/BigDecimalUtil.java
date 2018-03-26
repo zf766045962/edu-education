@@ -46,4 +46,11 @@ public class BigDecimalUtil {
         }
         return BigDecimal.valueOf(Double.parseDouble(str));
     }
+
+    public static String convertBigDecimalToPercent(BigDecimal bigDecimal) {
+        if (bigDecimal == null) {
+            return "0.00%";
+        }
+        return String.valueOf(bigDecimal.multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP)) + "%";
+    }
 }
