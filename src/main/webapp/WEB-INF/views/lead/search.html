@@ -13,7 +13,7 @@
     <script type="text/javascript" src="../../../assets/edu/js/common.js"
             th:src="@{/assets/edu/js/common.js?v=201803171720}"></script>
 </head>
-<body th:inline="none" th:fragment="search">
+<body th:inline="none">
 <div class="pad10">
     <blockquote class="layui-elem-quote">
         您的成绩：位次：<span id="ranking" th:text="${candidate.ranking}">209524</span>&nbsp;&nbsp;
@@ -104,15 +104,19 @@
         <div class="layui-inline">
             <label class="layui-form-label">冲</label>
             <div class="layui-input-inline" style="width: 100px;">
-                <input type="text" autocomplete="off" class="layui-input">
+                <div id="c_result">
+
+                </div>
             </div>
-            <button class="layui-btn" data-type="c_search">查看志愿</button>
+            <button class="layui-btn" data-type="cSearch">查看志愿</button>
         </div>
         <div class="layui-inline">
             <div class="layui-inline">
                 <label class="layui-form-label">稳</label>
                 <div class="layui-input-inline" style="width: 100px;">
-                    <input type="text" disabled class="layui-input">
+                    <div id="w_result">
+
+                    </div>
                 </div>
             </div>
             <button class="layui-btn" data-type="w_search">查看志愿</button>
@@ -121,7 +125,9 @@
             <div class="layui-inline">
                 <label class="layui-form-label">保</label>
                 <div class="layui-input-inline" style="width: 100px;">
-                    <input type="text" autocomplete="off" class="layui-input">
+                    <div id="b_result">
+
+                    </div>
                 </div>
             </div>
             <button class="layui-btn" data-type="b_search">查看志愿</button>
@@ -155,18 +161,36 @@
                     layer.msg("保位次区间不能为空");
                     return;
                 }
+                layer.load();
                 $.get("/candidate/application", {
                     "c_min": c_min
                     , "c_max": c_max
                     , "w_min": w_min
                     , "w_max": w_max
                     , "b_min": b_min
-                    , "b_max": "b_max"
+                    , "b_max": b_max
                     , "id": id
                 }, function (res) {
-                    console.log(res);
+                    if (res.code == 30002) {
+                        layer.msg(res.msg);
+                        setTimeout(function () {
+                            top.location.href = "/login";
+                        }, 5000);
+                    } else if (res.code != 90000) {
+                        layer.msg(res.msg);
+                    } else {
+                        $("#c_result").html("推荐志愿:" + res.data.cMajor + "，分布于" + res.data.cSchool + "所院校中");
+                        $("#w_result").html("推荐志愿:" + res.data.wMajor + "，分布于" + res.data.wSchool + "所院校中");
+                        $("#b_result").html("推荐志愿:" + res.data.bMajor + "，分布于" + res.data.bSchool + "所院校中");
+                    }
+                    layer.closeAll();
                 });
-                layer.msg("开始查询" + c_min);
+            }
+            , cSearch: function () {
+                var c_min = $("#c_min").val();
+                var c_max = $("#c_max").val();
+                var id = $("#hid_id").val();
+                window.open("/candidate/searchDetail?min" + c_min + "&max=" + c_max + "&id=" + id, "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
             }
         };
         $('.layui-btn').on('click', function () {
