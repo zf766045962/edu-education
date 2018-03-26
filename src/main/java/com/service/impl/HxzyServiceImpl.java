@@ -3,6 +3,7 @@ package com.service.impl;
 import com.dao.HxzyMapper;
 import com.entity.Hxzy;
 import com.service.HxzyService;
+import com.vo.HxzyVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +25,8 @@ public class HxzyServiceImpl implements HxzyService {
     }
 
     @Override
-    public List<Hxzy> listHxzyByCandidateId(Long candidateId) {
-        return hxzyMapper.listHxzyByCandidateId(candidateId);
+    public List<HxzyVo> listHxzyByCandidateId(Hxzy hxzy) {
+        return hxzyMapper.listHxzyByCandidateId(hxzy);
     }
 
     @Override
