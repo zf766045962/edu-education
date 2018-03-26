@@ -1,6 +1,7 @@
 package com.service;
 
 import com.entity.Hxzy;
+import com.vo.HxzyVo;
 
 import java.util.List;
 
@@ -21,10 +22,10 @@ public interface HxzyService {
     /**
      * 通过考生ID查询考生候选志愿情况
      *
-     * @param candidateId 考生ID
+     * @param hxzy hxzy
      * @return 考生候选志愿
      */
-    List<Hxzy> listHxzyByCandidateId(Long candidateId);
+    List<HxzyVo> listHxzyByCandidateId(Hxzy hxzy);
 
     /**
      * 清空考生的候选志愿
