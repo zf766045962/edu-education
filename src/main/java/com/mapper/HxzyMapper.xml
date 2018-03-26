@@ -94,10 +94,22 @@
             </if>
         </trim>
     </insert>
-    <select id="listHxzyByCandidateId" resultMap="BaseResultMap">
+    <select id="listHxzyByCandidateId" resultType="com.vo.HxzyVo">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM hxzy WHERE candidate_id=#{candidateId}
+        <include refid="Base_Column_List"/>,
+        CASE status WHEN '1' THEN '建议冲'
+        WHEN '2' THEN '建议稳' ELSE '建议保' END AS statusName
+        FROM hxzy
+        <where>
+            candidate_id=#{candidateId}
+            <if test="schoolName != null and schoolName !=''">
+                and school_name like concat('%',#{schoolName},'%')
+            </if>
+            <if test="majorName!= null and majorName !=''">
+                and major_name like concat('%',#{majorName},'%')
+            </if>
+        </where>
+        order by reference_index
     </select>
     <select id="deleteAllByCandidateId">
         DELETE FROM hxzy
