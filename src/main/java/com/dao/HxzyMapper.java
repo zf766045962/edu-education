@@ -1,6 +1,7 @@
 package com.dao;
 
 import com.entity.Hxzy;
+import com.vo.HxzyVo;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,10 +26,10 @@ public interface HxzyMapper {
     /**
      * 通过考生ID查询考生候选志愿情况
      *
-     * @param candidateId 考生ID
+     * @param hxzy 候选志愿信息
      * @return 考生候选志愿
      */
-    List<Hxzy> listHxzyByCandidateId(Long candidateId);
+    List<HxzyVo> listHxzyByCandidateId(Hxzy hxzy);
 
     /**
      * 清空考生的候选志愿
