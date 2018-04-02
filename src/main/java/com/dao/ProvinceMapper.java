@@ -14,5 +14,10 @@ import java.util.List;
  */
 @Repository
 public interface ProvinceMapper {
+    /**
+     * 查询所有的省市信息
+     *
+     * @return 省市信息
+     */
     List<Province> listProvince();
 }
