@@ -3,10 +3,13 @@ package com.controller.lead;
 import com.common.result.CodeMsg;
 import com.common.result.Result;
 import com.entity.Candidate;
+import com.entity.Province;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.service.CandidateService;
+import com.service.ProvinceService;
 import com.service.RecruitStudentsPlanService;
+import com.util.normal.CommonUtils;
 import com.vo.LoginUser;
 import com.vo.RecruitStudentsPlanVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +38,8 @@ public class CandidateController {
     private CandidateService candidateService;
     @Autowired
     private RecruitStudentsPlanService recruitStudentsPlanService;
+    @Autowired
+    private ProvinceService provinceService;
 
     @RequestMapping("/")
     public String toCandidate() {
@@ -44,7 +49,9 @@ public class CandidateController {
     @RequestMapping("/search/{id}")
     public String toSearch(@PathVariable("id") Long id, Model model) {
         Candidate candidate = candidateService.getCandidateById(id);
+        List<Province> provinces = provinceService.listProvince();
         model.addAttribute("candidate", candidate);
+        model.addAttribute("provinces", provinces);
         return "/lead/search";
     }
 
@@ -121,7 +128,8 @@ public class CandidateController {
             , @RequestParam("w_max") int wMax
             , @RequestParam("b_min") int bMin
             , @RequestParam("b_max") int bMax
-            , @RequestParam("id") Long id) {
+            , @RequestParam("id") Long id
+            ,String provinceCode) {
         // 查询考生信息
         Candidate candidate = candidateService.getCandidateById(id);
         if (candidate == null) {
@@ -132,6 +140,13 @@ public class CandidateController {
         String s = simpleDateFormat.format(new Date());
         String nf = (Integer.valueOf(s) - 1) + "";
         Map<String, Object> map = new HashMap<>(4);
+        String[] provinceCodes={};
+        if(CommonUtils.isNotEmpty(provinceCode)){
+           provinceCodes= provinceCode.split(",");
+        }
+        if(provinceCodes.length>0){
+            map.put("provinceCodes",provinceCodes);
+        }
         map.put("nf", nf);
         map.put("list", kms);
         map.put("min", cMin);
