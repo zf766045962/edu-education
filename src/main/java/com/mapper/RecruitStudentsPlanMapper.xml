@@ -159,9 +159,9 @@
         </foreach>
         )
         )
-        <if test="szd != null">
-            AND szd IN (
-            <foreach collection="szds" item="item" separator=",">
+        <if test="provinceCodes != null">
+            AND ssdm IN (
+            <foreach collection="provinceCodes" item="item" separator=",">
                 #{item}
             </foreach>
             )
@@ -196,9 +196,9 @@
         </foreach>
         )
         )
-        <if test="szd != null">
-            AND szd IN (
-            <foreach collection="szds" item="item" separator=",">
+        <if test="provinceCodes != null">
+            AND ssdm IN (
+            <foreach collection="provinceCodes" item="item" separator=",">
                 #{item}
             </foreach>
             )
@@ -229,7 +229,7 @@
         WHERE b.nf = #{nf}
         AND a.yxdh = b.schoole_code
         AND a.zymc = b.zymc
-        AND b.tdmc &lt;= 30000 AND tdmc &gt;= 20000
+        AND b.tdmc &lt;= #{max} AND tdmc &gt;= #{min}
         AND
         (a.km1 = '00' OR
         a.km1
@@ -250,12 +250,12 @@
         </foreach>
         )
         )
-        <if test="szd != null">
-            AND szd IN (
-            <foreach collection="szds" item="item" separator=",">
-                #{item}
-            </foreach>
-            )
+        <if test="provinceCodes != null">
+        AND ssdm IN (
+        <foreach collection="provinceCodes" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
         </if>
     </select>
 </mapper>
