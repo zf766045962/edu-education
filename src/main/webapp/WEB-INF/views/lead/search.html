@@ -76,10 +76,10 @@
     </fieldset>
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">意向专业</label>
-        <button class="layui-btn" lay-submit="" lay-filter="demo1">选择专业</button>
+        <button class="layui-btn" data-type="chooseMajor">选择专业</button>
         <span style="color:red;">(点击此按钮选择专业)</span>
         <div class="layui-input-block">
-            <textarea placeholder="请选择意向专业" class="layui-textarea" disabled></textarea>
+            <textarea placeholder="请选择意向专业" class="layui-textarea" disabled id="selectZY"></textarea>
         </div>
     </div>
     <div class="layui-form-item layui-form-text">
@@ -145,12 +145,70 @@
         </div>
     </form>
 </div>
+<div class="m-modal" id="major" style="display: none;">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">专业名称</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="zymc">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label"></label>
+            <a href="javascript:;" class="layui-btn ayui-btn-normal bg-blue " data-type="reload">
+                <i class="iconfont">&#xe606;</i> 查询</a>
+        </div>
+    </div>
+    <form class="layui-form">
+        <div class="gkwh-tb">
+            <div class="layui-btn-group">
+                <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="addMajor"><i class="iconfont"></i>增加意向专业</a>
+                <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="clearMajor"><i
+                        class="iconfont"></i>清空意向专业</a>
+            </div>
+            <table id="wh-list"></table>
+        </div>
+    </form>
+</div>
 <script>
     layui.use(['table', 'form'], function () {
         var $ = layui.jquery
             , table = layui.table
             , $2 = layui.$
             , form = layui.form;
+        var majors = [];
+        table.render({
+            elem: '#wh-list'
+            , url: '/major/'
+            , cols: [[
+                {field: 'id', title: 'id', checkbox: true, sort: true}
+                , {field: 'zymc', title: '专业名称', sort: true}
+            ]]
+            , id: 'idTest'
+            , request: {
+                pageName: 'currentPage' //页码的参数名称，默认：page
+                , limitName: 'pageSize' //每页数据量的参数名，默认：limit
+            }
+            , response: {
+                statusCode: 90000 //成功的状态码，默认：0
+                , countName: 'count' //数据总数的字段名称，默认：count
+                , dataName: 'data' //数据列表的字段名称，默认：data
+            }
+            , even: true
+            , page: {theme: '#2d5eb7'}
+            , done: function (res, curr, count) {
+                if (res.code == 30002) {
+                    layer.msg(res.msg);
+                    setTimeout(function () {
+                        top.location.href = "/login";
+                    }, 5000);
+                } else if (res.code != 90000) {
+                    layer.msg(res.msg);
+                }
+            }
+        });
+        var zyName = [];
+        var zyCode = [];
         var active = {
             search: function () {
                 var c_min = $("#c_min").val();
@@ -172,7 +230,7 @@
                     layer.msg("保位次区间不能为空");
                     return;
                 }
-                var provinceCode=$("#province_code").val();
+                var provinceCode = $("#province_code").val();
                 layer.load();
                 $.get("/candidate/application", {
                     "c_min": c_min
@@ -182,7 +240,7 @@
                     , "b_min": b_min
                     , "b_max": b_max
                     , "id": id
-                    ,"provinceCode":provinceCode
+                    , "provinceCode": provinceCode
                 }, function (res) {
                     if (res.code == 30002) {
                         layer.msg(res.msg);
@@ -234,12 +292,71 @@
                     }
                 });
             }
+            , chooseMajor: function () {
+                layer.open({
+                    type: 1
+                    , skin: 'layui-layer-demo t-layer-add' //样式类名
+                    , closeBtn: 1
+                    , anim: 2
+                    , area: '800px'
+                    , btn: ['确定', '取消']
+                    , title: "专业选择"
+                    , content: $("#major")
+                    , yes: function (index, layero) {
+                        layer.closeAll();
+                    }
+                    , success: function (layero, index) {
+
+                    }
+                    , cancel: function (index, layero) {
+
+                    }
+                });
+            }
+            , reload: function () {
+                var zymc = $("#zymc").val();
+                table.reload('idTest', {
+                    page: {
+                        curr: 1
+                    }
+                    , where: {
+                        "zymc": zymc
+                    }
+                });
+            },
+            addMajor: function () {
+                var checkStatus = table.checkStatus('idTest');
+                var data = checkStatus.data;
+                if (data.length <= 0) {
+                    layer.msg("请选择专业");
+                    return;
+                }
+                for (var j = 0; j < data.length; j++) {
+                    var ids = data[j].zydm;
+                    var name = data[j].zymc;
+                    if (zyCode.in_array(ids) == false) {
+                        zyCode.push(ids);
+                        zyName.push(name);
+                    }
+                }
+                $("#selectZY").val(zyName);
+            }
         };
         $('.layui-btn').on('click', function () {
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';
         });
     });
+</script>
+<script>
+    Array.prototype.in_array = function (element) {
+        for (var i = 0; i < this.length; i++) {
+            if (this[i] == element) {
+                return true;
+            }
+        }
+        return false;
+    }
 </script>
 </body>
 </html>
