@@ -167,7 +167,7 @@
             )
         </if>
         <if test="majorCodes !=null">
-            AND zydm IN (
+            AND b.zydm IN (
             <foreach collection="majorCodes" item="item" separator=",">
                 #{item}
             </foreach>
@@ -211,7 +211,7 @@
             )
         </if>
         <if test="majorCodes !=null">
-            AND zydm IN (
+            AND b.zydm IN (
             <foreach collection="majorCodes" item="item" separator=",">
                 #{item}
             </foreach>

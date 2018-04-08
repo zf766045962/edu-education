@@ -231,7 +231,13 @@
                     return;
                 }
                 var provinceCode = $("#province_code").val();
-                console.log(zyCode);
+                var majorCode = "";
+                for (var i = 0, len = zyCode.length; i < len; i++) {
+                    majorCode += "" + zyCode[i];
+                    if (i < len - 1) {
+                        majorCode += ",";
+                    }
+                }
                 layer.load();
                 $.get("/candidate/application", {
                     "c_min": c_min
@@ -242,8 +248,9 @@
                     , "b_max": b_max
                     , "id": id
                     , "provinceCode": provinceCode
-                    , "majorCode": zyCode
+                    , "majorCode": majorCode
                 }, function (res) {
+                    layer.closeAll();
                     if (res.code == 30002) {
                         layer.msg(res.msg);
                         setTimeout(function () {
@@ -256,7 +263,6 @@
                         $("#w_result").html("推荐志愿:" + res.data.wMajor + "，分布于" + res.data.wSchool + "所院校中");
                         $("#b_result").html("推荐志愿:" + res.data.bMajor + "，分布于" + res.data.bSchool + "所院校中");
                     }
-                    layer.closeAll();
                 });
             }
             , cSearch: function () {

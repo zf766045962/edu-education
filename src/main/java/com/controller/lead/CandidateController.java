@@ -150,6 +150,7 @@ public class CandidateController {
                 map.put("provinceCodes", provinceCodes);
             }
         }
+        System.out.println(majorCode);
         if (CommonUtils.isNotEmpty(majorCode)) {
             String[] majorCodes = majorCode.split(",");
             if (majorCodes.length > 0) {
