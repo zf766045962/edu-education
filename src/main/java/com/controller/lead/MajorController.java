@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
+/**
+ * @author 潘根山
+ * @create 2018-04-08 19:48
+ * @since 1.0.0
+ */
 @Controller
 @RequestMapping("/major")
 public class MajorController {
@@ -23,7 +28,7 @@ public class MajorController {
     @GetMapping("/")
     @ResponseBody
     public Result findMajor(
-             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize
             , @RequestParam(value = "currentPage", defaultValue = "1") int currentPage, String zymc) {
         PageHelper.startPage(currentPage, pageSize);
         List<Major> majorList = majorService.listMajor(zymc);

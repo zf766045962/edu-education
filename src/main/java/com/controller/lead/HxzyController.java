@@ -1,12 +1,12 @@
 package com.controller.lead;
 
 import com.common.result.Result;
-import com.dao.HxzyMapper;
 import com.entity.Candidate;
 import com.entity.Hxzy;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.service.CandidateService;
+import com.service.HxzyService;
 import com.util.excel.DownLoad;
 import com.util.normal.BigDecimalUtil;
 import com.vo.HxzyVo;
@@ -25,9 +25,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
+ * 候选之志愿控制器
+ *
  * @author 潘根山
  * @create 2018-03-22 22:12
  * @since 1.0.0
@@ -36,7 +39,7 @@ import java.util.List;
 @RequestMapping("/hxzy")
 public class HxzyController {
     @Autowired
-    private HxzyMapper hxzyMapper;
+    private HxzyService hxzyService;
     @Autowired
     private CandidateService candidateService;
 
@@ -61,7 +64,7 @@ public class HxzyController {
             , @RequestParam(value = "currentPage", defaultValue = "1") int currentPage
             , Hxzy hxzy) {
         PageHelper.startPage(currentPage, pageSize);
-        List<HxzyVo> hxzyList = hxzyMapper.listHxzyByCandidateId(hxzy);
+        List<HxzyVo> hxzyList = hxzyService.listHxzyByCandidateId(hxzy);
         PageInfo<HxzyVo> pageInfo = new PageInfo<>(hxzyList);
         List<HxzyVo> list = pageInfo.getList();
         HxzyVo hxzyVo;
@@ -81,7 +84,7 @@ public class HxzyController {
     @PostMapping("/clear")
     @ResponseBody
     public Result clearAll(@RequestParam("candidateId") Long candidateId, LoginUser user) {
-        hxzyMapper.deleteAllByCandidateId(candidateId);
+        hxzyService.deleteAllByCandidateId(candidateId);
         return Result.success(true);
     }
 
@@ -99,7 +102,39 @@ public class HxzyController {
         for (String s : strs) {
             idList.add(Long.parseLong(s));
         }
-        hxzyMapper.deleteByIds(idList);
+        hxzyService.deleteByIds(idList);
+        return Result.success(true);
+    }
+
+    /**
+     * 收藏志愿
+     *
+     * @param hxzy 候选志愿对象
+     * @return result
+     */
+    @PostMapping("add")
+    @ResponseBody
+    public Result addHxzy(Hxzy hxzy) {
+        hxzy.setGmtCreate(new Date());
+        hxzy.setGmtModified(new Date());
+        hxzyService.insertSelective(hxzy);
+        return Result.success(true);
+    }
+
+    /**
+     * 取消志愿
+     *
+     * @param id         考生id
+     * @param majorCode  专业代码
+     * @param schoolCode 学校代码
+     * @return result
+     */
+    @PostMapping("cancel")
+    @ResponseBody
+    public Result cancelHxzy(@RequestParam("id") long id
+            , @RequestParam("schoolCode") String schoolCode
+            , @RequestParam("majorCode") String majorCode) {
+        hxzyService.deleteByCandidateIdAndSchoolCodeAndMajorCode(id, schoolCode, majorCode);
         return Result.success(true);
     }
 
@@ -107,7 +142,7 @@ public class HxzyController {
     public void export(@RequestParam("candidateId") Long candidateId, HttpServletResponse response) throws IOException {
         Hxzy hxzy = new Hxzy();
         hxzy.setCandidateId(candidateId);
-        List<HxzyVo> hxzyList = hxzyMapper.listHxzyByCandidateId(hxzy);
+        List<HxzyVo> hxzyList = hxzyService.listHxzyByCandidateId(hxzy);
         Candidate candidate = candidateService.getCandidateById(candidateId);
         Workbook workbook = new HSSFWorkbook();
         Sheet sheet = workbook.createSheet();
@@ -139,7 +174,7 @@ public class HxzyController {
                         cell.setCellValue(hxzyVo.getMajorCode());
                         break;
                     case 4:
-                        cell.setCellValue(BigDecimalUtil.convertBigDecimalToPercent(hxzy.getReferenceIndex()));
+                        cell.setCellValue(BigDecimalUtil.convertBigDecimalToPercent(hxzyVo.getReferenceIndex()));
                         break;
                     case 5:
                         cell.setCellValue(hxzyVo.getStatusName());

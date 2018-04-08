@@ -9,6 +9,7 @@ import com.github.pagehelper.PageInfo;
 import com.service.CandidateService;
 import com.service.ProvinceService;
 import com.service.RecruitStudentsPlanService;
+import com.util.normal.BigDecimalUtil;
 import com.util.normal.CommonUtils;
 import com.vo.LoginUser;
 import com.vo.RecruitStudentsPlanVo;
@@ -110,13 +111,15 @@ public class CandidateController {
     /**
      * 查询志愿
      *
-     * @param cMin 冲位次最小值
-     * @param cMax 冲位次最大值
-     * @param wMin 稳位次最小值
-     * @param wMax 稳位次最大值
-     * @param bMin 保位次最小值
-     * @param bMax 保位次最大值
-     * @param id   考生id
+     * @param cMin         冲位次最小值
+     * @param cMax         冲位次最大值
+     * @param wMin         稳位次最小值
+     * @param wMax         稳位次最大值
+     * @param bMin         保位次最小值
+     * @param bMax         保位次最大值
+     * @param id           考生id
+     * @param provinceCode 省市名称
+     * @param majorCode    专业名称
      * @return 志愿
      */
     @RequestMapping("/application")
@@ -129,7 +132,8 @@ public class CandidateController {
             , @RequestParam("b_min") int bMin
             , @RequestParam("b_max") int bMax
             , @RequestParam("id") Long id
-            ,String provinceCode) {
+            , String provinceCode
+            , String majorCode) {
         // 查询考生信息
         Candidate candidate = candidateService.getCandidateById(id);
         if (candidate == null) {
@@ -140,12 +144,17 @@ public class CandidateController {
         String s = simpleDateFormat.format(new Date());
         String nf = (Integer.valueOf(s) - 1) + "";
         Map<String, Object> map = new HashMap<>(4);
-        String[] provinceCodes={};
-        if(CommonUtils.isNotEmpty(provinceCode)){
-           provinceCodes= provinceCode.split(",");
+        if (CommonUtils.isNotEmpty(provinceCode)) {
+            String[] provinceCodes = provinceCode.split(",");
+            if (provinceCodes.length > 0) {
+                map.put("provinceCodes", provinceCodes);
+            }
         }
-        if(provinceCodes.length>0){
-            map.put("provinceCodes",provinceCodes);
+        if (CommonUtils.isNotEmpty(majorCode)) {
+            String[] majorCodes = majorCode.split(",");
+            if (majorCodes.length > 0) {
+                map.put("majorCodes", majorCodes);
+            }
         }
         map.put("nf", nf);
         map.put("list", kms);
@@ -176,10 +185,13 @@ public class CandidateController {
     }
 
     @RequestMapping("/searchDetail")
-    public String toDetail(@RequestParam("min") int min, @RequestParam("max") int max, @RequestParam("id") Long id, Model model) {
+    public String toDetail(@RequestParam("min") int min, @RequestParam("max") int max, @RequestParam("id") Long id, String provinceCode, String majorCode, String type, Model model) {
         model.addAttribute("min", min);
         model.addAttribute("max", max);
         model.addAttribute("id", id);
+        model.addAttribute("provinceCode", provinceCode);
+        model.addAttribute("majorCode", majorCode);
+        model.addAttribute("type", type);
         return "/lead/detail";
     }
 
@@ -192,7 +204,16 @@ public class CandidateController {
      * @return 专业详情
      */
     @RequestMapping("/detail")
-    public Result searchDetail(@RequestParam("min") int min, @RequestParam("max") int max, @RequestParam("id") Long id) {
+    @ResponseBody
+    public Result searchDetail(@RequestParam("min") int min
+            , @RequestParam("max") int max
+            , @RequestParam("id") Long id
+            , String provinceCode
+            , String majorCode
+            , @RequestParam("pageSize") int pageSize
+            , @RequestParam("currentPage") int currentPage
+            , String schoolName
+            , String majorName) {
         // 查询考生信息
         Candidate candidate = candidateService.getCandidateById(id);
         if (candidate == null) {
@@ -207,39 +228,62 @@ public class CandidateController {
         map.put("list", kms);
         map.put("min", min);
         map.put("max", max);
+        map.put("schoolName", schoolName);
+        map.put("majorName", majorName);
+        map.put("candidateId", id);
+        if (CommonUtils.isNotEmpty(provinceCode)) {
+            String[] provinceCodes = provinceCode.split(",");
+            if (provinceCodes.length > 0) {
+                map.put("provinceCodes", provinceCodes);
+            }
+        }
+        if (CommonUtils.isNotEmpty(majorCode)) {
+            String[] majorCodes = majorCode.split(",");
+            if (majorCodes.length > 0) {
+                map.put("majorCodes", majorCodes);
+            }
+        }
         //显示符合条件的志愿
+        PageHelper.startPage(currentPage, pageSize);
         List<RecruitStudentsPlanVo> recruitStudentsPlanList = recruitStudentsPlanService.listRecruitStudentsPlan(map);
-        return Result.success(recruitStudentsPlanList);
+        PageInfo<RecruitStudentsPlanVo> pageInfo = new PageInfo<>(recruitStudentsPlanList);
+        List<RecruitStudentsPlanVo> r = pageInfo.getList();
+        RecruitStudentsPlanVo recruitStudentsPlanVo;
+        for (int i = 0, len = r.size(); i < len; i++) {
+            recruitStudentsPlanVo = r.get(i);
+            recruitStudentsPlanVo.setCkzsName(BigDecimalUtil.convertBigDecimalToPercent(recruitStudentsPlanVo.getCkzs()));
+        }
+        return Result.page(pageInfo.getList(), pageInfo.getTotal());
     }
 
     private List<String> dealWithKms(Candidate candidate) {
         List<String> kms = new ArrayList<>();
         //生物
-        if (candidate.getBiology() == 0) {
+        if (candidate.getBiology() == 1) {
             kms.add("06");
         }
         //化学
-        if (candidate.getChemistry() == 0) {
+        if (candidate.getChemistry() == 1) {
             kms.add("05");
         }
         //历史
-        if (candidate.getHistory() == 0) {
+        if (candidate.getHistory() == 1) {
             kms.add("08");
         }
         //物理
-        if (candidate.getPhysics() == 0) {
+        if (candidate.getPhysics() == 1) {
             kms.add("04");
         }
         //思想政治
-        if (candidate.getPolitics() == 0) {
+        if (candidate.getPolitics() == 1) {
             kms.add("07");
         }
         //技术
-        if (candidate.getTechnology() == 0) {
+        if (candidate.getTechnology() == 1) {
             kms.add("13");
         }
         //地理
-        if (candidate.getGeography() == 0) {
+        if (candidate.getGeography() == 1) {
             kms.add("09");
         }
         return kms;
