@@ -120,7 +120,7 @@
                     </div>
                 </div>
             </div>
-            <button class="layui-btn" data-type="w_search">查看志愿</button>
+            <button class="layui-btn" data-type="wSearch">查看志愿</button>
         </div>
         <div class="layui-inline">
             <div class="layui-inline">
@@ -131,7 +131,7 @@
                     </div>
                 </div>
             </div>
-            <button class="layui-btn" data-type="b_search">查看志愿</button>
+            <button class="layui-btn" data-type="bSearch">查看志愿</button>
         </div>
     </div>
 </div>
@@ -241,6 +241,7 @@
                     , "b_max": b_max
                     , "id": id
                     , "provinceCode": provinceCode
+                    , "majorCode": zyCode
                 }, function (res) {
                     if (res.code == 30002) {
                         layer.msg(res.msg);
@@ -261,7 +262,22 @@
                 var c_min = $("#c_min").val();
                 var c_max = $("#c_max").val();
                 var id = $("#hid_id").val();
-                window.open("/candidate/searchDetail?min" + c_min + "&max=" + c_max + "&id=" + id, "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
+                var provinceCode = $("#province_code").val();
+                window.open("/candidate/searchDetail?min=" + c_min + "&max=" + c_max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + zyCode + "&type=1", "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
+            }
+            , wSearch: function () {
+                var min = $("#w_min").val();
+                var max = $("#w_max").val();
+                var id = $("#hid_id").val();
+                var provinceCode = $("#province_code").val();
+                window.open("/candidate/searchDetail?min=" + min + "&max=" + max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + zyCode + "&type=2", "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
+            }
+            , bSearch: function () {
+                var min = $("#b_min").val();
+                var max = $("#b_max").val();
+                var id = $("#hid_id").val();
+                var provinceCode = $("#province_code").val();
+                window.open("/candidate/searchDetail?min=" + min + "&max=" + max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + zyCode + "&type=3", "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
             }
             , chooseProvince: function () {
                 layer.open({
