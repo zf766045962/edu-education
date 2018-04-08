@@ -18,6 +18,9 @@
     <input type="hidden" th:value="${min}" id="min">
     <input type="hidden" th:value="${max}" id="max">
     <input type="hidden" th:value="${id}" id="hid_id">
+    <input type="hidden" th:value="${provinceCode}" id="provinceCode">
+    <input type="hidden" th:value="${majorCode}" id="majorCode">
+    <input type="hidden" th:value="${type}" id="type">
     <form class="layui-form" action="">
         <div class="layui-form-item">
             <div class="layui-inline">
@@ -43,33 +46,68 @@
         <span class=line-title>查询结果</span>
     </div>
     <div class="gkwh-tb">
-        <div class="layui-btn-group">
-            <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="del"><i class="iconfont"></i>删除志愿</a>
-            <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="clear"><i class="iconfont"></i>清空志愿</a>
-            <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="export"><i class="iconfont"></i>候选志愿导出</a>
-        </div>
         <table id="wh-list"></table>
     </div>
 </div>
+<script type="text/html" id="checkboxTpl">
+    <input type="checkbox" name="lock" value="{{d.zhcs}}" title="收藏" lay-filter="lockDemo" {{ d.sfsc== 1
+           ? 'checked' : '' }}>
+</script>
 <script>
     layui.use(['table', 'form'], function () {
         var $ = layui.jquery
             , table = layui.table
             , form = layui.form;
+        form.on('checkbox(lockDemo)', function (obj) {
+            var check = obj.elem.checked;
+            var v = this.value.split("|");
+            if (check) {
+                $.post('/hxzy/add', {
+                    "candidateId": $("#hid_id").val()
+                    , "schoolCode": v[0]
+                    , "schoolName": v[1]
+                    , "majorCode": v[2]
+                    , "majorName": v[3]
+                    , "referenceIndex": v[4]
+                    , "status": $("#type").val()
+                }, function (data) {
+                    if (data.code != '90000') {
+                        layer.msg("收藏失败");
+                    }
+                });
+            } else {
+                $.post('/hxzy/cancel', {
+                    "id": $("#hid_id").val()
+                    , "schoolCode": v[0]
+                    , "majorCode": v[2]
+                }, function (data) {
+                    if (data.code != '90000') {
+                        layer.msg("收藏失败");
+                    }
+                });
+            }
+        });
         table.render({
             elem: '#wh-list'
-            , url: '/candidate/search'
+            , url: '/candidate/detail'
             , cols: [[
-                {field: 'id', title: 'id', checkbox: true, sort: true}
-                , {field: 'schoolName', title: '学校名称', sort: true}
-                , {field: 'schoolCode', title: '学校代码', sort: true}
-                , {field: 'majorName', title: '专业名称', sort: true}
-                , {field: 'majorCode', title: '专业代码', sort: true}
-                , {field: 'referenceIndexName', title: '参考指数', sort: true}
-                , {field: 'statusName', title: '志愿类型', sort: true}
+                {field: 'lock', title: '收藏志愿', width: 110, templet: '#checkboxTpl', unresize: true}
+                , {field: 'yxdhmc', title: '学校名称', sort: true}
+                , {field: 'zymc', title: '专业名称', sort: true}
+                , {field: 'ckzsName', title: '参考指数', sort: true}
+                , {field: 'xkkmyqzw', title: '选考科目', sort: true}
+                , {field: 'sfbz', title: '收费标准', sort: true}
+                , {field: 'xzmc', title: '学制', sort: true}
+                , {field: 'zsjhs', title: '招生计划数', sort: true}
+                , {field: 'bz', title: '备注', sort: true}
             ]]
             , where: {
-                "candidateId": $("#hid_id").val()
+                "id": $("#hid_id").val()
+                , "min": $("#min").val()
+                , "max": $("#max").val()
+                , "provinceCode": $("#provinceCode").val()
+                , "majorCode": $("#majorCode").val()
+                , "type": $("#type").val()
             }
             , id: 'idTest'
             , request: {
