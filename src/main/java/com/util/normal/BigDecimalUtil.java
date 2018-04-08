@@ -51,6 +51,6 @@ public class BigDecimalUtil {
         if (bigDecimal == null) {
             return "0.00%";
         }
-        return String.valueOf(bigDecimal.multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP)) + "%";
+        return String.valueOf(bigDecimal.multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_EVEN)) + "%";
     }
 }

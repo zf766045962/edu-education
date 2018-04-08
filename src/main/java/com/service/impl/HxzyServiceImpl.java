@@ -38,4 +38,9 @@ public class HxzyServiceImpl implements HxzyService {
     public void deleteByIds(List<Long> ids) {
         hxzyMapper.deleteByIds(ids);
     }
+
+    @Override
+    public void deleteByCandidateIdAndSchoolCodeAndMajorCode(long candidateId, String schoolCode, String majorCode) {
+        hxzyMapper.deleteByCandidateIdAndSchoolCodeAndMajorCode(candidateId, schoolCode, majorCode);
+    }
 }

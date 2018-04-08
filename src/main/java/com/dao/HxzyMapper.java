@@ -2,6 +2,8 @@ package com.dao;
 
 import com.entity.Hxzy;
 import com.vo.HxzyVo;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -44,4 +46,17 @@ public interface HxzyMapper {
      * @param ids 候选志愿集合
      */
     void deleteByIds(List<Long> ids);
+
+    /**
+     * 根据考生Id，学校代码，专业代码取消候选志愿
+     *
+     * @param candidateId 考生ID
+     * @param schoolCode  学校代码
+     * @param majorCode   专业代码
+     */
+    @Delete("delete from hxzy where candidate_id=#{candidateId} and school_code=#{schoolCode} and major_code=#{majorCode}")
+    void deleteByCandidateIdAndSchoolCodeAndMajorCode(
+            @Param("candidateId") long candidateId
+            , @Param("schoolCode") String schoolCode
+            , @Param("majorCode") String majorCode);
 }

@@ -40,4 +40,13 @@ public interface HxzyService {
      * @param ids 候选志愿集合
      */
     void deleteByIds(List<Long> ids);
+
+    /**
+     * 根据考生Id，学校代码，专业代码取消候选志愿
+     *
+     * @param candidateId 考生ID
+     * @param schoolCode  学校代码
+     * @param majorCode   专业代码
+     */
+    void deleteByCandidateIdAndSchoolCodeAndMajorCode(long candidateId, String schoolCode, String majorCode);
 }
