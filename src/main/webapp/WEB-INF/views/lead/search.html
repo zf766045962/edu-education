@@ -231,6 +231,7 @@
                     return;
                 }
                 var provinceCode = $("#province_code").val();
+                console.log(zyCode);
                 layer.load();
                 $.get("/candidate/application", {
                     "c_min": c_min
@@ -356,6 +357,11 @@
                     }
                 }
                 $("#selectZY").val(zyName);
+            }
+            , clearMajor: function () {
+                $("#selectZY").val("");
+                zyCode = [];
+                zyName = [];
             }
         };
         $('.layui-btn').on('click', function () {
