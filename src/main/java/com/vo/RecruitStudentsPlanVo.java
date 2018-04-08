@@ -19,6 +19,12 @@ public class RecruitStudentsPlanVo extends RecruitStudentsPlan {
      * 是否收藏 0 未收藏 1已收藏
      */
     private String sfsc;
+    /**
+     * 组合参数
+     */
+    private String zhcs;
+
+    private String ckzsName;
 
     public BigDecimal getCkzs() {
         return ckzs;
@@ -34,5 +40,21 @@ public class RecruitStudentsPlanVo extends RecruitStudentsPlan {
 
     public void setSfsc(String sfsc) {
         this.sfsc = sfsc;
+    }
+
+    public String getZhcs() {
+        return zhcs;
+    }
+
+    public void setZhcs(String zhcs) {
+        this.zhcs = zhcs;
+    }
+
+    public String getCkzsName() {
+        return ckzsName;
+    }
+
+    public void setCkzsName(String ckzsName) {
+        this.ckzsName = ckzsName;
     }
 }
