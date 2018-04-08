@@ -166,6 +166,13 @@
             </foreach>
             )
         </if>
+        <if test="majorCodes !=null">
+            AND zydm IN (
+            <foreach collection="majorCodes" item="item" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
         GROUP BY yxdh
         ) t
     </select>
@@ -203,12 +210,19 @@
             </foreach>
             )
         </if>
+        <if test="majorCodes !=null">
+            AND zydm IN (
+            <foreach collection="majorCodes" item="item" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
     </select>
     <select id="listRecruitStudentsPlan" resultType="com.vo.RecruitStudentsPlanVo">
         SELECT
         a.zydm_new,
         a.zymc,
-        a.xzdm,
+        a.xzmc,
         a.sfbz,
         a.xkkmyqzw,
         a.ccmc,
@@ -219,12 +233,13 @@
         a.yxdh,
         a.yxdhmc,
         a.bz,
-        CASE (SELECT hxzy.id
-        FROM hxzy
-        WHERE a.yxdh = yxdh AND a.zydm = a.zydm_new)
-        WHEN NULL
-        THEN '1'
-        ELSE '0' END AS sfsc
+        concat(a.yxdh,'|',a.yxdhmc,'|',a.zydm_new,'|',a.zymc,'|',b.ckzs) AS zhcs,
+        CASE ifnull((SELECT c.id
+        FROM hxzy c
+        WHERE a.yxdh = c.school_code AND c.major_code = a.zydm_new AND c.candidate_id = #{candidateId}), 'aaa')
+        WHEN 'aaa'
+        THEN '0'
+        ELSE '1' END AS sfsc
         FROM recruit_students_plan a, wntdqk b
         WHERE b.nf = #{nf}
         AND a.yxdh = b.schoole_code
@@ -251,11 +266,24 @@
         )
         )
         <if test="provinceCodes != null">
-        AND ssdm IN (
-        <foreach collection="provinceCodes" item="item" separator=",">
-            #{item}
-        </foreach>
-        )
+            AND ssdm IN (
+            <foreach collection="provinceCodes" item="item" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        <if test="majorCodes != null">
+            AND a.zydm IN (
+            <foreach collection="majorCodes" item="item" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        <if test="schoolName !=null">
+            AND yxdhmc LIKE concat(#{schoolName},'%')
+        </if>
+        <if test="majorName !=null and majorName !=''">
+            AND a.zymc LIKE concat(#{majorName},'%')
         </if>
     </select>
 </mapper>
