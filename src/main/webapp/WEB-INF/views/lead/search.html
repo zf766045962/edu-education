@@ -266,25 +266,46 @@
                 });
             }
             , cSearch: function () {
+                var majorCode = "";
+                for (var i = 0, len = zyCode.length; i < len; i++) {
+                    majorCode += "" + zyCode[i];
+                    if (i < len - 1) {
+                        majorCode += ",";
+                    }
+                }
                 var c_min = $("#c_min").val();
                 var c_max = $("#c_max").val();
                 var id = $("#hid_id").val();
                 var provinceCode = $("#province_code").val();
-                window.open("/candidate/searchDetail?min=" + c_min + "&max=" + c_max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + zyCode + "&type=1", "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
+                window.open("/candidate/searchDetail?min=" + c_min + "&max=" + c_max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + majorCode + "&type=1", "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
             }
             , wSearch: function () {
+                var majorCode = "";
+                for (var i = 0, len = zyCode.length; i < len; i++) {
+                    majorCode += "" + zyCode[i];
+                    if (i < len - 1) {
+                        majorCode += ",";
+                    }
+                }
                 var min = $("#w_min").val();
                 var max = $("#w_max").val();
                 var id = $("#hid_id").val();
                 var provinceCode = $("#province_code").val();
-                window.open("/candidate/searchDetail?min=" + min + "&max=" + max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + zyCode + "&type=2", "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
+                window.open("/candidate/searchDetail?min=" + min + "&max=" + max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + majorCode + "&type=2", "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
             }
             , bSearch: function () {
+                var majorCode = "";
+                for (var i = 0, len = zyCode.length; i < len; i++) {
+                    majorCode += "" + zyCode[i];
+                    if (i < len - 1) {
+                        majorCode += ",";
+                    }
+                }
                 var min = $("#b_min").val();
                 var max = $("#b_max").val();
                 var id = $("#hid_id").val();
                 var provinceCode = $("#province_code").val();
-                window.open("/candidate/searchDetail?min=" + min + "&max=" + max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + zyCode + "&type=3", "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
+                window.open("/candidate/searchDetail?min=" + min + "&max=" + max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + majorCode + "&type=3", "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
             }
             , chooseProvince: function () {
                 layer.open({
