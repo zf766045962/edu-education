@@ -69,6 +69,7 @@
                     , "majorCode": v[2]
                     , "majorName": v[3]
                     , "referenceIndex": v[4]
+                    , "majorCodeNew": v[5]
                     , "status": $("#type").val()
                 }, function (data) {
                     if (data.code != '90000') {
@@ -79,7 +80,7 @@
                 $.post('/hxzy/cancel', {
                     "id": $("#hid_id").val()
                     , "schoolCode": v[0]
-                    , "majorCode": v[2]
+                    , "majorCode": v[5]
                 }, function (data) {
                     if (data.code != '90000') {
                         layer.msg("收藏失败");
@@ -92,12 +93,12 @@
             , url: '/candidate/detail'
             , cols: [[
                 {field: 'lock', title: '收藏志愿', width: 110, templet: '#checkboxTpl', unresize: true}
-                , {field: 'yxdhmc', title: '学校名称', sort: true}
-                , {field: 'zymc', title: '专业名称', sort: true}
-                , {field: 'ckzsName', title: '参考指数', sort: true}
+                , {field: 'yxdhmc', title: '学校名称', width: 150, sort: true}
+                , {field: 'zymc', title: '专业名称', width: 140, sort: true}
+                , {field: 'ckzsName', title: '参考指数', width: 110, sort: true}
                 , {field: 'xkkmyqzw', title: '选考科目', sort: true}
                 , {field: 'sfbz', title: '收费标准', sort: true}
-                , {field: 'xzmc', title: '学制', sort: true}
+                , {field: 'xzmc', title: '学制', width: 65, sort: true}
                 , {field: 'zsjhs', title: '招生计划数', sort: true}
                 , {field: 'bz', title: '备注', sort: true}
             ]]
