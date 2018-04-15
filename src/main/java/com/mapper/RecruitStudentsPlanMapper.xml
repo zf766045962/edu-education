@@ -233,10 +233,11 @@
         a.yxdh,
         a.yxdhmc,
         a.bz,
-        concat(a.yxdh,'|',a.yxdhmc,'|',a.zydm_new,'|',a.zymc,'|',b.ckzs) AS zhcs,
+        a.zydm,
+        concat(a.yxdh,'|',a.yxdhmc,'|',a.zydm,'|',a.zymc,'|',b.ckzs,'|',a.zydm_new) AS zhcs,
         CASE ifnull((SELECT c.id
         FROM hxzy c
-        WHERE a.yxdh = c.school_code AND c.major_code = a.zydm_new AND c.candidate_id = #{candidateId}), 'aaa')
+        WHERE a.yxdh = c.school_code AND c.major_code_new = a.zydm_new AND c.candidate_id = #{candidateId}), 'aaa')
         WHEN 'aaa'
         THEN '0'
         ELSE '1' END AS sfsc

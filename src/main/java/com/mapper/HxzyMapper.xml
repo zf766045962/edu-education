@@ -7,6 +7,7 @@
         <result column="school_code" property="schoolCode" jdbcType="VARCHAR"/>
         <result column="school_name" property="schoolName" jdbcType="VARCHAR"/>
         <result column="major_code" property="majorCode" jdbcType="VARCHAR"/>
+        <result column="major_code_new" property="majorCodeNew" jdbcType="VARCHAR"/>
         <result column="major_name" property="majorName" jdbcType="VARCHAR"/>
         <result column="reference_index" property="referenceIndex" jdbcType="DECIMAL"/>
         <result column="status" property="status" jdbcType="VARCHAR"/>
@@ -14,7 +15,7 @@
         <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, candidate_id, school_code, school_name, major_code, major_name, reference_index,
+        id, candidate_id, school_code, school_name, major_code,major_code_new, major_name, reference_index,
         status, gmt_create, gmt_modified
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
@@ -44,6 +45,9 @@
             </if>
             <if test="majorCode != null">
                 major_code,
+            </if>
+            <if test="majorCodeNew != null">
+                major_code_new,
             </if>
             <if test="majorName != null">
                 major_name,
@@ -76,6 +80,9 @@
             </if>
             <if test="majorCode != null">
                 #{majorCode,jdbcType=VARCHAR},
+            </if>
+            <if test="majorCodeNew != null">
+                #{majorCodeNew,jdbcType=VARCHAR},
             </if>
             <if test="majorName != null">
                 #{majorName,jdbcType=VARCHAR},

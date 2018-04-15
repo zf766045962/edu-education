@@ -35,6 +35,10 @@ public class Hxzy implements Serializable {
      */
     private String majorName;
     /**
+     * 专业代码和省代码2拼接在一起
+     */
+    private String majorCodeNew;
+    /**
      * 参考指数
      */
     private BigDecimal referenceIndex;
@@ -127,6 +131,14 @@ public class Hxzy implements Serializable {
         this.gmtModified = gmtModified;
     }
 
+    public String getMajorCodeNew() {
+        return majorCodeNew;
+    }
+
+    public void setMajorCodeNew(String majorCodeNew) {
+        this.majorCodeNew = majorCodeNew;
+    }
+
     @Override
     public String toString() {
         return "Hxzy{" +
@@ -136,6 +148,7 @@ public class Hxzy implements Serializable {
                 ", schoolName='" + schoolName + '\'' +
                 ", majorCode='" + majorCode + '\'' +
                 ", majorName='" + majorName + '\'' +
+                ", majorCodeNew='" + majorCodeNew + '\'' +
                 ", referenceIndex=" + referenceIndex +
                 ", status='" + status + '\'' +
                 ", gmtCreate=" + gmtCreate +
