@@ -131,6 +131,10 @@ public class RecruitStudentsPlan implements Serializable {
      * 专业代码与省代码2合成在一起
      */
     private String zydmNew;
+    /**
+     * 是否双一流
+     */
+    private String sfsyl;
 
     public Long getId() {
         return id;
@@ -474,5 +478,13 @@ public class RecruitStudentsPlan implements Serializable {
 
     public void setZydmNew(String zydmNew) {
         this.zydmNew = zydmNew;
+    }
+
+    public String getSfsyl() {
+        return sfsyl;
+    }
+
+    public void setSfsyl(String sfsyl) {
+        this.sfsyl = sfsyl;
     }
 }
