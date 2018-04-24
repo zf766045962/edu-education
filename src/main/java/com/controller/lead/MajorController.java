@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 /**
+ * 专业控制器
+ *
  * @author 潘根山
  * @create 2018-04-08 19:48
  * @since 1.0.0
