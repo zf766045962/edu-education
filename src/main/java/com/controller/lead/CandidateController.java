@@ -120,6 +120,7 @@ public class CandidateController {
      * @param id           考生id
      * @param provinceCode 省市名称
      * @param majorCode    专业名称
+     * @param schoolCode   院校名称
      * @return 志愿
      */
     @RequestMapping("/application")
@@ -133,7 +134,8 @@ public class CandidateController {
             , @RequestParam("b_max") int bMax
             , @RequestParam("id") Long id
             , String provinceCode
-            , String majorCode) {
+            , String majorCode
+            , String schoolCode) {
         // 查询考生信息
         Candidate candidate = candidateService.getCandidateById(id);
         if (candidate == null) {
@@ -150,11 +152,16 @@ public class CandidateController {
                 map.put("provinceCodes", provinceCodes);
             }
         }
-        System.out.println(majorCode);
         if (CommonUtils.isNotEmpty(majorCode)) {
             String[] majorCodes = majorCode.split(",");
             if (majorCodes.length > 0) {
                 map.put("majorCodes", majorCodes);
+            }
+        }
+        if (CommonUtils.isNotEmpty(schoolCode)) {
+            String[] schoolCodes = schoolCode.split(",");
+            if (schoolCodes.length > 0) {
+                map.put("schoolCodes", schoolCodes);
             }
         }
         map.put("nf", nf);
@@ -186,12 +193,21 @@ public class CandidateController {
     }
 
     @RequestMapping("/searchDetail")
-    public String toDetail(@RequestParam("min") int min, @RequestParam("max") int max, @RequestParam("id") Long id, String provinceCode, String majorCode, String type, Model model) {
+    public String toDetail(
+            @RequestParam("min") int min
+            , @RequestParam("max") int max
+            , @RequestParam("id") Long id
+            , String provinceCode
+            , String majorCode
+            , String schoolCode
+            , String type
+            , Model model) {
         model.addAttribute("min", min);
         model.addAttribute("max", max);
         model.addAttribute("id", id);
         model.addAttribute("provinceCode", provinceCode);
         model.addAttribute("majorCode", majorCode);
+        model.addAttribute("schoolCode", schoolCode);
         model.addAttribute("type", type);
         return "/lead/detail";
     }
@@ -214,7 +230,8 @@ public class CandidateController {
             , @RequestParam("pageSize") int pageSize
             , @RequestParam("currentPage") int currentPage
             , String schoolName
-            , String majorName) {
+            , String majorName
+            , String schoolCode) {
         // 查询考生信息
         Candidate candidate = candidateService.getCandidateById(id);
         if (candidate == null) {
@@ -242,6 +259,12 @@ public class CandidateController {
             String[] majorCodes = majorCode.split(",");
             if (majorCodes.length > 0) {
                 map.put("majorCodes", majorCodes);
+            }
+        }
+        if (CommonUtils.isNotEmpty(schoolCode)) {
+            String[] schoolCodes = schoolCode.split(",");
+            if (schoolCodes.length > 0) {
+                map.put("schoolCodes", schoolCodes);
             }
         }
         //显示符合条件的志愿
