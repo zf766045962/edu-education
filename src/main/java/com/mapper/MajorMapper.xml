@@ -64,32 +64,6 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.entity.Major">
-        update major
-        <set>
-            <if test="zydm != null">
-                zydm = #{zydm,jdbcType=VARCHAR},
-            </if>
-            <if test="zymc != null">
-                zymc = #{zymc,jdbcType=VARCHAR},
-            </if>
-            <if test="gmtCreate != null">
-                gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-            </if>
-            <if test="gmtModified != null">
-                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-            </if>
-        </set>
-        where id = #{id,jdbcType=BIGINT}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.entity.Major">
-    update major
-    set zydm = #{zydm,jdbcType=VARCHAR},
-      zymc = #{zymc,jdbcType=VARCHAR},
-      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
     <select id="listMajor" resultMap="BaseResultMap">
         select id,zydm,zymc from major
         <where>
@@ -99,4 +73,8 @@
         </where>
         order by zydm
     </select>
+    <insert id="insertMajor">
+        INSERT major(zydm, zymc, gmt_create)
+        SELECT zydm,zymc,now() FROM recruit_students_plan GROUP BY zydm
+    </insert>
 </mapper>
