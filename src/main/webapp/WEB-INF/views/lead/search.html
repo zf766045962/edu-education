@@ -91,6 +91,15 @@
             <textarea placeholder="请选择意向省份" class="layui-textarea" disabled id="province_name"></textarea>
         </div>
     </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">意向学校</label>
+        <button class="layui-btn" data-type="chooseSchool">选择学校</button>
+        <span style="color:red;">(点击此按钮选择学校)</span>
+        <div class="layui-input-block">
+            <input type="hidden" id="school_code">
+            <textarea placeholder="请选择意向学校" class="layui-textarea" disabled id="school_name"></textarea>
+        </div>
+    </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn" data-type="search">生成志愿</button>
@@ -170,6 +179,31 @@
         </div>
     </form>
 </div>
+<div class="m-modal" id="school" style="display: none;">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">院校名称</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="yxmc">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label"></label>
+            <a href="javascript:;" class="layui-btn ayui-btn-normal bg-blue " data-type="reloadSchool">
+                <i class="iconfont">&#xe606;</i> 查询</a>
+        </div>
+    </div>
+    <form class="layui-form">
+        <div class="gkwh-tb">
+            <div class="layui-btn-group">
+                <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="addSchool"><i class="iconfont"></i>增加意向学校</a>
+                <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="clearSchool"><i
+                        class="iconfont"></i>清空意向学校</a>
+            </div>
+            <table id="school-list"></table>
+        </div>
+    </form>
+</div>
 <script>
     layui.use(['table', 'form'], function () {
         var $ = layui.jquery
@@ -207,8 +241,40 @@
                 }
             }
         });
+        table.render({
+            elem: '#school-list'
+            , url: '/school/'
+            , cols: [[
+                {field: 'id', title: 'id', checkbox: true, sort: true}
+                , {field: 'yxmc', title: '院校名称', sort: true}
+            ]]
+            , id: 'schoolTable'
+            , request: {
+                pageName: 'currentPage' //页码的参数名称，默认：page
+                , limitName: 'pageSize' //每页数据量的参数名，默认：limit
+            }
+            , response: {
+                statusCode: 90000 //成功的状态码，默认：0
+                , countName: 'count' //数据总数的字段名称，默认：count
+                , dataName: 'data' //数据列表的字段名称，默认：data
+            }
+            , even: true
+            , page: {theme: '#2d5eb7'}
+            , done: function (res, curr, count) {
+                if (res.code == 30002) {
+                    layer.msg(res.msg);
+                    setTimeout(function () {
+                        top.location.href = "/login";
+                    }, 5000);
+                } else if (res.code != 90000) {
+                    layer.msg(res.msg);
+                }
+            }
+        });
         var zyName = [];
         var zyCode = [];
+        var yxName = [];
+        var yxCode = [];
         var active = {
             search: function () {
                 var c_min = $("#c_min").val();
@@ -238,6 +304,13 @@
                         majorCode += ",";
                     }
                 }
+                var schoolCode = "";
+                for (var i = 0, len = yxCode.length; i < len; i++) {
+                    schoolCode += "" + yxCode[i];
+                    if (i < len - 1) {
+                        schoolCode += ",";
+                    }
+                }
                 layer.load();
                 $.get("/candidate/application", {
                     "c_min": c_min
@@ -249,6 +322,7 @@
                     , "id": id
                     , "provinceCode": provinceCode
                     , "majorCode": majorCode
+                    , "schoolCode": schoolCode
                 }, function (res) {
                     layer.closeAll();
                     if (res.code == 30002) {
@@ -270,21 +344,25 @@
                 var c_max = $("#c_max").val();
                 var id = $("#hid_id").val();
                 var provinceCode = $("#province_code").val();
-                window.open("/candidate/searchDetail?min=" + c_min + "&max=" + c_max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + zyCode + "&type=1", "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
+                window.open("/candidate/searchDetail?min=" + c_min + "&max=" + c_max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + zyCode + "&type=1" +
+                    "&schoolCode=" + yxCode, "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
             }
             , wSearch: function () {
                 var min = $("#w_min").val();
                 var max = $("#w_max").val();
                 var id = $("#hid_id").val();
                 var provinceCode = $("#province_code").val();
-                window.open("/candidate/searchDetail?min=" + min + "&max=" + max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + zyCode + "&type=2", "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
+                window.open("/candidate/searchDetail?min=" + min + "&max=" + max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + zyCode + "&type=2" +
+                    "&schoolCode=" + yxCode, "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
             }
             , bSearch: function () {
                 var min = $("#b_min").val();
                 var max = $("#b_max").val();
                 var id = $("#hid_id").val();
                 var provinceCode = $("#province_code").val();
-                window.open("/candidate/searchDetail?min=" + min + "&max=" + max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + zyCode + "&type=3", "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
+                var schoolCode = $("#school_code").val();
+                window.open("/candidate/searchDetail?min=" + min + "&max=" + max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + zyCode + "&type=3" +
+                    "&schoolCode=" + yxCode, "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
             }
             , chooseProvince: function () {
                 layer.open({
@@ -314,6 +392,7 @@
                     , cancel: function (index, layero) {
                     }
                 });
+
             }
             , chooseMajor: function () {
                 layer.open({
@@ -335,6 +414,27 @@
 
                     }
                 });
+            }
+            , chooseSchool: function () {
+                layer.open({
+                    type: 1
+                    , skin: 'layui-layer-demo t-layer-add' //样式类名
+                    , closeBtn: 1
+                    , anim: 2
+                    , area: '800px'
+                    , btn: ['确定', '取消']
+                    , title: "院校选择"
+                    , content: $("#school")
+                    , yes: function (index, layero) {
+                        layer.closeAll();
+                    }
+                    , success: function (layero, index) {
+
+                    }
+                    , cancel: function (index, layero) {
+                    }
+                });
+
             }
             , reload: function () {
                 var zymc = $("#zymc").val();
@@ -368,6 +468,39 @@
                 $("#selectZY").val("");
                 zyCode = [];
                 zyName = [];
+            }
+            , addSchool: function () {
+                var checkStatus = table.checkStatus('schoolTable');
+                var data = checkStatus.data;
+                if (data.length <= 0) {
+                    layer.msg("请选择院校");
+                    return;
+                }
+                for (var j = 0; j < data.length; j++) {
+                    var ids = data[j].yxdh;
+                    var name = data[j].yxmc;
+                    if (yxCode.in_array(ids) == false) {
+                        yxCode.push(ids);
+                        yxName.push(name);
+                    }
+                }
+                $("#school_name").val(yxName);
+            }
+            , clearSchool: function () {
+                $("#school_name").val("");
+                yxCode = [];
+                yxName = [];
+            }
+            , reloadSchool: function () {
+                var yxmc = $("#yxmc").val();
+                table.reload('schoolTable', {
+                    page: {
+                        curr: 1
+                    }
+                    , where: {
+                        "yxmc": yxmc
+                    }
+                });
             }
         };
         $('.layui-btn').on('click', function () {
