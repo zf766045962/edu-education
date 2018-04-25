@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.SchoolMapper">
+    <resultMap id="BaseResultMap" type="com.entity.School">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="yxdh" property="yxdh" jdbcType="VARCHAR"/>
+        <result column="yxmc" property="yxmc" jdbcType="VARCHAR"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, yxdh, yxmc, gmt_create, gmt_modified
+  </sql>
+    <insert id="insertSchool">
+      insert into school(yxdh, yxmc, gmt_create, gmt_modified)
+        SELECT yxdh,yxdhmc,now(),now() FROM recruit_students_plan GROUP BY yxdh,yxdhmc
+  </insert>
+    <select id="listSchool" resultMap="BaseResultMap">
+        select id,yxdh,yxmc from school
+        <where>
+            <if test="yxmc != null and yxmc != ''">
+                yxmc like concat('%',#{yxmc},'%')
+            </if>
+        </where>
+        order by yxdh
+    </select>
+</mapper>

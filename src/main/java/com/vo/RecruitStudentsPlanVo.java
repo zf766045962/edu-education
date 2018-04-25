@@ -25,6 +25,14 @@ public class RecruitStudentsPlanVo extends RecruitStudentsPlan {
     private String zhcs;
 
     private String ckzsName;
+    /**
+     * 省市名称和所在地组合
+     */
+    private String ssmcSzd;
+
+    private String sf985Name;
+
+    private String sf211Name;
 
     public BigDecimal getCkzs() {
         return ckzs;
@@ -56,5 +64,29 @@ public class RecruitStudentsPlanVo extends RecruitStudentsPlan {
 
     public void setCkzsName(String ckzsName) {
         this.ckzsName = ckzsName;
+    }
+
+    public String getSsmcSzd() {
+        return ssmcSzd;
+    }
+
+    public void setSsmcSzd(String ssmcSzd) {
+        this.ssmcSzd = ssmcSzd;
+    }
+
+    public String getSf985Name() {
+        return sf985Name;
+    }
+
+    public void setSf985Name(String sf985Name) {
+        this.sf985Name = sf985Name;
+    }
+
+    public String getSf211Name() {
+        return sf211Name;
+    }
+
+    public void setSf211Name(String sf211Name) {
+        this.sf211Name = sf211Name;
     }
 }

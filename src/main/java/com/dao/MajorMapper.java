@@ -1,6 +1,7 @@
 package com.dao;
 
 import com.entity.Major;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -23,4 +24,15 @@ public interface MajorMapper {
      */
 
     List<Major> listMajor(@Param("zymc") String zymc);
+
+    /**
+     * 新增专业数据
+     */
+    void insertMajor();
+
+    /**
+     * 删除专业信息
+     */
+    @Delete("delete from major")
+    void deleteMajor();
 }

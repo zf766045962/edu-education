@@ -18,4 +18,9 @@ public interface MajorService {
      */
 
     List<Major> listMajor(String zymc);
+
+    /**
+     * 初始化专业数据
+     */
+    void initializationMajor();
 }
