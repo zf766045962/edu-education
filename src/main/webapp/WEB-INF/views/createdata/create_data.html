@@ -28,12 +28,28 @@
                 <a href="javascript:;" class="layui-btn ayui-btn-normal bg-blue " data-type="createSchool">
                     <i class="iconfont"></i> 生成院校数据</a>
             </div>
+            <div class="layui-inline">
+                <label class="layui-form-label"></label>
+                <a href="javascript:;" class="layui-btn ayui-btn-normal bg-blue " data-type="createWntdqkHz">
+                    <i class="iconfont"></i> 生成投档汇总数据</a>
+                <label class="layui-form-label" id="year_mc">年份</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="year">
+                </div>
+            </div>
         </div>
     </form>
 </div>
 <script>
-    layui.use('layer', function () {
-        var layer = layui.layer;
+    layui.use(['layer', 'laydate'], function () {
+        var layer = layui.layer
+            , laydate = layui.laydate;
+        laydate.render({
+            elem: '#year'
+            , type: 'year'
+            , format: 'yyyy'
+            , max: 0//可任意组合
+        });
         var active = {
             createMajor: function () {
                 layer.confirm('确定要生成专业数据吗?', {
@@ -49,6 +65,19 @@
                     btn: ['确定', '取消']
                 }, function (index, layero) {
                     school();
+                }, function (index) {
+                });
+            }
+            , createWntdqkHz: function () {
+                var year = $("#year").val();
+                if (year == null || year == "") {
+                    layer.msg("请选择生成的年份");
+                    return;
+                }
+                layer.confirm('确定要生成投档汇总数据吗?', {
+                    btn: ['确定', '取消']
+                }, function (index, layero) {
+                    wntdqkHz(year);
                 }, function (index) {
                 });
             }
@@ -79,6 +108,23 @@
     function school() {
         layer.load();
         $.post("/createData/school", function (res) {
+            layer.closeAll();
+            if (res.code == 30002) {
+                layer.msg(res.msg);
+                setTimeout(function () {
+                    top.location.href = "/login";
+                }, 5000);
+            } else if (res.code != 90000) {
+                layer.msg(res.msg);
+            } else {
+                layer.msg("生成成功");
+            }
+        });
+    }
+
+    function wntdqkHz(year) {
+        layer.load();
+        $.post("/createData/wntdqkhz", {"year": year}, function (res) {
             layer.closeAll();
             if (res.code == 30002) {
                 layer.msg(res.msg);
