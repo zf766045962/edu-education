@@ -17,7 +17,7 @@ public interface WntdqkMapper {
     /**
      * 批量插入往年投档情况
      *
-     * @param list
+     * @param list 往年投档情况
      */
     void insertWntdqkBatch(List<Wntdqk> list);
 }
