@@ -3,7 +3,7 @@
 <mapper namespace="com.dao.WntdqkMapper">
     <resultMap id="BaseResultMap" type="com.entity.Wntdqk">
         <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="schoole_code" property="schooleCode" jdbcType="VARCHAR"/>
+        <result column="school_code" property="schoolCode" jdbcType="VARCHAR"/>
         <result column="school_name" property="schoolName" jdbcType="VARCHAR"/>
         <result column="zydm" property="zydm" jdbcType="VARCHAR"/>
         <result column="zymc" property="zymc" jdbcType="VARCHAR"/>
@@ -19,7 +19,7 @@
         <result column="ckzs" property="ckzs" jdbcType="DECIMAL"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, schoole_code, school_name, zydm, zymc, kl, nf, tdrs, pjf, zdf, tdmc, pc, gmt_create,
+        id, school_code, school_name, zydm, zymc, kl, nf, tdrs, pjf, zdf, tdmc, pc, gmt_create,
         gmt_modified, zkzs
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
@@ -34,7 +34,7 @@
     </delete>
     <insert id="insertWntdqkBatch" parameterType="java.util.List">
         insert into wntdqk (
-        schoole_code
+        school_code
         , school_name
         ,zydm
         , zymc
@@ -51,7 +51,7 @@
         values
         <foreach collection="list" item="item" separator=",">
             (
-            #{item.schooleCode,jdbcType=VARCHAR}
+            #{item.schoolCode,jdbcType=VARCHAR}
             , #{item.schoolName,jdbcType=VARCHAR}
             ,#{item.zydm,jdbcType=VARCHAR}
             , #{item.zymc,jdbcType=VARCHAR}
@@ -73,8 +73,8 @@
             <if test="id != null">
                 id,
             </if>
-            <if test="schooleCode != null">
-                schoole_code,
+            <if test="schoolCode != null">
+                school_code,
             </if>
             <if test="schoolName != null">
                 school_name,
@@ -117,8 +117,8 @@
             <if test="id != null">
                 #{id,jdbcType=BIGINT},
             </if>
-            <if test="schooleCode != null">
-                #{schooleCode,jdbcType=VARCHAR},
+            <if test="schoolCode != null">
+                #{schoolCode,jdbcType=VARCHAR},
             </if>
             <if test="schoolName != null">
                 #{schoolName,jdbcType=VARCHAR},
@@ -161,8 +161,8 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.entity.Wntdqk">
         update wntdqk
         <set>
-            <if test="schooleCode != null">
-                schoole_code = #{schooleCode,jdbcType=VARCHAR},
+            <if test="schoolCode != null">
+                school_code = #{schoolCode,jdbcType=VARCHAR},
             </if>
             <if test="schoolName != null">
                 school_name = #{schoolName,jdbcType=VARCHAR},
@@ -205,7 +205,7 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.entity.Wntdqk">
         UPDATE wntdqk
-        SET schoole_code = #{schooleCode,jdbcType=VARCHAR},
+        SET school_code = #{schoolCode,jdbcType=VARCHAR},
             school_name  = #{schoolName,jdbcType=VARCHAR},
             zydm         = #{zydm,jdbcType=VARCHAR},
             zymc         = #{zymc,jdbcType=VARCHAR},
