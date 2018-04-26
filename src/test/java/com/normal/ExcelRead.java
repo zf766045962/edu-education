@@ -3,8 +3,10 @@ package com.normal;
 import com.SpringBaseTest;
 import com.common.Constants;
 import com.dao.RecruitStudentsPlanMapper;
+import com.dao.TempMapper;
 import com.dao.WntdqkMapper;
 import com.entity.RecruitStudentsPlan;
+import com.entity.Temp;
 import com.entity.Wntdqk;
 import com.util.excel.AbstractExcelUtil;
 import com.util.normal.CommonUtils;
@@ -33,6 +35,8 @@ public class ExcelRead extends SpringBaseTest {
     private RecruitStudentsPlanMapper recruitStudentsPlanMapper;
     @Autowired
     private WntdqkMapper wntdqkMapper;
+    @Autowired
+    private TempMapper tempMapper;
 
     @Test
     public void testPlan() throws IOException {
@@ -209,7 +213,7 @@ public class ExcelRead extends SpringBaseTest {
                         wntdqk.setPc(CommonUtils.convertStringToInteger(v));
                         break;
                     case 4:
-                        wntdqk.setSchooleCode(v);
+                        wntdqk.setSchoolCode(v);
                         break;
                     case 5:
                         wntdqk.setSchoolName(v);
@@ -258,5 +262,85 @@ public class ExcelRead extends SpringBaseTest {
             }
             temp.clear();
         }
+    }
+
+    @Test
+    public void testTemp() throws IOException {
+        String file = "D:\\工作\\高考志愿填报辅助系统\\2016.xls";
+        FileInputStream fileInput = new FileInputStream(file);
+        Workbook workbook;
+        if (AbstractExcelUtil.isExcel2003(file)) {
+            workbook = new HSSFWorkbook(fileInput);
+        } else if (AbstractExcelUtil.isExcel2007(file)) {
+            workbook = new XSSFWorkbook(fileInput);
+        } else {
+            workbook = null;
+        }
+        if (workbook != null) {
+            Sheet sheet = workbook.getSheetAt(0);
+            Row row;
+            Temp temp;
+            List<Temp> tempList = new ArrayList<>();
+            for (int i = 1, len = sheet.getLastRowNum(); i <= len; i++) {
+                row = sheet.getRow(i);
+                temp = new Temp();
+                temp.setNf("2016");
+                for (int j = 0; j < 9; j++) {
+                    String v = AbstractExcelUtil.getCellByType(row.getCell(j));
+                    switch (j) {
+                        case 0:
+                            temp.setPc(v);
+                            break;
+                        case 1:
+                            temp.setYxdm(v);
+                            break;
+                        case 2:
+                            temp.setYxmc(v);
+                            break;
+                        case 3:
+                            temp.setYxlx(v);
+                            break;
+                        case 4:
+                            temp.setKl(v);
+                            break;
+                        case 5:
+                            temp.setZydm(v);
+                            break;
+                        case 6:
+                            temp.setZydhmc(v);
+                            break;
+                        case 7:
+                            temp.setCcmc(v);
+                            break;
+                        case 8:
+                            temp.setBz(v);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                tempList.add(temp);
+            }
+            if (tempList.size() > 0) {
+                int len = tempList.size();
+                if (len <= Constants.EXCEL_BATCH_SIZE) {
+                    tempMapper.insertBatch(tempList);
+                }
+                List<Temp> t = new ArrayList<>(Constants.EXCEL_BATCH_SIZE);
+                for (int i = 0; i < len; i++) {
+                    if (i > 0 && i % Constants.EXCEL_BATCH_SIZE == 0) {
+                        tempMapper.insertBatch(t);
+                        t.clear();
+                    }
+                    t.add(tempList.get(i));
+                }
+                if (t.size() > 0) {
+                    tempMapper.insertBatch(t);
+                }
+                t.clear();
+            }
+        }
+
+        fileInput.close();
     }
 }
