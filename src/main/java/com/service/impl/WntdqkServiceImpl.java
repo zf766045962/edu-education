@@ -51,7 +51,7 @@ public class WntdqkServiceImpl implements WntdqkService {
                 String v = AbstractExcelUtil.getCellByType(row.getCell(j));
                 switch (j) {
                     case 1:
-                        wntdqk.setSchooleCode(v);
+                        wntdqk.setSchoolCode(v);
                         break;
                     case 2:
                         wntdqk.setSchoolName(v);
