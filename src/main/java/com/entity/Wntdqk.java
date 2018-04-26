@@ -17,7 +17,7 @@ public class Wntdqk implements Serializable {
     /**
      * 学校代码
      */
-    private String schooleCode;
+    private String schoolCode;
     /**
      * 学校名称
      */
@@ -75,12 +75,12 @@ public class Wntdqk implements Serializable {
         this.id = id;
     }
 
-    public String getSchooleCode() {
-        return schooleCode;
+    public String getSchoolCode() {
+        return schoolCode;
     }
 
-    public void setSchooleCode(String schooleCode) {
-        this.schooleCode = schooleCode;
+    public void setSchoolCode(String schoolCode) {
+        this.schoolCode = schoolCode;
     }
 
     public String getSchoolName() {
@@ -191,7 +191,7 @@ public class Wntdqk implements Serializable {
     public String toString() {
         return "Wntdqk{" +
                 "id=" + id +
-                ", schooleCode='" + schooleCode + '\'' +
+                ", schoolCode='" + schoolCode + '\'' +
                 ", schoolName='" + schoolName + '\'' +
                 ", zydm='" + zydm + '\'' +
                 ", zymc='" + zymc + '\'' +
