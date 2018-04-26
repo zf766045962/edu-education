@@ -134,9 +134,8 @@
         SELECT count(*)
         FROM (
         SELECT count(*)
-        FROM recruit_students_plan a, wntdqk b
-        WHERE b.nf = #{nf}
-        AND a.yxdh = b.schoole_code
+        FROM recruit_students_plan a, wntdqk_hz b
+        WHERE a.yxdh = b.school_code
         AND a.zymc = b.zymc
         AND b.tdmc &lt;=#{max} AND tdmc &gt;=#{min}
         AND
@@ -185,9 +184,8 @@
     </select>
     <select id="countMajor" resultType="int">
         SELECT count(*)
-        FROM recruit_students_plan a, wntdqk b
-        WHERE b.nf = #{nf}
-        AND a.yxdh = b.schoole_code
+        FROM recruit_students_plan a, wntdqk_hz b
+        WHERE a.yxdh = b.school_code
         AND a.zymc = b.zymc
         AND b.tdmc &lt;=#{max} AND tdmc &gt;=#{min}
         AND
@@ -260,9 +258,8 @@
         WHEN 'aaa'
         THEN '0'
         ELSE '1' END AS sfsc
-        FROM recruit_students_plan a, wntdqk b
-        WHERE b.nf = #{nf}
-        AND a.yxdh = b.schoole_code
+        FROM recruit_students_plan a, wntdqk_hz b
+        WHERE a.yxdh = b.school_code
         AND a.zymc = b.zymc
         AND b.tdmc &lt;= #{max} AND tdmc &gt;= #{min}
         AND
