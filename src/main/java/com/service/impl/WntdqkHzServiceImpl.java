@@ -18,9 +18,12 @@ public class WntdqkHzServiceImpl implements WntdqkHzService {
     @Override
     public void createWntdqkHz(String year) {
         // 清空往年投档数据临时表
-        //todo 向往年投档数据临时表中插入选择年的投档数据
+        // 向往年投档数据临时表中插入选择年的投档数据
         //todo 将选择年的投档数据与前两年的数据进行比较，计算参考指数和名次
         wntdqkHzMapper.deleteWntdqkHz();
         wntdqkHzMapper.insertWntdqkHz(year);
+        int iYear = Integer.parseInt(year);
+        String lastYear = "" + (iYear - 1);
+        String beforeLastYear = "" + (iYear - 2);
     }
 }
