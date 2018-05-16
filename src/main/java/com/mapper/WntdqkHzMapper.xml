@@ -3,33 +3,37 @@
 <mapper namespace="com.dao.WntdqkHzMapper">
     <insert id="insertWntdqkHz" parameterType="java.lang.String">
         insert into wntdqk_hz (
-        school_code
-        , school_name
-        ,zydm
-        , zymc
-        , kl
-        , nf
-        , tdrs
-        , pjf
-        , zdf
-        , tdmc
-        , pc
-        ,ckzs
-        , gmt_create
+            school_code
+            , school_name
+            , zydm
+            , zymc
+            , kl
+            , nf
+            , tdrs
+            , pjf
+            , zdf
+            , tdmc
+            , pc
+            , ckzs
+            , dsms
+            , gmt_create
         )
-        SELECT
-        school_code
-        , school_name
-        ,zydm
-        , zymc
-        , kl
-        , nf
-        , tdrs
-        , pjf
-        , zdf
-        , tdmc
-        , pc
-        ,ckzs
-        , gmt_create FROM wntdqk WHERE nf=#{nf}
+            SELECT
+                school_code,
+                school_name,
+                zydm,
+                zymc,
+                kl,
+                nf,
+                tdrs,
+                pjf,
+                zdf,
+                tdmc,
+                pc,
+                ckzs,
+                dsms,
+                gmt_create
+            FROM wntdqk
+            WHERE nf = #{nf}
     </insert>
 </mapper>
