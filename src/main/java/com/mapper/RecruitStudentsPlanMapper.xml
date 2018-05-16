@@ -247,6 +247,7 @@
         a.zydm,
         a.bxlxmc,
         a.sfsyl,
+        b.dsms,
         CASE a.sf985 WHEN 1 THEN '是' ELSE '否'
         END AS sf985Name,
         CASE a.sf211 WHEN 1 THEN '是' ELSE '否'
