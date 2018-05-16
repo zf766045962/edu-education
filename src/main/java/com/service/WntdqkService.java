@@ -20,4 +20,23 @@ public interface WntdqkService {
      * @throws CustomException CustomException
      */
     void uploadData(MultipartFile file, String year) throws IOException, CustomException;
+    /**
+     * 生成段数描述的临时数据
+     *
+     * @param year 年份
+     */
+    void generateDsms(String year);
+
+    /**
+     * 更新往年投档数据表中的段数描述
+     *
+     * @param year 年份
+     */
+    void updateDsms(String year);
+    /**
+     * 通过高考计划库，更新往年投档数据中的备注
+     *
+     * @param year 年份
+     */
+    void updateBz(String year);
 }
