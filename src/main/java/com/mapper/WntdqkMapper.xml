@@ -17,10 +17,12 @@
         <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
         <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
         <result column="ckzs" property="ckzs" jdbcType="DECIMAL"/>
+        <result column="ds" property="ds" jdbcType="VARCHAR"/>
+        <result column="zsjhs" property="zsjhs" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, school_code, school_name, zydm, zymc, kl, nf, tdrs, pjf, zdf, tdmc, pc, gmt_create,
-        gmt_modified, zkzs
+        gmt_modified, zkzs, ds
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -46,6 +48,8 @@
         , tdmc
         , pc
         ,ckzs
+        , ds
+        ,zsjhs
         , gmt_create
         )
         values
@@ -63,6 +67,8 @@
             , #{item.tdmc,jdbcType=INTEGER}
             , #{item.pc,jdbcType=INTEGER}
             , #{item.ckzs,jdbcType=DECIMAL}
+            , #{item.ds,jdbcType=VARCHAR}
+            , #{item.zsjhs,jdbcType=INTEGER}
             , #{item.gmtCreate,jdbcType=TIMESTAMP}
             )
         </foreach>
@@ -203,21 +209,27 @@
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.entity.Wntdqk">
-        UPDATE wntdqk
-        SET school_code = #{schoolCode,jdbcType=VARCHAR},
-            school_name  = #{schoolName,jdbcType=VARCHAR},
-            zydm         = #{zydm,jdbcType=VARCHAR},
-            zymc         = #{zymc,jdbcType=VARCHAR},
-            kl           = #{kl,jdbcType=VARCHAR},
-            nf           = #{nf,jdbcType=VARCHAR},
-            tdrs         = #{tdrs,jdbcType=INTEGER},
-            pjf          = #{pjf,jdbcType=INTEGER},
-            zdf          = #{zdf,jdbcType=INTEGER},
-            tdmc         = #{tdmc,jdbcType=INTEGER},
-            pc           = #{pc,jdbcType=INTEGER},
-            gmt_create   = #{gmtCreate,jdbcType=TIMESTAMP},
-            gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
-        WHERE id = #{id,jdbcType=BIGINT}
+    <update id="generateDsms" parameterType="java.lang.String">
+        insert into wntdqk_hz (school_code, school_name, zymc, dsms)
+            select
+                school_code,
+                "",
+                zymc,
+                group_concat(ds, '指数：', format(ckzs * 100, 2), '%', '、计划数：', zsjhs)
+            from wntdqk
+            where nf = #{nf}
+            group by school_name, zymc
+            having count(*) > 1
+            order by ds, school_name, zymc
+    </update>
+    <update id="updateDsms" parameterType="java.lang.String">
+        update wntdqk a, wntdqk_hz b
+        set a.dsms = b.dsms
+        where a.school_code = b.school_code and a.zymc = b.zymc and a.nf = #{nf};
+    </update>
+    <update id="updateBz" parameterType="java.lang.String">
+        UPDATE wntdqk a, recruit_students_plan b
+        SET a.bz = b.bz
+        WHERE a.school_code = b.yxdh AND a.zymc = b.zymc AND nf = #{nf}
     </update>
 </mapper>
