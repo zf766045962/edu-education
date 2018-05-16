@@ -41,15 +41,18 @@ public class WntdqkServiceImpl implements WntdqkService {
         }
         Sheet sheet = workbook.getSheetAt(0);
         Row row;
-        List<Wntdqk> wdtdqkList = new ArrayList<>();
+        List<Wntdqk> wdtdqkList = new ArrayList<>(sheet.getLastRowNum());
         Wntdqk wntdqk;
         for (int i = 1, len = sheet.getLastRowNum(); i <= len; i++) {
             row = sheet.getRow(i);
             wntdqk = new Wntdqk();
             wntdqk.setNf(year);
-            for (int j = 0; j < 10; j++) {
+            for (int j = 0, jLen = row.getLastCellNum(); j < jLen; j++) {
                 String v = AbstractExcelUtil.getCellByType(row.getCell(j));
                 switch (j) {
+                    case 0:
+                        wntdqk.setDs(v);
+                        break;
                     case 1:
                         wntdqk.setSchoolCode(v);
                         break;
@@ -61,6 +64,9 @@ public class WntdqkServiceImpl implements WntdqkService {
                         break;
                     case 4:
                         wntdqk.setZymc(v);
+                        break;
+                    case 5:
+                        wntdqk.setZsjhs((int) (Double.parseDouble(CommonUtils.isEmpty(v) ? "0" : v)));
                         break;
                     case 6:
                         wntdqk.setZdf(CommonUtils.convertStringToInteger(v));
@@ -94,9 +100,28 @@ public class WntdqkServiceImpl implements WntdqkService {
                 wntdqkMapper.insertWntdqkBatch(temp);
             }
             temp.clear();
+            temp = null;
         }
+        wdtdqkList.clear();
+        wdtdqkList = null;
         if (inp != null) {
             inp.close();
         }
+        workbook.close();
+    }
+
+    @Override
+    public void generateDsms(String year) {
+        wntdqkMapper.generateDsms(year);
+    }
+
+    @Override
+    public void updateDsms(String year) {
+        wntdqkMapper.updateDsms(year);
+    }
+
+    @Override
+    public void updateBz(String year) {
+        wntdqkMapper.updateBz(year);
     }
 }
