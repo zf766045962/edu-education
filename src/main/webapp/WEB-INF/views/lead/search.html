@@ -180,20 +180,39 @@
     </form>
 </div>
 <div class="m-modal" id="school" style="display: none;">
-    <div class="layui-form-item">
-        <div class="layui-inline">
-            <label class="layui-form-label">院校名称</label>
-            <div class="layui-input-inline">
-                <input type="text" class="layui-input" id="yxmc">
+    <form class="layui-form" action="" lay-filter="example">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">院校名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="yxmc">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label"></label>
+                <a href="javascript:;" class="layui-btn ayui-btn-normal bg-blue " data-type="reloadSchool">
+                    <i class="iconfont">&#xe606;</i> 查询</a>
             </div>
         </div>
-        <div class="layui-inline">
-            <label class="layui-form-label"></label>
-            <a href="javascript:;" class="layui-btn ayui-btn-normal bg-blue " data-type="reloadSchool">
-                <i class="iconfont">&#xe606;</i> 查询</a>
+        <div class="layui-form-item">
+            <label class="layui-form-label">院校性质</label>
+            <div class="layui-input-block">
+                <input type="checkbox" id="sf985" lay-skin="primary" title="985" checked="">
+                <input type="checkbox" id="sf211" lay-skin="primary" title="211">
+                <input type="checkbox" id="sfsyl" lay-skin="primary" title="双一流">
+            </div>
         </div>
-    </div>
-    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">办学类型</label>
+            <div class="layui-input-inline">
+                <select id="bxlx">
+                    <option value="">请选择办学类型</option>
+                    <option value="1">公办</option>
+                    <option value="2">民办</option>
+                    <option value="3">独立学院</option>
+                </select>
+            </div>
+        </div>
         <div class="gkwh-tb">
             <div class="layui-btn-group">
                 <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="addSchool"><i class="iconfont"></i>增加意向学校</a>
@@ -298,8 +317,8 @@
                 }
                 var provinceCode = $("#province_code").val();
                 var majorCode = "";
-                for (var i = 0, len = zyCode.length; i < len; i++) {
-                    majorCode += "" + zyCode[i];
+                for (var i = 0, len = zyName.length; i < len; i++) {
+                    majorCode += "" + zyName[i];
                     if (i < len - 1) {
                         majorCode += ",";
                     }
@@ -344,7 +363,7 @@
                 var c_max = $("#c_max").val();
                 var id = $("#hid_id").val();
                 var provinceCode = $("#province_code").val();
-                window.open("/candidate/searchDetail?min=" + c_min + "&max=" + c_max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + zyCode + "&type=1" +
+                window.open("/candidate/searchDetail?min=" + c_min + "&max=" + c_max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + zyName + "&type=1" +
                     "&schoolCode=" + yxCode, "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
             }
             , wSearch: function () {
@@ -352,7 +371,7 @@
                 var max = $("#w_max").val();
                 var id = $("#hid_id").val();
                 var provinceCode = $("#province_code").val();
-                window.open("/candidate/searchDetail?min=" + min + "&max=" + max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + zyCode + "&type=2" +
+                window.open("/candidate/searchDetail?min=" + min + "&max=" + max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + zyName + "&type=2" +
                     "&schoolCode=" + yxCode, "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
             }
             , bSearch: function () {
@@ -361,7 +380,7 @@
                 var id = $("#hid_id").val();
                 var provinceCode = $("#province_code").val();
                 var schoolCode = $("#school_code").val();
-                window.open("/candidate/searchDetail?min=" + min + "&max=" + max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + zyCode + "&type=3" +
+                window.open("/candidate/searchDetail?min=" + min + "&max=" + max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + zyName + "&type=3" +
                     "&schoolCode=" + yxCode, "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
             }
             , chooseProvince: function () {
@@ -455,10 +474,10 @@
                     return;
                 }
                 for (var j = 0; j < data.length; j++) {
-                    var ids = data[j].zydm;
+                    //  var ids = data[j].zydm;
                     var name = data[j].zymc;
-                    if (zyCode.in_array(ids) == false) {
-                        zyCode.push(ids);
+                    if (zyCode.in_array(name) == false) {
+                        //zyCode.push(ids);
                         zyName.push(name);
                     }
                 }
@@ -493,12 +512,29 @@
             }
             , reloadSchool: function () {
                 var yxmc = $("#yxmc").val();
+                var sf985 = "";
+                if ($("#sf985").prop("checked")) {
+                    sf985 = 1;
+                }
+                var sf211 = "";
+                if ($("#sf211").prop("checked")) {
+                    sf211 = 1;
+                }
+                var sfsyl = "";
+                if ($("#sfsyl").prop("checked")) {
+                    sfsyl = 1;
+                }
+                var bxlx = $("#bxlx").val();
                 table.reload('schoolTable', {
                     page: {
                         curr: 1
                     }
                     , where: {
                         "yxmc": yxmc
+                        , "sf985": sf985
+                        , "sf211": sf211
+                        , "sfsyl": sfsyl
+                        , "bxlx": bxlx
                     }
                 });
             }
