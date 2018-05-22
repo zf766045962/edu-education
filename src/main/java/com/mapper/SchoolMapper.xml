@@ -12,14 +12,26 @@
     id, yxdh, yxmc, gmt_create, gmt_modified
   </sql>
     <insert id="insertSchool">
-      insert into school(yxdh, yxmc, gmt_create, gmt_modified)
-        SELECT yxdh,yxdhmc,now(),now() FROM recruit_students_plan GROUP BY yxdh,yxdhmc
+      insert into school(yxdh, yxmc,sf985,sf211,sfsyl,bxlx,gmt_create, gmt_modified)
+        SELECT yxdh,yxdhmc,sf985,sf211,sfsyl,bxlxdm,now(),now() FROM recruit_students_plan GROUP BY yxdh,yxdhmc
   </insert>
     <select id="listSchool" resultMap="BaseResultMap">
         select id,yxdh,yxmc from school
         <where>
             <if test="yxmc != null and yxmc != ''">
                 yxmc like concat('%',#{yxmc},'%')
+            </if>
+            <if test="sf985 != null">
+               and sf985 = #{sf985,jdbcType=INTEGER}
+            </if>
+            <if test="sf211 != null">
+               and sf211 = #{sf211,jdbcType=INTEGER}
+            </if>
+            <if test="sfsyl != null and sfsyl !=''">
+                and sfsyl =#{sfsyl,jdbcType=VARCHAR}
+            </if>
+            <if test="bxlx != null">
+                and bxlx =#{bxlx,jdbcType=INTEGER}
             </if>
         </where>
         order by yxdh
