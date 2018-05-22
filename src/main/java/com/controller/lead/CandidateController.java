@@ -202,6 +202,8 @@ public class CandidateController {
             , String schoolCode
             , String type
             , Model model) {
+        Candidate candidate = candidateService.getCandidateById(id);
+        model.addAttribute("candidate", candidate);
         model.addAttribute("min", min);
         model.addAttribute("max", max);
         model.addAttribute("id", id);
