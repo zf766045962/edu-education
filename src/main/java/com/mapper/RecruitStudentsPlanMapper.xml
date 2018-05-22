@@ -166,7 +166,7 @@
             )
         </if>
         <if test="majorCodes !=null">
-            AND b.zydm IN (
+            AND b.zymc IN (
             <foreach collection="majorCodes" item="item" separator=",">
                 #{item}
             </foreach>
@@ -216,7 +216,7 @@
             )
         </if>
         <if test="majorCodes !=null">
-            AND b.zydm IN (
+            AND b.zymc IN (
             <foreach collection="majorCodes" item="item" separator=",">
                 #{item}
             </foreach>
@@ -291,7 +291,7 @@
             )
         </if>
         <if test="majorCodes != null">
-            AND a.zydm IN (
+            AND a.zymc IN (
             <foreach collection="majorCodes" item="item" separator=",">
                 #{item}
             </foreach>
