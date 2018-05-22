@@ -19,8 +19,8 @@ public class SchoolServiceImpl implements SchoolService {
     private SchoolMapper schoolMapper;
 
     @Override
-    public List<School> listSchool(String yxmc) {
-        return schoolMapper.listSchool(yxmc);
+    public List<School> listSchool(String yxmc,Integer sf985,Integer sf211,String sfsyl,Integer bxlx) {
+        return schoolMapper.listSchool(yxmc,sf985,sf211,sfsyl,bxlx);
     }
 
     @Override
