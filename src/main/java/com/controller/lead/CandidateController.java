@@ -3,10 +3,12 @@ package com.controller.lead;
 import com.common.result.CodeMsg;
 import com.common.result.Result;
 import com.entity.Candidate;
+import com.entity.Cwbbl;
 import com.entity.Province;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.service.CandidateService;
+import com.service.CwbblService;
 import com.service.ProvinceService;
 import com.service.RecruitStudentsPlanService;
 import com.util.normal.BigDecimalUtil;
@@ -41,6 +43,8 @@ public class CandidateController {
     private RecruitStudentsPlanService recruitStudentsPlanService;
     @Autowired
     private ProvinceService provinceService;
+    @Autowired
+    private CwbblService cwbblService;
 
     @RequestMapping("/")
     public String toCandidate() {
@@ -51,8 +55,14 @@ public class CandidateController {
     public String toSearch(@PathVariable("id") Long id, Model model) {
         Candidate candidate = candidateService.getCandidateById(id);
         List<Province> provinces = provinceService.listProvince();
+        Cwbbl cwbbl = cwbblService.getCwbbl();
+        Integer ranking = candidate.getRanking();
         model.addAttribute("candidate", candidate);
         model.addAttribute("provinces", provinces);
+        model.addAttribute("cwbbl", cwbbl);
+        model.addAttribute("cMin", (int)(ranking * (1 - cwbbl.getChong())));
+        model.addAttribute("wMax", (int)(ranking * (1 + cwbbl.getWen())));
+        model.addAttribute("bMax", (int)(ranking * (1 + cwbbl.getWen() + cwbbl.getBao())));
         return "/lead/search";
     }
 
