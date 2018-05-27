@@ -1,0 +1,100 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/edu/layui/css/layui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/edu/css/css.css}">
+    <script type="text/javascript" th:src="@{/assets/edu/js/jquery-1.11.3.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/edu/js/md5.min.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/edu/js/common.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/edu/layui/layui.js}"></script>
+</head>
+<body>
+<div class="pad10">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <input type="hidden"  th:value="${cwbbl.id}" id="hid">
+                <label class="layui-form-label">冲区间比例</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="chong" th:value="${cwbbl.chong}">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">稳区间比例</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="wen" th:value="${cwbbl.wen}">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">保区间比例</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="bao" th:value="${cwbbl.bao}">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label"></label>
+                <a href="javascript:update();" class="layui-btn ayui-btn-normal bg-blue ">
+                    <i class="iconfont"></i>保存</a>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use('layer', function () {
+        var layer = layui.layer;
+    });
+
+    function update() {
+        var chong = $("#chong").val();
+        var wen = $("#wen").val();
+        var bao = $("#bao").val();
+        var id =$("#hid").val();
+        if (chong == "") {
+            layer.msg("请输入冲区间比例！");
+            return;
+        }
+        if (wen == "") {
+            layer.msg("请输入稳区间比例！");
+            return;
+        }
+        if (bao =="") {
+            layer.msg("请输入保区间比例！");
+            return;
+        }
+        layer.confirm('确定要更新比例吗!', {
+            btn: ['确定', '取消']
+        }, function (index, layero) {
+            $.ajax({
+                url: "/cwbbl/update",
+                type: "post",
+                dataType: "json",
+                data: {
+                    "bao": bao,
+                    "chong": chong,
+                    "wen": wen,
+                    "id":id
+                },
+                success: function (data) {
+                    if (data.code == 90000) {
+                        layer.msg("修改成功！！");
+                    } else if (data.code == 30002) {
+                        layer.msg(data.msg);
+                        setTimeout(function () {
+                            top.location.href = "/login";
+                        }, 5000);
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                },
+                error: function (data) {
+                    layer.msg("服务异常");
+                }
+            });
+        });
+    }
+</script>
+</body>
+</html>
