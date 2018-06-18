@@ -73,4 +73,9 @@ public class UserServiceImpl implements UserService {
     public User getPasswordAndSaltById(Long id) {
         return userMapper.getPasswordAndSaltById(id);
     }
+
+    @Override
+    public int existsUsername(String userName) {
+        return userMapper.existsUserName(userName);
+    }
 }
