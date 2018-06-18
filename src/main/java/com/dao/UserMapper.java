@@ -111,4 +111,13 @@ public interface UserMapper {
      */
     @Select("select password,salt from user where id=#{id}")
     User getPasswordAndSaltById(@Param("id") Long id);
+
+    /**
+     * 判断用户名是否已存在
+     *
+     * @param userName 用户名
+     * @return 条数
+     */
+    @Select("select count(*) from user where user_name=#{userName}")
+    int existsUserName(@Param("userName") String userName);
 }
