@@ -2,6 +2,7 @@ package com.util.exception;
 
 import com.common.result.CodeMsg;
 import com.common.result.Result;
+import com.util.normal.ExceptionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindException;
@@ -51,8 +52,7 @@ public class ApiExceptionHandler {
             String param = methodArgumentTypeMismatchException.getName();
             return Result.error(CodeMsg.BIND_ERROR.fillArgs(param + "参数类型错误"));
         }
-        ex.printStackTrace();
-        logger.info("错误信息:{},错误原因:{}", ex.getMessage(), ex.getCause());
+        logger.error("错误信息:{}", ExceptionUtil.collectExceptionStackMsg(ex));
         return Result.error(CodeMsg.SERVER_ERROR);
     }
 }
