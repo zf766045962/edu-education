@@ -1,5 +1,6 @@
 package com.util.aspect;
 
+import com.util.normal.ExceptionUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
@@ -24,7 +25,6 @@ public class ServiceExceptionAspect {
 
     @AfterThrowing(pointcut = "servicePointcut()", throwing = "e")
     public void handle(JoinPoint point, Exception e) {
-        e.printStackTrace();
-        LOGGER.info("异常信息:{},发生原因:{}", new Object[]{e.getMessage(), e.getStackTrace()});
+        LOGGER.error("异常信息:{}", ExceptionUtil.collectExceptionStackMsg(e));
     }
 }
