@@ -27,19 +27,7 @@ public class CodeMsg {
     /**
      * 文件上传异常 200xx
      */
-    public static CodeMsg FILE_TYPE_ERROR = new CodeMsg(20001, "文件格式不正确");
-
     public static CodeMsg FILE_DATA_EMPTY = new CodeMsg(20002, "获取文件参数失败");
-
-    public static CodeMsg FILE_TYPE_EMPTY = new CodeMsg(20003, "文件类型获取失败");
-
-    public static CodeMsg FILE_NAME_ERROR = new CodeMsg(20004, "文件名格式错误");
-
-    public static CodeMsg FILE_NO_EXIST = new CodeMsg(20005, "文件不存在");
-
-    public static CodeMsg FILE_REPEAT_UPLOAD = new CodeMsg(20006, "重复上传文件");
-
-    public static CodeMsg FILE_NOT_ALLOWED_DELETE = new CodeMsg(20007, "文件不允许删除");
     /**
      * 登录异常 300xx
      */
@@ -63,6 +51,7 @@ public class CodeMsg {
      * 考生异常 500xx
      */
     public static CodeMsg CANDIDATE_NOT_EXISTS = new CodeMsg(50001, "考生不存在");
+    public static CodeMsg CANDIDATE_NUM_UNVALID = new CodeMsg(50002, "考生人数不合法");
 
 
     private CodeMsg(int code, String msg) {
