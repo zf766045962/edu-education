@@ -28,10 +28,6 @@
         from candidate
         where id = #{id,jdbcType=BIGINT}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-        DELETE FROM candidate
-        WHERE id = #{id,jdbcType=BIGINT}
-    </delete>
     <select id="listCandidateByCondition" resultMap="BaseResultMap">
         SELECT
         id,
@@ -46,10 +42,13 @@
         geography,
         politics,
         contact_number,
-        consultant_id
+        consultant_id,
+        (select nick_name from user where user.id=consultant_id) as consultantName
         FROM candidate
         <where>
-            consultant_id = #{consultantId}
+            <if test="consultantId != null">
+                AND consultant_id = #{consultantId}
+            </if>
             <if test="name != null and name != ''">
                 AND name like concat ('%',#{name,jdbcType=VARCHAR},'%')
             </if>
