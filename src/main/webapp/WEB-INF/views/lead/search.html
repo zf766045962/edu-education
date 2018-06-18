@@ -17,8 +17,9 @@
 <div class="pad10">
     <blockquote class="layui-elem-quote">
         您的成绩：位次：<span id="ranking" th:text="${candidate.ranking}">209524</span>&nbsp;&nbsp;
-        分数：<span
-            th:text="${candidate.totalScore}">400</span>&nbsp;&nbsp;科目：<span
+        分数：<span th:text="${candidate.totalScore}">400</span>&nbsp;&nbsp;
+        指数：<span th:text="${zs}">1%</span>&nbsp;&nbsp;
+        科目：<span
             th:if="${candidate.physics eq 1}">物理&nbsp;</span>
         <span th:if="${candidate.chemistry eq 1}">化学&nbsp;</span><span th:if="${candidate.biology eq 1}">生物&nbsp;</span>
         <span th:if="${candidate.technology eq 1}">技术&nbsp;</span>
