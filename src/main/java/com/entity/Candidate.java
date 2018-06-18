@@ -77,6 +77,11 @@ public class Candidate implements Serializable {
      */
     private Date gmtModified;
 
+    /**
+     * 创建用户名称
+     */
+    private String consultantName;
+
     public Long getId() {
         return id;
     }
@@ -197,6 +202,14 @@ public class Candidate implements Serializable {
         this.gmtModified = gmtModified;
     }
 
+    public String getConsultantName() {
+        return consultantName;
+    }
+
+    public void setConsultantName(String consultantName) {
+        this.consultantName = consultantName;
+    }
+
     @Override
     public String toString() {
         return "Candidate{" +
@@ -215,6 +228,7 @@ public class Candidate implements Serializable {
                 ", consultantId=" + consultantId +
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
+                ", consultantName='" + consultantName + '\'' +
                 '}';
     }
 }
