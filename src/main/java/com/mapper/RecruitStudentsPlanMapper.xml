@@ -234,7 +234,7 @@
         SELECT
         a.zydm_new,
         a.zymc,
-        a.xzmc,
+        a.xzdm as xzmc,
         a.sfbz,
         a.xkkmyqzw,
         a.ccmc,

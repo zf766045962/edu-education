@@ -212,13 +212,13 @@
     <update id="generateDsms" parameterType="java.lang.String">
         insert into wntdqk_hz (school_code, school_name, zymc, dsms)
             select
-                school_code,
+                any_value(school_code),
                 "",
                 zymc,
                 group_concat(ds, '指数：', format(ckzs * 100, 2), '%', '、计划数：', zsjhs)
             from wntdqk
             where nf = #{nf}
-            group by school_name, zymc
+            group by school_name, zymc, ds
             having count(*) > 1
             order by ds, school_name, zymc
     </update>

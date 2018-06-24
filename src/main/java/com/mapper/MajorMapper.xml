@@ -75,6 +75,6 @@
     </select>
     <insert id="insertMajor">
         INSERT major(zydm, zymc, gmt_create)
-        SELECT zydm,zymc,now() FROM recruit_students_plan GROUP BY zymc
+        SELECT any_value(zydm),zymc,now() FROM recruit_students_plan GROUP BY zymc
     </insert>
 </mapper>

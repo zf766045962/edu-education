@@ -9,12 +9,22 @@
         <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, yxdh, yxmc, gmt_create, gmt_modified
-  </sql>
+        id, yxdh, yxmc, gmt_create, gmt_modified
+    </sql>
     <insert id="insertSchool">
-      insert into school(yxdh, yxmc,sf985,sf211,sfsyl,bxlx,gmt_create, gmt_modified)
-        SELECT yxdh,yxdhmc,sf985,sf211,sfsyl,bxlxdm,now(),now() FROM recruit_students_plan GROUP BY yxdh,yxdhmc
-  </insert>
+        insert into school (yxdh, yxmc, sf985, sf211, sfsyl, bxlx, gmt_create, gmt_modified)
+            SELECT
+                yxdh,
+                yxdhmc,
+                any_value(sf985),
+                any_value(sf211),
+                any_value(sfsyl),
+                any_value(bxlxdm),
+                now(),
+                now()
+            FROM recruit_students_plan
+            GROUP BY yxdh, yxdhmc
+    </insert>
     <select id="listSchool" resultMap="BaseResultMap">
         select id,yxdh,yxmc from school
         <where>
@@ -22,10 +32,10 @@
                 yxmc like concat('%',#{yxmc},'%')
             </if>
             <if test="sf985 != null">
-               and sf985 = #{sf985,jdbcType=INTEGER}
+                and sf985 = #{sf985,jdbcType=INTEGER}
             </if>
             <if test="sf211 != null">
-               and sf211 = #{sf211,jdbcType=INTEGER}
+                and sf211 = #{sf211,jdbcType=INTEGER}
             </if>
             <if test="sfsyl != null and sfsyl !=''">
                 and sfsyl =#{sfsyl,jdbcType=VARCHAR}
