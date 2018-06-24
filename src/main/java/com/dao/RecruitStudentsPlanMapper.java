@@ -2,6 +2,7 @@ package com.dao;
 
 import com.entity.RecruitStudentsPlan;
 import com.vo.RecruitStudentsPlanVo;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -52,4 +53,10 @@ public interface RecruitStudentsPlanMapper {
      * @return 专业详情
      */
     List<RecruitStudentsPlanVo> listRecruitStudentsPlan(Map<String, Object> map);
+
+    /**
+     * 清空招生计划库数据
+     */
+    @Delete("delete from recruit_students_plan")
+    void deleteRecruitStudentsPlan();
 }
