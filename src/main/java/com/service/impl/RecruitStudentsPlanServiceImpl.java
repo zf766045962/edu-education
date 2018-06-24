@@ -96,7 +96,7 @@ public class RecruitStudentsPlanServiceImpl implements RecruitStudentsPlanServic
                         recruitStudentsPlan.setZydm(v);
                         break;
                     case 15:
-                        recruitStudentsPlan.setSbdm2(v);
+                        recruitStudentsPlan.setSbdm2(v == null ? "" : v);
                         break;
                     case 16:
                         recruitStudentsPlan.setZymc(v);
@@ -137,7 +137,7 @@ public class RecruitStudentsPlanServiceImpl implements RecruitStudentsPlanServic
                             recruitStudentsPlan.setKm2("00");
                             recruitStudentsPlan.setKm3("00");
                         } else {
-                            String[] strs = v.split("\\+");
+                            String[] strs = v.split("\\|");
                             if (strs.length == 3) {
                                 recruitStudentsPlan.setKm1(strs[0].trim());
                                 recruitStudentsPlan.setKm2(strs[1].trim());
@@ -171,6 +171,8 @@ public class RecruitStudentsPlanServiceImpl implements RecruitStudentsPlanServic
             recruitStudentsPlans.add(recruitStudentsPlan);
         }
         if (recruitStudentsPlans.size() > 0) {
+            //清空招生计划库
+            recruitStudentsPlanMapper.deleteRecruitStudentsPlan();
             int len = recruitStudentsPlans.size();
             if (len <= Constants.EXCEL_BATCH_SIZE) {
                 recruitStudentsPlanMapper.insertRecruitStudentsPlanBatch(recruitStudentsPlans);
