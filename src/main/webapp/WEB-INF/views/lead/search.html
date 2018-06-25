@@ -360,29 +360,13 @@
                 });
             }
             , cSearch: function () {
-                var c_min = $("#c_min").val();
-                var c_max = $("#c_max").val();
-                var id = $("#hid_id").val();
-                var provinceCode = $("#province_code").val();
-                window.open("/candidate/searchDetail?min=" + c_min + "&max=" + c_max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + zyName + "&type=1" +
-                    "&schoolCode=" + yxCode, "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
+                changeToDetail(yxCode, zyName, '1');
             }
             , wSearch: function () {
-                var min = $("#w_min").val();
-                var max = $("#w_max").val();
-                var id = $("#hid_id").val();
-                var provinceCode = $("#province_code").val();
-                window.open("/candidate/searchDetail?min=" + min + "&max=" + max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + zyName + "&type=2" +
-                    "&schoolCode=" + yxCode, "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
+                changeToDetail(yxCode, zyName, '2');
             }
             , bSearch: function () {
-                var min = $("#b_min").val();
-                var max = $("#b_max").val();
-                var id = $("#hid_id").val();
-                var provinceCode = $("#province_code").val();
-                var schoolCode = $("#school_code").val();
-                window.open("/candidate/searchDetail?min=" + min + "&max=" + max + "&id=" + id + "&provinceCode=" + provinceCode + "&majorCode=" + zyName + "&type=3" +
-                    "&schoolCode=" + yxCode, "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
+                changeToDetail(yxCode, zyName, '3');
             }
             , chooseProvince: function () {
                 layer.open({
@@ -545,6 +529,37 @@
             active[type] ? active[type].call(this) : '';
         });
     });
+
+    function changeToDetail(yxCode, zyName, type) {
+        var min = $("#b_min").val();
+        var max = $("#b_max").val();
+        var id = $("#hid_id").val();
+        var provinceCode = $("#province_code").val();
+        console.log(zyName);
+        $.ajax({
+            url: '/candidate/sendMsg'
+            , type: 'post'
+            , dataType: 'json'
+            , data: {
+                "schoolCode": yxCode.toString(),
+                "majorCode": zyName.toString(),
+                "id": id
+            }
+            , success: function (data) {
+                if (data.code == 30002) {
+                    layer.msg(data.msg);
+                    setTimeout(function () {
+                        top.location.href = "/login";
+                    }, 5000);
+                } else if (data.code != 90000) {
+                    layer.msg(data.msg);
+                } else {
+                    window.open("/candidate/searchDetail?min=" + min + "&max=" + max + "&id=" + id + "&provinceCode=" + provinceCode
+                        + "&schoolCodeSession=" + data.data.schoolCodeSession + "&majorCodeSession=" + data.data.majorCodeSession + "&type=" + type, "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=1000, height=800");
+                }
+            }
+        });
+    }
 </script>
 <script>
     Array.prototype.in_array = function (element) {
