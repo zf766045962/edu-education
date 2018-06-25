@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>高考志愿填报辅导系统</title>
-    <link rel="stylesheet" type="text/css" href="../../../assets/edu/layui/css/layui.css"
-          th:href="@{/assets/edu/layui/css/layui.css}">
+    <link rel="stylesheet" type="text/css" href="../../../assets/edu/layui/css/layui.css?v=201805221950"
+          th:href="@{/assets/edu/layui/css/layui.css?v=201805221953}">
     <link rel="stylesheet" type="text/css" href="../../../assets/edu/css/css.css" th:href="@{/assets/edu/css/css.css}">
     <script type="text/javascript" src="../../../assets/edu/js/jquery-1.11.3.js"
             th:src="@{/assets/edu/js/jquery-1.11.3.js}"></script>
@@ -22,6 +22,19 @@
     <input type="hidden" th:value="${majorCode}" id="majorCode">
     <input type="hidden" th:value="${schoolCode}" id="schoolCode">
     <input type="hidden" th:value="${type}" id="type">
+    <blockquote class="layui-elem-quote">
+        您的成绩：位次：<span id="ranking" th:text="${candidate.ranking}">209524</span>&nbsp;&nbsp;
+        分数：<span
+            th:text="${candidate.totalScore}">400</span>&nbsp;&nbsp;
+        指数：<span th:text="${zs}">1%</span>&nbsp;&nbsp;
+        科目：<span
+            th:if="${candidate.physics eq 1}">物理&nbsp;</span>
+        <span th:if="${candidate.chemistry eq 1}">化学&nbsp;</span><span th:if="${candidate.biology eq 1}">生物&nbsp;</span>
+        <span th:if="${candidate.technology eq 1}">技术&nbsp;</span>
+        <span th:if="${candidate.history eq 1}">历史&nbsp;</span>
+        <span th:if="${candidate.geography eq 1}">地理&nbsp;</span>
+        <span th:if="${candidate.politics eq 1}">政治&nbsp;</span>
+    </blockquote>
     <form class="layui-form" action="">
         <div class="layui-form-item">
             <div class="layui-inline">
@@ -44,10 +57,13 @@
         </div>
     </form>
     <div class="line">
-        <span class=line-title>查询结果</span>
+        <span class=line-title>查询结果
+            (<span th:if="${type eq '1'}">冲</span><span th:if="${type eq '2'}">稳</span><span
+                    th:if="${type eq '3'}">保</span>)
+        </span>
     </div>
     <div class="gkwh-tb">
-        <table id="wh-list"></table>
+        <table id="wh-list" style=""></table>
     </div>
 </div>
 <script type="text/html" id="checkboxTpl">
@@ -107,6 +123,7 @@
                 , {field: 'xzmc', title: '学制', width: 65, sort: true}
                 , {field: 'zsjhs', title: '招生计划数', sort: true}
                 , {field: 'bz', title: '备注', sort: true}
+                , {field: 'dsms', title: '段数描述', width: 140, sort: true}
             ]]
             , where: {
                 "id": $("#hid_id").val()

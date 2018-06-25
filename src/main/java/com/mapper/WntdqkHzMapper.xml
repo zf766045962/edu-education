@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.WntdqkHzMapper">
+    <insert id="insertWntdqkHz" parameterType="java.lang.String">
+        insert into wntdqk_hz (
+            school_code
+            , school_name
+            , zydm
+            , zymc
+            , kl
+            , nf
+            , tdrs
+            , pjf
+            , zdf
+            , tdmc
+            , pc
+            , ckzs
+            , dsms
+            , gmt_create
+        )
+            SELECT
+                school_code,
+                school_name,
+                zydm,
+                zymc,
+                kl,
+                nf,
+                tdrs,
+                pjf,
+                zdf,
+                tdmc,
+                pc,
+                ckzs,
+                dsms,
+                gmt_create
+            FROM wntdqk
+            WHERE nf = #{nf}
+    </insert>
+</mapper>

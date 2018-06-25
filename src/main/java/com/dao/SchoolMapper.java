@@ -31,7 +31,16 @@ public interface SchoolMapper {
      * 查询学校信息
      *
      * @param yxmc 院校名称
+     * @param sf211 是否985
+     * @param sf985 是否211
+     * @param sfsyl 是否双一流
+     * @param bxlx 办学类型
      * @return 学校信息
      */
-    List<School> listSchool(@Param("yxmc") String yxmc);
+    List<School> listSchool(
+            @Param("yxmc") String yxmc
+            ,@Param("sf985") Integer sf985
+            ,@Param("sf211") Integer sf211
+            ,@Param("sfsyl") String sfsyl
+            ,@Param("bxlx") Integer bxlx);
 }

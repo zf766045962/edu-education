@@ -17,7 +17,7 @@ public class Wntdqk implements Serializable {
     /**
      * 学校代码
      */
-    private String schooleCode;
+    private String schoolCode;
     /**
      * 学校名称
      */
@@ -62,6 +62,18 @@ public class Wntdqk implements Serializable {
      * 参考指数
      */
     private BigDecimal ckzs;
+    /**
+     * 段数
+     */
+    private String ds;
+    /**
+     * 段数描述
+     */
+    private String dsms;
+    /**
+     * 招生计划数
+     */
+    private int zsjhs;
 
     private Date gmtCreate;
 
@@ -75,12 +87,12 @@ public class Wntdqk implements Serializable {
         this.id = id;
     }
 
-    public String getSchooleCode() {
-        return schooleCode;
+    public String getSchoolCode() {
+        return schoolCode;
     }
 
-    public void setSchooleCode(String schooleCode) {
-        this.schooleCode = schooleCode;
+    public void setSchoolCode(String schoolCode) {
+        this.schoolCode = schoolCode;
     }
 
     public String getSchoolName() {
@@ -187,11 +199,35 @@ public class Wntdqk implements Serializable {
         this.ckzs = ckzs;
     }
 
+    public String getDs() {
+        return ds;
+    }
+
+    public void setDs(String ds) {
+        this.ds = ds;
+    }
+
+    public String getDsms() {
+        return dsms;
+    }
+
+    public void setDsms(String dsms) {
+        this.dsms = dsms;
+    }
+
+    public int getZsjhs() {
+        return zsjhs;
+    }
+
+    public void setZsjhs(int zsjhs) {
+        this.zsjhs = zsjhs;
+    }
+
     @Override
     public String toString() {
         return "Wntdqk{" +
                 "id=" + id +
-                ", schooleCode='" + schooleCode + '\'' +
+                ", schoolCode='" + schoolCode + '\'' +
                 ", schoolName='" + schoolName + '\'' +
                 ", zydm='" + zydm + '\'' +
                 ", zymc='" + zymc + '\'' +
@@ -202,7 +238,10 @@ public class Wntdqk implements Serializable {
                 ", zdf=" + zdf +
                 ", tdmc=" + tdmc +
                 ", pc=" + pc +
-                ", ckzs='" + ckzs + '\'' +
+                ", ckzs=" + ckzs +
+                ", ds='" + ds + '\'' +
+                ", dsms='" + dsms + '\'' +
+                ", zsjhs=" + zsjhs +
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
                 '}';

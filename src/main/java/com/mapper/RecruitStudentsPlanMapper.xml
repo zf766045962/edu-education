@@ -134,9 +134,8 @@
         SELECT count(*)
         FROM (
         SELECT count(*)
-        FROM recruit_students_plan a, wntdqk b
-        WHERE b.nf = #{nf}
-        AND a.yxdh = b.schoole_code
+        FROM recruit_students_plan a, wntdqk_hz b
+        WHERE a.yxdh = b.school_code
         AND a.zymc = b.zymc
         AND b.tdmc &lt;=#{max} AND tdmc &gt;=#{min}
         AND
@@ -167,7 +166,7 @@
             )
         </if>
         <if test="majorCodes !=null">
-            AND a.zydm IN (
+            AND b.zymc IN (
             <foreach collection="majorCodes" item="item" separator=",">
                 #{item}
             </foreach>
@@ -185,9 +184,8 @@
     </select>
     <select id="countMajor" resultType="int">
         SELECT count(*)
-        FROM recruit_students_plan a, wntdqk b
-        WHERE b.nf = #{nf}
-        AND a.yxdh = b.schoole_code
+        FROM recruit_students_plan a, wntdqk_hz b
+        WHERE a.yxdh = b.school_code
         AND a.zymc = b.zymc
         AND b.tdmc &lt;=#{max} AND tdmc &gt;=#{min}
         AND
@@ -218,7 +216,7 @@
             )
         </if>
         <if test="majorCodes !=null">
-            AND a.zydm IN (
+            AND b.zymc IN (
             <foreach collection="majorCodes" item="item" separator=",">
                 #{item}
             </foreach>
@@ -236,7 +234,7 @@
         SELECT
         a.zydm_new,
         a.zymc,
-        a.xzmc,
+        a.xzdm as xzmc,
         a.sfbz,
         a.xkkmyqzw,
         a.ccmc,
@@ -249,6 +247,7 @@
         a.zydm,
         a.bxlxmc,
         a.sfsyl,
+        b.dsms,
         CASE a.sf985 WHEN 1 THEN '是' ELSE '否'
         END AS sf985Name,
         CASE a.sf211 WHEN 1 THEN '是' ELSE '否'
@@ -260,9 +259,8 @@
         WHEN 'aaa'
         THEN '0'
         ELSE '1' END AS sfsc
-        FROM recruit_students_plan a, wntdqk b
-        WHERE b.nf = #{nf}
-        AND a.yxdh = b.schoole_code
+        FROM recruit_students_plan a, wntdqk_hz b
+        WHERE a.yxdh = b.school_code
         AND a.zymc = b.zymc
         AND b.tdmc &lt;= #{max} AND tdmc &gt;= #{min}
         AND
@@ -293,7 +291,7 @@
             )
         </if>
         <if test="majorCodes != null">
-            AND a.zydm IN (
+            AND a.zymc IN (
             <foreach collection="majorCodes" item="item" separator=",">
                 #{item}
             </foreach>

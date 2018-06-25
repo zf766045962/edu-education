@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.CwbblMapper" >
+  <resultMap id="BaseResultMap" type="com.entity.Cwbbl" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="chong" property="chong" jdbcType="REAL" />
+    <result column="wen" property="wen" jdbcType="REAL" />
+    <result column="bao" property="bao" jdbcType="REAL" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, chong, wen, bao, gmt_create, gmt_modified
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from cwbbl
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from cwbbl
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertSelective" parameterType="com.entity.Cwbbl" >
+    insert into cwbbl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="chong != null" >
+        chong,
+      </if>
+      <if test="wen != null" >
+        wen,
+      </if>
+      <if test="bao != null" >
+        bao,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="chong != null" >
+        #{chong,jdbcType=REAL},
+      </if>
+      <if test="wen != null" >
+        #{wen,jdbcType=REAL},
+      </if>
+      <if test="bao != null" >
+        #{bao,jdbcType=REAL},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateCwbbl" parameterType="com.entity.Cwbbl" >
+    update cwbbl
+    <set >
+      <if test="chong != null" >
+        chong = #{chong,jdbcType=REAL},
+      </if>
+      <if test="wen != null" >
+        wen = #{wen,jdbcType=REAL},
+      </if>
+      <if test="bao != null" >
+        bao = #{bao,jdbcType=REAL},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.entity.Cwbbl" >
+    update cwbbl
+    set chong = #{chong,jdbcType=REAL},
+      wen = #{wen,jdbcType=REAL},
+      bao = #{bao,jdbcType=REAL},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

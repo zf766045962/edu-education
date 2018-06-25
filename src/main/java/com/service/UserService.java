@@ -94,4 +94,12 @@ public interface UserService {
      * @return 用户密码, salt
      */
     User getPasswordAndSaltById(Long id);
+
+    /**
+     * 判断用户名是否已存在
+     *
+     * @param userName 用户名
+     * @return 条数
+     */
+    int existsUsername(String userName);
 }

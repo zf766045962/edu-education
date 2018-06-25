@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.TempMapper">
+    <resultMap id="BaseResultMap" type="com.entity.Temp">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="pc" property="pc" jdbcType="VARCHAR"/>
+        <result column="yxdm" property="yxdm" jdbcType="VARCHAR"/>
+        <result column="yxmc" property="yxmc" jdbcType="VARCHAR"/>
+        <result column="yxlx" property="yxlx" jdbcType="VARCHAR"/>
+        <result column="kl" property="kl" jdbcType="VARCHAR"/>
+        <result column="zydm" property="zydm" jdbcType="VARCHAR"/>
+        <result column="zydhmc" property="zydhmc" jdbcType="VARCHAR"/>
+        <result column="ccmc" property="ccmc" jdbcType="VARCHAR"/>
+        <result column="bz" property="bz" jdbcType="VARCHAR"/>
+        <result column="nf" property="nf" jdbcType="CHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, pc, yxdm, yxmc, yxlx, kl, zydm, zydhmc, ccmc, bz, nf
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from temp
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from temp
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.entity.Temp">
+    insert into temp (id, pc, yxdm, 
+      yxmc, yxlx, kl, zydm, 
+      zydhmc, ccmc, bz, nf
+      )
+    values (#{id,jdbcType=BIGINT}, #{pc,jdbcType=VARCHAR}, #{yxdm,jdbcType=VARCHAR}, 
+      #{yxmc,jdbcType=VARCHAR}, #{yxlx,jdbcType=VARCHAR}, #{kl,jdbcType=VARCHAR}, #{zydm,jdbcType=VARCHAR}, 
+      #{zydhmc,jdbcType=VARCHAR}, #{ccmc,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, #{nf,jdbcType=CHAR}
+      )
+  </insert>
+    <insert id="insertBatch">
+        insert into temp (pc, yxdm,
+        yxmc, yxlx, kl, zydm,
+        zydhmc, ccmc, bz, nf
+        )
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.pc,jdbcType=VARCHAR}
+            , #{item.yxdm,jdbcType=VARCHAR}
+            , #{item.yxmc,jdbcType=VARCHAR}
+            , #{item.yxlx,jdbcType=VARCHAR}
+            , #{item.kl,jdbcType=VARCHAR}
+            , #{item.zydm,jdbcType=VARCHAR}
+            , #{item.zydhmc,jdbcType=VARCHAR}
+            , #{item.ccmc,jdbcType=VARCHAR}
+            , #{item.bz,jdbcType=VARCHAR}
+            , #{item.nf,jdbcType=CHAR}
+            )
+        </foreach>
+    </insert>
+    <insert id="insertSelective" parameterType="com.entity.Temp">
+        insert into temp
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="pc != null">
+                pc,
+            </if>
+            <if test="yxdm != null">
+                yxdm,
+            </if>
+            <if test="yxmc != null">
+                yxmc,
+            </if>
+            <if test="yxlx != null">
+                yxlx,
+            </if>
+            <if test="kl != null">
+                kl,
+            </if>
+            <if test="zydm != null">
+                zydm,
+            </if>
+            <if test="zydhmc != null">
+                zydhmc,
+            </if>
+            <if test="ccmc != null">
+                ccmc,
+            </if>
+            <if test="bz != null">
+                bz,
+            </if>
+            <if test="nf != null">
+                nf,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="pc != null">
+                #{pc,jdbcType=VARCHAR},
+            </if>
+            <if test="yxdm != null">
+                #{yxdm,jdbcType=VARCHAR},
+            </if>
+            <if test="yxmc != null">
+                #{yxmc,jdbcType=VARCHAR},
+            </if>
+            <if test="yxlx != null">
+                #{yxlx,jdbcType=VARCHAR},
+            </if>
+            <if test="kl != null">
+                #{kl,jdbcType=VARCHAR},
+            </if>
+            <if test="zydm != null">
+                #{zydm,jdbcType=VARCHAR},
+            </if>
+            <if test="zydhmc != null">
+                #{zydhmc,jdbcType=VARCHAR},
+            </if>
+            <if test="ccmc != null">
+                #{ccmc,jdbcType=VARCHAR},
+            </if>
+            <if test="bz != null">
+                #{bz,jdbcType=VARCHAR},
+            </if>
+            <if test="nf != null">
+                #{nf,jdbcType=CHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>

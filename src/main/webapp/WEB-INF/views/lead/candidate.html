@@ -40,11 +40,14 @@
     </div>
     <div class="gkwh-tb">
         <div class="layui-btn-group">
-            <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="add"><i class="iconfont">&#xe651;</i>录入</a>
+            <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="add"><i class="iconfont"></i>录入</a>
             <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="search"><i class="iconfont"></i>查询志愿</a>
             <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="searchHx"><i class="iconfont"></i>候选志愿查看</a>
             <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="export"><i class="iconfont"></i>候选志愿导出</a>
-            <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="del"><i class="iconfont">&#xe60d;</i>删除</a>
+            <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="del"
+               th:if="${session.user.loginUserName eq 'admin'}"><i class="iconfont"></i>删除</a>
+            <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="exportCandidate"
+               th:if="${session.user.loginUserName eq 'admin'}"><i class="iconfont"></i>考生导出</a>
         </div>
         <table id="wh-list"></table>
     </div>
@@ -119,6 +122,7 @@
                 , {field: 'totalScore', title: '总分', sort: true}
                 , {field: 'ranking', title: '排名', sort: true}
                 , {field: 'contactNumber', title: '联系电话', sort: true}
+                , {field: 'consultantName', title: '创建用户', sort: true}
             ]]
             , id: 'idTest'
             , request: {
@@ -213,6 +217,9 @@
                     return;
                 }
                 window.location.href = '/hxzy/export?candidateId=' + data[0].id;
+            }
+            , exportCandidate: function () {
+                window.location.href = '/candidate/exportCandidate';
             }
         };
         $('.layui-btn').on('click', function () {

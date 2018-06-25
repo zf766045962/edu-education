@@ -22,6 +22,22 @@ public class School implements Serializable {
      */
     private String yxmc;
     /**
+     * 985
+     */
+    private Integer sf985;
+    /**
+     * 211
+     */
+    private Integer sf211;
+    /**
+     * 双一流
+     */
+    private String sfsyl;
+    /**
+     * 办学类型
+     */
+    private Integer bxlx;
+    /**
      * 创建时间
      */
     private Date gmtCreate;
@@ -70,12 +86,47 @@ public class School implements Serializable {
         this.gmtModified = gmtModified;
     }
 
+    public Integer getSf985() {
+        return sf985;
+    }
+
+    public void setSf985(Integer sf985) {
+        this.sf985 = sf985;
+    }
+
+    public Integer getSf211() {
+        return sf211;
+    }
+
+    public void setSf211(Integer sf211) {
+        this.sf211 = sf211;
+    }
+
+    public String getSfsyl() {
+        return sfsyl;
+    }
+
+    public void setSfsyl(String sfsyl) {
+        this.sfsyl = sfsyl;
+    }
+
+    public Integer getBxlx() {
+        return bxlx;
+    }
+
+    public void setBxlx(Integer bxlx) {
+        this.bxlx = bxlx;
+    }
+
     @Override
     public String toString() {
         return "School{" +
                 "id=" + id +
                 ", yxdh='" + yxdh + '\'' +
                 ", yxmc='" + yxmc + '\'' +
+                ", sf985='" + sf985 + '\'' +
+                ", sf211='" + sf211 + '\'' +
+                ", sfsyl='" + sfsyl + '\'' +
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModified=" + gmtModified +
                 '}';

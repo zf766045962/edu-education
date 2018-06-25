@@ -1,27 +1,35 @@
 package com.controller.lead;
 
+import com.common.Constants;
 import com.common.result.CodeMsg;
 import com.common.result.Result;
 import com.entity.Candidate;
+import com.entity.CandidateNum;
+import com.entity.Cwbbl;
 import com.entity.Province;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.service.CandidateService;
-import com.service.ProvinceService;
-import com.service.RecruitStudentsPlanService;
+import com.service.*;
+import com.util.excel.DownLoad;
 import com.util.normal.BigDecimalUtil;
 import com.util.normal.CommonUtils;
 import com.vo.LoginUser;
 import com.vo.RecruitStudentsPlanVo;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -41,6 +49,10 @@ public class CandidateController {
     private RecruitStudentsPlanService recruitStudentsPlanService;
     @Autowired
     private ProvinceService provinceService;
+    @Autowired
+    private CwbblService cwbblService;
+    @Autowired
+    private CandidateNumService candidateNumService;
 
     @RequestMapping("/")
     public String toCandidate() {
@@ -51,8 +63,17 @@ public class CandidateController {
     public String toSearch(@PathVariable("id") Long id, Model model) {
         Candidate candidate = candidateService.getCandidateById(id);
         List<Province> provinces = provinceService.listProvince();
+        Cwbbl cwbbl = cwbblService.getCwbbl();
+        Integer ranking = candidate.getRanking();
+        CandidateNum candidateNum = candidateNumService.getCandidateNum();
         model.addAttribute("candidate", candidate);
         model.addAttribute("provinces", provinces);
+        model.addAttribute("cwbbl", cwbbl);
+        model.addAttribute("cMin", (int) (ranking * (1 - cwbbl.getChong())));
+        model.addAttribute("wMax", (int) (ranking * (1 + cwbbl.getWen())));
+        model.addAttribute("bMax", (int) (ranking * (1 + cwbbl.getWen() + cwbbl.getBao())));
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        model.addAttribute("zs", (Double.valueOf(decimalFormat.format(((double) ranking / candidateNum.getNum() * 100))) + "%"));
         return "/lead/search";
     }
 
@@ -72,8 +93,10 @@ public class CandidateController {
             , Candidate candidate
             , @RequestParam("pageSize") int pageSize
             , @RequestParam("currentPage") int currentPage) {
-        candidate.setConsultantId(loginUser.getLoginId());
         PageHelper.startPage(currentPage, pageSize);
+        if (!loginUser.getLoginUserName().contains(Constants.USER_PREFIX)) {
+            candidate.setConsultantId(loginUser.getLoginId());
+        }
         List<Candidate> candidates = candidateService.listCandidateByCondition(candidate);
         PageInfo<Candidate> pageInfo = new PageInfo<>(candidates);
         return Result.page(pageInfo.getList(), pageInfo.getTotal());
@@ -202,6 +225,9 @@ public class CandidateController {
             , String schoolCode
             , String type
             , Model model) {
+        Candidate candidate = candidateService.getCandidateById(id);
+        CandidateNum candidateNum = candidateNumService.getCandidateNum();
+        model.addAttribute("candidate", candidate);
         model.addAttribute("min", min);
         model.addAttribute("max", max);
         model.addAttribute("id", id);
@@ -209,6 +235,8 @@ public class CandidateController {
         model.addAttribute("majorCode", majorCode);
         model.addAttribute("schoolCode", schoolCode);
         model.addAttribute("type", type);
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        model.addAttribute("zs", (Double.valueOf(decimalFormat.format(((double) candidate.getRanking() / candidateNum.getNum() * 100))) + "%"));
         return "/lead/detail";
     }
 
@@ -278,6 +306,59 @@ public class CandidateController {
             recruitStudentsPlanVo.setCkzsName(BigDecimalUtil.convertBigDecimalToPercent(recruitStudentsPlanVo.getCkzs()));
         }
         return Result.page(pageInfo.getList(), pageInfo.getTotal());
+    }
+
+    /**
+     * 考生导出
+     *
+     * @param loginUser loginUser
+     * @param response  response
+     * @throws IOException IOException
+     */
+    @GetMapping("/exportCandidate")
+    public void exportCandidate(LoginUser loginUser, HttpServletResponse response) throws IOException {
+        List<Candidate> candidates = candidateService.listCandidateByCondition(new Candidate());
+        Workbook workbook = new HSSFWorkbook();
+        Sheet sheet = workbook.createSheet();
+        Row row = sheet.createRow(0);
+        String[] cellHead = {"姓名", "总分", "排名", "联系电话", "创建用户"};
+        Cell cell;
+        for (int i = 0, len = cellHead.length; i < len; i++) {
+            cell = row.createCell(i);
+            cell.setCellValue(cellHead[i]);
+        }
+        int k = 1;
+        for (Candidate candidate : candidates) {
+            row = sheet.createRow(k++);
+            for (int i = 0, iLen = cellHead.length; i < iLen; i++) {
+                cell = row.createCell(i);
+                switch (i) {
+                    case 0:
+                        cell.setCellValue(candidate.getName());
+                        break;
+                    case 1:
+                        cell.setCellValue(candidate.getTotalScore());
+                        break;
+                    case 2:
+                        cell.setCellValue(candidate.getRanking());
+                        break;
+                    case 3:
+                        cell.setCellValue(candidate.getContactNumber());
+                        break;
+                    case 4:
+                        cell.setCellValue(candidate.getConsultantName());
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        String path = "考生信息" + System.currentTimeMillis() + ".xls";
+        FileOutputStream fileOutputStream = new FileOutputStream(path);
+        workbook.write(fileOutputStream);
+        workbook.close();
+        fileOutputStream.close();
+        DownLoad.download(path, response);
     }
 
     private List<String> dealWithKms(Candidate candidate) {

@@ -34,6 +34,11 @@ public class RecruitStudentsPlanVo extends RecruitStudentsPlan {
 
     private String sf211Name;
 
+    /**
+     * 段数描述
+     */
+    private String dsms;
+
     public BigDecimal getCkzs() {
         return ckzs;
     }
@@ -88,5 +93,13 @@ public class RecruitStudentsPlanVo extends RecruitStudentsPlan {
 
     public void setSf211Name(String sf211Name) {
         this.sf211Name = sf211Name;
+    }
+
+    public String getDsms() {
+        return dsms;
+    }
+
+    public void setDsms(String dsms) {
+        this.dsms = dsms;
     }
 }

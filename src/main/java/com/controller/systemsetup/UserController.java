@@ -96,6 +96,11 @@ public class UserController {
     @PostMapping("/addUser")
     @ResponseBody
     public Result<Boolean> createUser(@Valid User user) {
+        //判断用户名是否存在
+        int count = userService.existsUsername(user.getUserName());
+        if (count > 0) {
+            return Result.error(CodeMsg.USERNAME_EXIST);
+        }
         Date date = new Date();
         user.setGmtCreate(date);
         user.setGmtModified(date);

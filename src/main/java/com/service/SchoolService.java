@@ -14,10 +14,14 @@ public interface SchoolService {
      * 查询所有的学校信息
      *
      * @param yxmc 学校名称
-     * @return 专业信息
+     * @param sf211 是否985
+     * @param sf985 是否211
+     * @param sfsyl 是否双一流
+     * @param bxlx 办学类型
+     * @return 学校信息
      */
 
-    List<School> listSchool(String yxmc);
+    List<School> listSchool(String yxmc,Integer sf985,Integer sf211,String sfsyl,Integer bxlx);
 
     /**
      * 初始化专业数据

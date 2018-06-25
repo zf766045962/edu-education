@@ -16,6 +16,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -155,6 +156,12 @@ public class HxzyController {
         }
         HxzyVo hxzyVo;
         int k = 1;
+        sheet.setColumnWidth(0, 256*20+184);
+        sheet.setColumnWidth(1, 256*14+184);
+        sheet.setColumnWidth(2, 256*34+184);
+        sheet.setColumnWidth(3, 256*31+184);
+        sheet.setColumnWidth(4, 256*20+184);
+        sheet.setColumnWidth(5, 256*9+184);
         for (HxzyVo aHxzyList : hxzyList) {
             row = sheet.createRow(k++);
             hxzyVo = aHxzyList;
@@ -184,6 +191,13 @@ public class HxzyController {
                 }
             }
         }
+        sheet.addMergedRegion(new CellRangeAddress(k, k, 0, 5));
+        row = sheet.createRow(k);
+        row.setHeight((short) 1000);
+        cell = row.createCell(0);
+        cell.setCellValue("备注:" +
+                "  \r\n（1）专家给出的志愿填报方案，是根据新高考改革方案，利用大数据分析的基础上得出的，具有较好的指导作用，最终报考学校及专业均由考生及家长决策。" +
+                "  \r\n（2）考生及家长必须认真核查想要报考学校的招生章程，因体检原因、专业单科成绩不符合造成的退档，由考生及家长自行负责。");
         String path = candidate.getName() + "的候选志愿" + System.currentTimeMillis() + ".xls";
         FileOutputStream fileOutputStream = new FileOutputStream(path);
         workbook.write(fileOutputStream);

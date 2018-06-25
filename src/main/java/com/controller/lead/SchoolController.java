@@ -29,11 +29,16 @@ public class SchoolController {
 
     @GetMapping("/")
     @ResponseBody
-    public Result findMajor(
+    public Result findSchool(
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize
-            , @RequestParam(value = "currentPage", defaultValue = "1") int currentPage, String yxmc) {
+            , @RequestParam(value = "currentPage", defaultValue = "1") int currentPage
+            , String yxmc
+            , Integer sf985
+            , Integer sf211
+            , String sfsyl
+            , Integer bxlx) {
         PageHelper.startPage(currentPage, pageSize);
-        List<School> schoolList = schoolService.listSchool(yxmc);
+        List<School> schoolList = schoolService.listSchool(yxmc, sf985, sf211, sfsyl, bxlx);
         PageInfo<School> pageInfo = new PageInfo<>(schoolList);
         return Result.page(pageInfo.getList(), pageInfo.getTotal());
     }

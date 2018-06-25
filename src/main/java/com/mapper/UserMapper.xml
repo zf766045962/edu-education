@@ -64,6 +64,7 @@
                 AND nick_name like concat(#{nickName},'%')
             </if>
         </where>
+        order by gmt_create asc
     </select>
     <insert id="insertSelective" parameterType="com.entity.User">
         insert into user

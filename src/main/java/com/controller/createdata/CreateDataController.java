@@ -3,10 +3,12 @@ package com.controller.createdata;
 import com.common.result.Result;
 import com.service.MajorService;
 import com.service.SchoolService;
+import com.service.WntdqkHzService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -23,6 +25,8 @@ public class CreateDataController {
     private MajorService majorService;
     @Autowired
     private SchoolService schoolService;
+    @Autowired
+    private WntdqkHzService wntdqkHzService;
 
     @RequestMapping("/")
     public String toCreateData() {
@@ -50,6 +54,18 @@ public class CreateDataController {
     @ResponseBody
     public Result createSchool() {
         schoolService.initializationSchool();
+        return Result.success(true);
+    }
+
+    /**
+     * 生成三年的投档数据平均值
+     *
+     * @return 生成是否成功
+     */
+    @PostMapping("/wntdqkhz")
+    @ResponseBody
+    public Result createWntdqkHz(@RequestParam("year") String year) {
+        wntdqkHzService.createWntdqkHz(year);
         return Result.success(true);
     }
 }
