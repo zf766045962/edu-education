@@ -25,7 +25,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -221,10 +223,11 @@ public class CandidateController {
             , @RequestParam("max") int max
             , @RequestParam("id") Long id
             , String provinceCode
-            , String majorCode
-            , String schoolCode
+            , String majorCodeSession
+            , String schoolCodeSession
             , String type
-            , Model model) {
+            , Model model
+            , HttpSession httpSession) {
         Candidate candidate = candidateService.getCandidateById(id);
         CandidateNum candidateNum = candidateNumService.getCandidateNum();
         model.addAttribute("candidate", candidate);
@@ -232,12 +235,28 @@ public class CandidateController {
         model.addAttribute("max", max);
         model.addAttribute("id", id);
         model.addAttribute("provinceCode", provinceCode);
-        model.addAttribute("majorCode", majorCode);
-        model.addAttribute("schoolCode", schoolCode);
+        model.addAttribute("majorCode", httpSession.getAttribute(majorCodeSession));
+        model.addAttribute("schoolCode", httpSession.getAttribute(schoolCodeSession));
         model.addAttribute("type", type);
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
         model.addAttribute("zs", (Double.valueOf(decimalFormat.format(((double) candidate.getRanking() / candidateNum.getNum() * 100))) + "%"));
+        httpSession.removeAttribute(majorCodeSession);
+        httpSession.removeAttribute(schoolCodeSession);
         return "/lead/detail";
+    }
+
+    @PostMapping("/sendMsg")
+    @ResponseBody
+    public Result sendMsg(String schoolCode, String majorCode, @RequestParam("id") Long id, LoginUser user, HttpServletRequest request) {
+        HttpSession httpSession = request.getSession();
+        String schoolCodeSessionId = "schoolCode" + user.getLoginUserName() + id + System.currentTimeMillis();
+        String majorCodeSessionId = "majorCode" + user.getLoginUserName() + id + System.currentTimeMillis();
+        httpSession.setAttribute(schoolCodeSessionId, schoolCode);
+        httpSession.setAttribute(majorCodeSessionId, majorCode);
+        Map<String, Object> map = new HashMap<>();
+        map.put("schoolCodeSession", schoolCodeSessionId);
+        map.put("majorCodeSession", majorCodeSessionId);
+        return Result.success(map);
     }
 
     /**
