@@ -49,7 +49,7 @@ public class MD5Util {
         return salt.toString();
     }
 
-    public static String createDefaultPassword(String salt) {
+    public static String createDefaultPassword(String salt, String userName) {
         return formPassToDBPass(inputPassToFormPass(DEFAULT_PASSWORD), salt);
     }
 
