@@ -40,6 +40,7 @@
         <result column="km2" property="km2" jdbcType="VARCHAR"/>
         <result column="km3" property="km3" jdbcType="VARCHAR"/>
         <result column="zydmNew" property="zydmNew" jdbcType="VARCHAR"/>
+        <result column="sfsyl" property="sfsyl" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, yxdm, yxdh, yxdhmc, szd, sf985, sf211, bxlxdm, bxlxmc, ssdm, ssmc, zgdm, zgmc,
@@ -60,6 +61,7 @@
         , szd
         , sf985
         , sf211
+        , sfsyl
         , bxlxdm
         , bxlxmc
         , ssdm
@@ -98,6 +100,7 @@
             , #{item.szd,jdbcType=VARCHAR}
             , #{item.sf985,jdbcType=INTEGER}
             , #{item.sf211,jdbcType=INTEGER}
+            , #{item.sfsyl,jdbcType=VARCHAR}
             , #{item.bxlxdm,jdbcType=INTEGER}
             , #{item.bxlxmc,jdbcType=VARCHAR}
             , #{item.ssdm,jdbcType=INTEGER}
@@ -255,7 +258,8 @@
         concat(a.yxdh,'|',a.yxdhmc,'|',a.zydm,'|',a.zymc,'|',b.ckzs,'|',a.zydm_new) AS zhcs,
         CASE ifnull((SELECT c.id
         FROM hxzy c
-        WHERE a.yxdh = c.school_code AND c.major_code_new = a.zydm_new AND c.candidate_id = #{candidateId}), 'aaa')
+        WHERE a.yxdh = c.school_code AND c.major_code_new = a.zydm_new and b.ckzs=c.reference_index and
+        c.candidate_id = #{candidateId}), 'aaa')
         WHEN 'aaa'
         THEN '0'
         ELSE '1' END AS sfsc
@@ -304,11 +308,12 @@
             </foreach>
             )
         </if>
-        <if test="schoolName !=null">
+        <if test="schoolName !=null and schoolName !=''">
             AND yxdhmc LIKE concat(#{schoolName},'%')
         </if>
         <if test="majorName !=null and majorName !=''">
             AND a.zymc LIKE concat(#{majorName},'%')
         </if>
+        order by ckzs
     </select>
 </mapper>
