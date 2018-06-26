@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -134,8 +135,9 @@ public class HxzyController {
     @ResponseBody
     public Result cancelHxzy(@RequestParam("id") long id
             , @RequestParam("schoolCode") String schoolCode
-            , @RequestParam("majorCode") String majorCode) {
-        hxzyService.deleteByCandidateIdAndSchoolCodeAndMajorCode(id, schoolCode, majorCode);
+            , @RequestParam("majorCode") String majorCode
+            , @RequestParam("referenceIndex") BigDecimal referenceIndex) {
+        hxzyService.deleteByCandidateIdAndSchoolCodeAndMajorCode(id, schoolCode, majorCode,referenceIndex);
         return Result.success(true);
     }
 
@@ -156,12 +158,12 @@ public class HxzyController {
         }
         HxzyVo hxzyVo;
         int k = 1;
-        sheet.setColumnWidth(0, 256*20+184);
-        sheet.setColumnWidth(1, 256*14+184);
-        sheet.setColumnWidth(2, 256*34+184);
-        sheet.setColumnWidth(3, 256*31+184);
-        sheet.setColumnWidth(4, 256*20+184);
-        sheet.setColumnWidth(5, 256*9+184);
+        sheet.setColumnWidth(0, 256 * 20 + 184);
+        sheet.setColumnWidth(1, 256 * 14 + 184);
+        sheet.setColumnWidth(2, 256 * 34 + 184);
+        sheet.setColumnWidth(3, 256 * 31 + 184);
+        sheet.setColumnWidth(4, 256 * 20 + 184);
+        sheet.setColumnWidth(5, 256 * 9 + 184);
         for (HxzyVo aHxzyList : hxzyList) {
             row = sheet.createRow(k++);
             hxzyVo = aHxzyList;
