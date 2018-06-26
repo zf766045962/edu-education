@@ -107,7 +107,7 @@ public class UserController {
         user.setLastLoginDate(date);
         //随机生成salt
         user.setSalt(MD5Util.randomSalt());
-        user.setPassword(MD5Util.createDefaultPassword(user.getSalt()));
+        user.setPassword(MD5Util.createDefaultPassword(user.getSalt(), user.getUserName()));
         userService.insertSelective(user);
         return Result.success(true);
     }
@@ -153,7 +153,7 @@ public class UserController {
         }
         User user = new User();
         user.setId(id);
-        user.setPassword(MD5Util.createDefaultPassword(salt));
+        user.setPassword(MD5Util.createDefaultPassword(salt, user.getUserName()));
         userService.updatePassword(user);
         return Result.success(true);
     }
