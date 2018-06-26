@@ -7,6 +7,7 @@ import com.vo.HxzyVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -40,7 +41,7 @@ public class HxzyServiceImpl implements HxzyService {
     }
 
     @Override
-    public void deleteByCandidateIdAndSchoolCodeAndMajorCode(long candidateId, String schoolCode, String majorCode) {
-        hxzyMapper.deleteByCandidateIdAndSchoolCodeAndMajorCode(candidateId, schoolCode, majorCode);
+    public void deleteByCandidateIdAndSchoolCodeAndMajorCode(long candidateId, String schoolCode, String majorCode, BigDecimal referenceIndex) {
+        hxzyMapper.deleteByCandidateIdAndSchoolCodeAndMajorCode(candidateId, schoolCode, majorCode,referenceIndex);
     }
 }

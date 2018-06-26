@@ -3,6 +3,7 @@ package com.service;
 import com.entity.Hxzy;
 import com.vo.HxzyVo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -48,5 +49,5 @@ public interface HxzyService {
      * @param schoolCode  学校代码
      * @param majorCode   专业代码
      */
-    void deleteByCandidateIdAndSchoolCodeAndMajorCode(long candidateId, String schoolCode, String majorCode);
+    void deleteByCandidateIdAndSchoolCodeAndMajorCode(long candidateId, String schoolCode, String majorCode, BigDecimal referenceIndex);
 }
