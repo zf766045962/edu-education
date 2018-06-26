@@ -408,46 +408,6 @@ public class RecruitStudentsPlan implements Serializable {
         this.gmtModified = gmtModified;
     }
 
-    @Override
-    public String toString() {
-        return "RecruitStudentsPlan{" +
-                "id=" + id +
-                ", yxdm='" + yxdm + '\'' +
-                ", yxdh='" + yxdh + '\'' +
-                ", yxdhmc='" + yxdhmc + '\'' +
-                ", szd='" + szd + '\'' +
-                ", sf985=" + sf985 +
-                ", sf211=" + sf211 +
-                ", bxlxdm=" + bxlxdm +
-                ", bxlxmc='" + bxlxmc + '\'' +
-                ", ssdm=" + ssdm +
-                ", ssmc='" + ssmc + '\'' +
-                ", zgdm=" + zgdm +
-                ", zgmc='" + zgmc + '\'' +
-                ", ccdm=" + ccdm +
-                ", ccmc='" + ccmc + '\'' +
-                ", zydm='" + zydm + '\'' +
-                ", sbdm2='" + sbdm2 + '\'' +
-                ", zymc='" + zymc + '\'' +
-                ", xzdmxg='" + xzdmxg + '\'' +
-                ", xzdm='" + xzdm + '\'' +
-                ", xzmc='" + xzmc + '\'' +
-                ", sfbz='" + sfbz + '\'' +
-                ", kldm='" + kldm + '\'' +
-                ", ksklmc='" + ksklmc + '\'' +
-                ", pcdm='" + pcdm + '\'' +
-                ", pcmc='" + pcmc + '\'' +
-                ", kslxdm='" + kslxdm + '\'' +
-                ", kslxmc='" + kslxmc + '\'' +
-                ", xkkmyq='" + xkkmyq + '\'' +
-                ", xkkmyqzw='" + xkkmyqzw + '\'' +
-                ", zsjhs=" + zsjhs +
-                ", bz='" + bz + '\'' +
-                ", gmtCreate=" + gmtCreate +
-                ", gmtModified=" + gmtModified +
-                '}';
-    }
-
     public String getKm1() {
         return km1;
     }
@@ -486,5 +446,50 @@ public class RecruitStudentsPlan implements Serializable {
 
     public void setSfsyl(String sfsyl) {
         this.sfsyl = sfsyl;
+    }
+
+    @Override
+    public String toString() {
+        return "RecruitStudentsPlan{" +
+                "id=" + id +
+                ", yxdm='" + yxdm + '\'' +
+                ", yxdh='" + yxdh + '\'' +
+                ", yxdhmc='" + yxdhmc + '\'' +
+                ", szd='" + szd + '\'' +
+                ", sf985=" + sf985 +
+                ", sf211=" + sf211 +
+                ", bxlxdm=" + bxlxdm +
+                ", bxlxmc='" + bxlxmc + '\'' +
+                ", ssdm=" + ssdm +
+                ", ssmc='" + ssmc + '\'' +
+                ", zgdm=" + zgdm +
+                ", zgmc='" + zgmc + '\'' +
+                ", ccdm=" + ccdm +
+                ", ccmc='" + ccmc + '\'' +
+                ", zydm='" + zydm + '\'' +
+                ", sbdm2='" + sbdm2 + '\'' +
+                ", zymc='" + zymc + '\'' +
+                ", xzdmxg='" + xzdmxg + '\'' +
+                ", xzdm='" + xzdm + '\'' +
+                ", xzmc='" + xzmc + '\'' +
+                ", sfbz='" + sfbz + '\'' +
+                ", kldm='" + kldm + '\'' +
+                ", ksklmc='" + ksklmc + '\'' +
+                ", pcdm='" + pcdm + '\'' +
+                ", pcmc='" + pcmc + '\'' +
+                ", kslxdm='" + kslxdm + '\'' +
+                ", kslxmc='" + kslxmc + '\'' +
+                ", xkkmyq='" + xkkmyq + '\'' +
+                ", xkkmyqzw='" + xkkmyqzw + '\'' +
+                ", zsjhs=" + zsjhs +
+                ", bz='" + bz + '\'' +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
+                ", km1='" + km1 + '\'' +
+                ", km2='" + km2 + '\'' +
+                ", km3='" + km3 + '\'' +
+                ", zydmNew='" + zydmNew + '\'' +
+                ", sfsyl='" + sfsyl + '\'' +
+                '}';
     }
 }
