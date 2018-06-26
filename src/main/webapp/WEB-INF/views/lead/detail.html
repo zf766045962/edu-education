@@ -75,6 +75,7 @@
         var $ = layui.jquery
             , table = layui.table
             , form = layui.form;
+        layer.load(1);
         form.on('checkbox(lockDemo)', function (obj) {
             var check = obj.elem.checked;
             var v = this.value.split("|");
@@ -145,9 +146,12 @@
                 , countName: 'count' //数据总数的字段名称，默认：count
                 , dataName: 'data' //数据列表的字段名称，默认：data
             }
+            , limit: 50
+            , limits: [50, 100, 200, 500, 1000]
             , even: true
             , page: {theme: '#2d5eb7'}
             , done: function (res, curr, count) {
+                layer.closeAll('loading');
                 if (res.code == 30002) {
                     layer.msg(res.msg);
                     setTimeout(function () {
@@ -183,6 +187,7 @@
                 var schoolName = $("#schoolName").val();
                 var majorName = $("#majorName").val();
                 //执行重载
+                layer.load(1);
                 table.reload('idTest', {
                     page: {
                         curr: 1 //重新从第 1 页开始
