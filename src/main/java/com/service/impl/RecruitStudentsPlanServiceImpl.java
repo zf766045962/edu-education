@@ -47,7 +47,7 @@ public class RecruitStudentsPlanServiceImpl implements RecruitStudentsPlanServic
         for (int i = 1, len = sheet.getLastRowNum(); i <= len; i++) {
             row = sheet.getRow(i);
             recruitStudentsPlan = new RecruitStudentsPlan();
-            for (int j = 0; j < 31; j++) {
+            for (int j = 0; j < 32; j++) {
                 String v = AbstractExcelUtil.getCellByType2(row.getCell(j));
                 switch (j) {
                     case 0:
@@ -69,69 +69,72 @@ public class RecruitStudentsPlanServiceImpl implements RecruitStudentsPlanServic
                         recruitStudentsPlan.setSf211(CommonUtils.convertStringToInteger(v));
                         break;
                     case 6:
-                        recruitStudentsPlan.setBxlxdm(CommonUtils.convertStringToInteger(v));
+                        recruitStudentsPlan.setSfsyl(v);
                         break;
                     case 7:
-                        recruitStudentsPlan.setBxlxmc(v);
+                        recruitStudentsPlan.setBxlxdm(CommonUtils.convertStringToInteger(v));
                         break;
                     case 8:
-                        recruitStudentsPlan.setSsdm(CommonUtils.convertStringToInteger(v));
+                        recruitStudentsPlan.setBxlxmc(v);
                         break;
                     case 9:
-                        recruitStudentsPlan.setSsmc(v);
+                        recruitStudentsPlan.setSsdm(CommonUtils.convertStringToInteger(v));
                         break;
                     case 10:
-                        recruitStudentsPlan.setZgdm(CommonUtils.convertStringToInteger(v));
+                        recruitStudentsPlan.setSsmc(v);
                         break;
                     case 11:
-                        recruitStudentsPlan.setZgmc(v);
+                        recruitStudentsPlan.setZgdm(CommonUtils.convertStringToInteger(v));
                         break;
                     case 12:
-                        recruitStudentsPlan.setCcdm(CommonUtils.convertStringToInteger(v));
+                        recruitStudentsPlan.setZgmc(v);
                         break;
                     case 13:
-                        recruitStudentsPlan.setCcmc(v);
+                        recruitStudentsPlan.setCcdm(CommonUtils.convertStringToInteger(v));
                         break;
                     case 14:
-                        recruitStudentsPlan.setZydm(v);
+                        recruitStudentsPlan.setCcmc(v);
                         break;
                     case 15:
-                        recruitStudentsPlan.setSbdm2(v == null ? "" : v);
+                        recruitStudentsPlan.setZydm(v);
                         break;
                     case 16:
-                        recruitStudentsPlan.setZymc(v);
+                        recruitStudentsPlan.setSbdm2(v == null ? "" : v);
                         break;
                     case 17:
-                        recruitStudentsPlan.setXzdmxg(v);
+                        recruitStudentsPlan.setZymc(v);
                         break;
                     case 18:
-                        recruitStudentsPlan.setXzdm(v);
+                        recruitStudentsPlan.setXzdmxg(v);
                         break;
                     case 19:
-                        recruitStudentsPlan.setXzmc(v);
+                        recruitStudentsPlan.setXzdm(v);
                         break;
                     case 20:
-                        recruitStudentsPlan.setSfbz(v);
+                        recruitStudentsPlan.setXzmc(v);
                         break;
                     case 21:
-                        recruitStudentsPlan.setKldm(v);
+                        recruitStudentsPlan.setSfbz(v);
                         break;
                     case 22:
-                        recruitStudentsPlan.setKsklmc(v);
+                        recruitStudentsPlan.setKldm(v);
                         break;
                     case 23:
-                        recruitStudentsPlan.setPcdm(v);
+                        recruitStudentsPlan.setKsklmc(v);
                         break;
                     case 24:
-                        recruitStudentsPlan.setPcmc(v);
+                        recruitStudentsPlan.setPcdm(v);
                         break;
                     case 25:
-                        recruitStudentsPlan.setKslxdm(v);
+                        recruitStudentsPlan.setPcmc(v);
                         break;
                     case 26:
-                        recruitStudentsPlan.setKslxmc(v);
+                        recruitStudentsPlan.setKslxdm(v);
                         break;
                     case 27:
+                        recruitStudentsPlan.setKslxmc(v);
+                        break;
+                    case 28:
                         if ("00".equals(v)) {
                             recruitStudentsPlan.setKm1("00");
                             recruitStudentsPlan.setKm2("00");
@@ -154,13 +157,13 @@ public class RecruitStudentsPlanServiceImpl implements RecruitStudentsPlanServic
                         }
                         recruitStudentsPlan.setXkkmyq(v);
                         break;
-                    case 28:
+                    case 29:
                         recruitStudentsPlan.setXkkmyqzw(v);
                         break;
-                    case 29:
+                    case 30:
                         recruitStudentsPlan.setZsjhs(CommonUtils.convertStringToInteger(v));
                         break;
-                    case 30:
+                    case 31:
                         recruitStudentsPlan.setBz(v);
                         break;
                     default:
@@ -189,6 +192,9 @@ public class RecruitStudentsPlanServiceImpl implements RecruitStudentsPlanServic
                 recruitStudentsPlanMapper.insertRecruitStudentsPlanBatch(temp);
             }
             temp.clear();
+            recruitStudentsPlans.clear();
+            recruitStudentsPlans = null;
+            temp = null;
         }
         if (inp != null) {
             inp.close();
