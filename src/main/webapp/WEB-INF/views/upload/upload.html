@@ -24,6 +24,8 @@
                            lay-skin="primary" checked>
                     <input type="radio" name="upload_type" value="2" lay-filter="file_type" title="投档数据"
                            lay-skin="primary">
+                    <input type="radio" name="upload_type" value="3" lay-filter="file_type" title="新增普高计划库"
+                           lay-skin="primary">
                 </div>
                 <label class="layui-form-label" id="year_mc">年份</label>
                 <div class="layui-input-inline">
@@ -33,7 +35,8 @@
             <div class="layui-form-item">
                 <div class="layui-upload">
                     <button type="button" class="layui-btn layui-btn-normal" id="upload-file">选择文件
-                    </button> <span style="color: red">普高计划库KSLXMC、PCMC、ZSJHS 需先处理再导入</span>
+                    </button>
+                    <span style="color: red">普高计划库KSLXMC、PCMC、ZSJHS 需先处理再导入</span>
                     <div class="layui-upload-list">
                         <table class="layui-table">
                             <thead>
@@ -79,11 +82,9 @@
             , exts: 'xls|xlsx'
             , before: function (obj) {
                 var year = $("#year").val();
-                if (fileType == '2') {
-                    if (year == null || year == "") {
-                        layer.msg("上传往年投档情况数据时，请输入年份");
-                        return;
-                    }
+                if (year == null || year == "") {
+                    layer.msg("请输入年份");
+                    return;
                 }
                 layer.load();
                 this.data = {
