@@ -41,12 +41,26 @@
         <result column="km3" property="km3" jdbcType="VARCHAR"/>
         <result column="zydmNew" property="zydmNew" jdbcType="VARCHAR"/>
         <result column="sfsyl" property="sfsyl" jdbcType="VARCHAR"/>
+        <result column="nf" property="nf" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, yxdm, yxdh, yxdhmc, szd, sf985, sf211, bxlxdm, bxlxmc, ssdm, ssmc, zgdm, zgmc,
         ccdm, ccmc, zydm, sbdm2, zymc, xzdmxg, xzdm, xzmc, sfbz, kldm, ksklmc, pcdm, pcmc,
         kslxdm, kslxmc, xkkmyq, xkkmyqzw, zsjhs, bz, gmt_create, gmt_modified, km1, km2, km3, zydmNew
     </sql>
+    <update id="updateSyzsjhsByTemp">
+        update recruit_students_plan a, recruit_students_plan_temp b
+        set a.zsjhs_sy = b.zsjhs_sy
+        where a.yxdh = b.yxdh and a.zszymc = b.zszymc and a.nf = #{year}
+    </update>
+    <update id="updateSyzsjhsToZero">
+        update recruit_students_plan a
+        set zsjhs_sy = 0
+        where a.nf = #{year} and (yxdh, zszymc) not in (select
+                                                            yxdh,
+                                                            zszymc
+                                                        from recruit_students_plan_temp)
+    </update>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
@@ -90,7 +104,10 @@
         ,km1
         ,km2
         ,km3
-        ,zydm_new)
+        ,zydm_new
+        ,nf
+        ,zsjhs_sy
+        ,zszymc)
         values
         <foreach collection="list" item="item" separator=",">
             (
@@ -130,31 +147,208 @@
             , #{item.km2,jdbcType=VARCHAR}
             , #{item.km3,jdbcType=VARCHAR}
             , #{item.zydmNew,jdbcType=VARCHAR}
+            , #{item.nf,jdbcType=VARCHAR}
+            , #{item.zsjhsSy,jdbcType=INTEGER}
+            , #{item.zszymc,jdbcType=VARCHAR}
             )
         </foreach>
     </insert>
+    <insert id="insertRecruitStudentsPlanTempBatch">
+        insert into recruit_students_plan_temp (
+        yxdm
+        , yxdh
+        , yxdhmc
+        , szd
+        , sf985
+        , sf211
+        , sfsyl
+        , bxlxdm
+        , bxlxmc
+        , ssdm
+        , ssmc
+        , zgdm
+        , zgmc
+        , ccdm
+        , ccmc
+        , zydm
+        , sbdm2
+        , zymc
+        , xzdmxg
+        , xzdm
+        , xzmc
+        , sfbz
+        , kldm
+        , ksklmc
+        , pcdm
+        , pcmc
+        , kslxdm
+        , kslxmc
+        , xkkmyq
+        , xkkmyqzw
+        , zsjhs
+        , bz
+        ,km1
+        ,km2
+        ,km3
+        ,zydm_new
+        ,nf
+        ,zsjhs_sy
+        ,zszymc)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.yxdm,jdbcType=VARCHAR}
+            , #{item.yxdh,jdbcType=VARCHAR}
+            , #{item.yxdhmc,jdbcType=VARCHAR}
+            , #{item.szd,jdbcType=VARCHAR}
+            , #{item.sf985,jdbcType=INTEGER}
+            , #{item.sf211,jdbcType=INTEGER}
+            , #{item.sfsyl,jdbcType=VARCHAR}
+            , #{item.bxlxdm,jdbcType=INTEGER}
+            , #{item.bxlxmc,jdbcType=VARCHAR}
+            , #{item.ssdm,jdbcType=INTEGER}
+            , #{item.ssmc,jdbcType=VARCHAR}
+            , #{item.zgdm,jdbcType=INTEGER}
+            , #{item.zgmc,jdbcType=VARCHAR}
+            , #{item.ccdm,jdbcType=INTEGER}
+            , #{item.ccmc,jdbcType=VARCHAR}
+            , #{item.zydm,jdbcType=VARCHAR}
+            , #{item.sbdm2,jdbcType=VARCHAR}
+            , #{item.zymc,jdbcType=VARCHAR}
+            , #{item.xzdmxg,jdbcType=VARCHAR}
+            , #{item.xzdm,jdbcType=CHAR}
+            , #{item.xzmc,jdbcType=VARCHAR}
+            , #{item.sfbz,jdbcType=VARCHAR}
+            , #{item.kldm,jdbcType=VARCHAR}
+            , #{item.ksklmc,jdbcType=VARCHAR}
+            , #{item.pcdm,jdbcType=VARCHAR}
+            , #{item.pcmc,jdbcType=VARCHAR}
+            , #{item.kslxdm,jdbcType=VARCHAR}
+            , #{item.kslxmc,jdbcType=VARCHAR}
+            , #{item.xkkmyq,jdbcType=VARCHAR}
+            , #{item.xkkmyqzw,jdbcType=VARCHAR}
+            , #{item.zsjhs,jdbcType=INTEGER}
+            , #{item.bz,jdbcType=VARCHAR}
+            , #{item.km1,jdbcType=VARCHAR}
+            , #{item.km2,jdbcType=VARCHAR}
+            , #{item.km3,jdbcType=VARCHAR}
+            , #{item.zydmNew,jdbcType=VARCHAR}
+            , #{item.nf,jdbcType=VARCHAR}
+            , #{item.zsjhsSy,jdbcType=INTEGER}
+            , #{item.zszymc,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+    <insert id="insertTempToReal">
+        insert into recruit_students_plan (
+            yxdm
+            , yxdh
+            , yxdhmc
+            , szd
+            , sf985
+            , sf211
+            , sfsyl
+            , bxlxdm
+            , bxlxmc
+            , ssdm
+            , ssmc
+            , zgdm
+            , zgmc
+            , ccdm
+            , ccmc
+            , zydm
+            , sbdm2
+            , zymc
+            , xzdmxg
+            , xzdm
+            , xzmc
+            , sfbz
+            , kldm
+            , ksklmc
+            , pcdm
+            , pcmc
+            , kslxdm
+            , kslxmc
+            , xkkmyq
+            , xkkmyqzw
+            , zsjhs
+            , bz
+            , km1
+            , km2
+            , km3
+            , zydm_new
+            , nf
+            , zsjhs_sy
+            , zszymc) select
+                          yxdm,
+                          yxdh,
+                          yxdhmc,
+                          szd,
+                          sf985,
+                          sf211,
+                          sfsyl,
+                          bxlxdm,
+                          bxlxmc,
+                          ssdm,
+                          ssmc,
+                          zgdm,
+                          zgmc,
+                          ccdm,
+                          ccmc,
+                          zydm,
+                          sbdm2,
+                          zymc,
+                          xzdmxg,
+                          xzdm,
+                          xzmc,
+                          sfbz,
+                          kldm,
+                          ksklmc,
+                          pcdm,
+                          pcmc,
+                          kslxdm,
+                          kslxmc,
+                          xkkmyq,
+                          xkkmyqzw,
+                          zsjhs,
+                          bz,
+                          km1,
+                          km2,
+                          km3,
+                          zydm_new,
+                          nf,
+                          zsjhs_sy,
+                          zszymc
+                      from recruit_students_plan_temp
+    </insert>
     <select id="countSchool" resultType="int">
-        SELECT count(*)
+        SELECT count(distinct yxdh)
         FROM (
-        SELECT count(*)
+        SELECT a.yxdh,a.zszymc
         FROM recruit_students_plan a, wntdqk_hz b
         WHERE a.yxdh = b.school_code
         AND a.zymc = b.zymc
-        AND b.tdmc &lt;=#{max} AND tdmc &gt;=#{min}
+        AND a.nf=#{nf,jdbcType=VARCHAR}
+        and a.zsjhs_sy>0
         AND
-        (a.km1 = '00' OR
+        (
         a.km1
         IN
         (
         <foreach collection="list" item="item" separator=",">
             #{item}
         </foreach>
+        ,'00'
         )
-        OR a.km2 IN (
+        or
+        a.km2 IN
+        (
         <foreach collection="list" item="item" separator=",">
             #{item}
         </foreach>
-        ) OR a.km3 IN
+        )
+        or
+        a.km3 IN
         (
         <foreach collection="list" item="item" separator=",">
             #{item}
@@ -168,11 +362,11 @@
             </foreach>
             )
         </if>
-        <if test="majorCodes !=null">
-            AND b.zymc IN (
-            <foreach collection="majorCodes" item="item" separator=",">
-                #{item}
-            </foreach>
+        <if test="zymc !=null and zymc !=''">
+            and (
+            a.zszymc like concat('%',#{zymc,jdbcType=VARCHAR},'%')
+            or
+            a.bz like concat('%',#{zymc,jdbcType=VARCHAR},'%')
             )
         </if>
         <if test="schoolCodes != null">
@@ -182,29 +376,34 @@
             </foreach>
             )
         </if>
-        GROUP BY yxdh
+        group by a.yxdh,a.zszymc having avg(b.ckzs)&lt;=#{max} and avg(b.ckzs)&gt;=#{min}
         ) t
     </select>
     <select id="countMajor" resultType="int">
-        SELECT count(*)
+        select count(*) from (SELECT a.yxdh,a.zszymc
         FROM recruit_students_plan a, wntdqk_hz b
         WHERE a.yxdh = b.school_code
         AND a.zymc = b.zymc
-        AND b.tdmc &lt;=#{max} AND tdmc &gt;=#{min}
-        AND
-        (a.km1 = '00' OR
+        AND a.nf=#{nf,jdbcType=VARCHAR}
+        and a.zsjhs_sy>0
+        AND (
         a.km1
         IN
         (
         <foreach collection="list" item="item" separator=",">
             #{item}
         </foreach>
+        ,'00'
         )
-        OR a.km2 IN (
+        or
+        a.km2 IN
+        (
         <foreach collection="list" item="item" separator=",">
             #{item}
         </foreach>
-        ) OR a.km3 IN
+        )
+        or
+        a.km3 IN
         (
         <foreach collection="list" item="item" separator=",">
             #{item}
@@ -218,11 +417,11 @@
             </foreach>
             )
         </if>
-        <if test="majorCodes !=null">
-            AND b.zymc IN (
-            <foreach collection="majorCodes" item="item" separator=",">
-                #{item}
-            </foreach>
+        <if test="zymc !=null and zymc !=''">
+            and (
+            a.zszymc like concat('%',#{zymc,jdbcType=VARCHAR},'%')
+            or
+            a.bz like concat('%',#{zymc,jdbcType=VARCHAR},'%')
             )
         </if>
         <if test="schoolCodes != null">
@@ -232,22 +431,21 @@
             </foreach>
             )
         </if>
+        group by a.yxdh,a.zszymc having avg(b.ckzs)&lt;=#{max} and avg(b.ckzs)&gt;=#{min}
+        ) a
     </select>
     <select id="listRecruitStudentsPlan" resultType="com.vo.RecruitStudentsPlanVo">
         SELECT
-        a.zydm_new,
-        a.zymc,
+        a.zszymc,
         a.xzdm as xzmc,
         a.sfbz,
         a.xkkmyqzw,
         a.ccmc,
         concat(a.ssmc,'.',a.szd) AS ssmcSzd,
-        b.ckzs,
+        avg(b.ckzs) ckzs,
         a.zsjhs,
-        a.yxdh,
         a.yxdhmc,
-        a.bz,
-        a.zydm,
+        ifnull(a.bz,'') bz,
         a.bxlxmc,
         a.sfsyl,
         b.dsms,
@@ -255,32 +453,38 @@
         END AS sf985Name,
         CASE a.sf211 WHEN 1 THEN '是' ELSE '否'
         END AS sf211Name,
-        concat(a.yxdh,'|',a.yxdhmc,'|',a.zydm,'|',a.zymc,'|',b.ckzs,'|',a.zydm_new) AS zhcs,
+        concat(a.yxdh,'|',a.yxdhmc,'|',a.zydm,'|',a.zszymc,'|',avg(b.ckzs),'|',a.xzdm) AS zhcs,
         CASE ifnull((SELECT c.id
         FROM hxzy c
-        WHERE a.yxdh = c.school_code AND c.major_code_new = a.zydm_new and b.ckzs=c.reference_index and
+        WHERE a.yxdh = c.school_code AND c.major_code = a.zydm and avg(b.ckzs)=c.reference_index and
         c.candidate_id = #{candidateId}), 'aaa')
         WHEN 'aaa'
         THEN '0'
         ELSE '1' END AS sfsc
-        FROM recruit_students_plan a, wntdqk_hz b
-        WHERE a.yxdh = b.school_code
+        FROM recruit_students_plan a left join wntdqk_hz b on a.yxdh = b.school_code
         AND a.zymc = b.zymc
-        AND b.tdmc &lt;= #{max} AND tdmc &gt;= #{min}
-        AND
-        (a.km1 = '00' OR
+        WHERE
+        b.ckzs is not null
+        and a.nf=#{nf,jdbcType=VARCHAR}
+        and a.zsjhs_sy>0
+        AND (
         a.km1
         IN
         (
         <foreach collection="list" item="item" separator=",">
             #{item}
         </foreach>
+        ,'00'
         )
-        OR a.km2 IN (
+        or
+        a.km2 IN
+        (
         <foreach collection="list" item="item" separator=",">
             #{item}
         </foreach>
-        ) OR a.km3 IN
+        )
+        or
+        a.km3 IN
         (
         <foreach collection="list" item="item" separator=",">
             #{item}
@@ -294,11 +498,11 @@
             </foreach>
             )
         </if>
-        <if test="majorCodes != null">
-            AND a.zymc IN (
-            <foreach collection="majorCodes" item="item" separator=",">
-                #{item}
-            </foreach>
+        <if test="zymc !=null and zymc !=''">
+            and (
+            a.zszymc like concat('%',#{zymc,jdbcType=VARCHAR},'%')
+            or
+            a.bz like concat('%',#{zymc,jdbcType=VARCHAR},'%')
             )
         </if>
         <if test="schoolCodes != null">
@@ -312,8 +516,19 @@
             AND yxdhmc LIKE concat(#{schoolName},'%')
         </if>
         <if test="majorName !=null and majorName !=''">
-            AND a.zymc LIKE concat(#{majorName},'%')
+            AND a.zszymc LIKE concat(#{majorName},'%')
         </if>
-        order by ckzs
+        group by a.yxdh,a.zszymc having avg(b.ckzs)&lt;=#{max} and avg(b.ckzs)&gt;=#{min}
     </select>
+    <select id="findZymc" resultType="com.entity.RecruitStudentsPlan">
+        select *
+        from recruit_students_plan
+        where nf = #{year}
+              and zymc like '%类%' and bz like '%$%'
+    </select>
+    <delete id="deleteRecruitStudentsPlanByBz">
+        delete from recruit_students_plan
+        where nf = #{year}
+              and zymc like '%类%' and bz like '%$%'
+    </delete>
 </mapper>
