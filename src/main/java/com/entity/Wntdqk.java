@@ -74,7 +74,12 @@ public class Wntdqk implements Serializable {
      * 招生计划数
      */
     private int zsjhs;
+    /**
+     * 招生专业名称
+     */
+    private String zszymc;
 
+    private String bz;
     private Date gmtCreate;
 
     private Date gmtModified;
@@ -221,6 +226,22 @@ public class Wntdqk implements Serializable {
 
     public void setZsjhs(int zsjhs) {
         this.zsjhs = zsjhs;
+    }
+
+    public String getZszymc() {
+        return zszymc;
+    }
+
+    public void setZszymc(String zszymc) {
+        this.zszymc = zszymc;
+    }
+
+    public String getBz() {
+        return bz;
+    }
+
+    public void setBz(String bz) {
+        this.bz = bz;
     }
 
     @Override
