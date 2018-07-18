@@ -15,8 +15,12 @@
             , tdmc
             , pc
             , ckzs
+            , bz
+            , ds
             , dsms
             , gmt_create
+            , zsjhs
+            , zszymc
         )
             SELECT
                 school_code,
@@ -31,8 +35,12 @@
                 tdmc,
                 pc,
                 ckzs,
+                bz,
+                ds,
                 dsms,
-                gmt_create
+                gmt_create,
+                zsjhs,
+                zszymc
             FROM wntdqk
             WHERE nf = #{nf}
     </insert>
