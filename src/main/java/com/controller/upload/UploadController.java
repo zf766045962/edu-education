@@ -61,10 +61,13 @@ public class UploadController {
             return Result.error(CodeMsg.FILE_DATA_EMPTY);
         }
         if (Constants.FILE_TYPE_PLAN.equals(fileType)) {
-            recruitStudentsPlanService.uploadData(file);
+            recruitStudentsPlanService.uploadData(file, year);
         }
         if (Constants.FILE_TYPE_SUBMIT.equals(fileType)) {
             wntdqkService.uploadData(file, year);
+        }
+        if (Constants.FILE_TYPE_PLAN_NEW.equals(fileType)) {
+            recruitStudentsPlanService.uploadNewData(file);
         }
         return Result.success(true);
     }
