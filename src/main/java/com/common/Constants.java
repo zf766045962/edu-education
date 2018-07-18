@@ -33,4 +33,8 @@ public class Constants {
      * 投档数据
      */
     public static final String FILE_TYPE_SUBMIT = "2";
+    /**
+     * 新增普高计划数据-用于更新普高计划剩余招生人数
+     */
+    public static final String FILE_TYPE_PLAN_NEW = "3";
 }
