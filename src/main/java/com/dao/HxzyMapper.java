@@ -56,7 +56,7 @@ public interface HxzyMapper {
      * @param majorCode      专业代码
      * @param referenceIndex 参考指数
      */
-    @Delete("delete from hxzy where candidate_id=#{candidateId} and school_code=#{schoolCode} and major_code_new=#{majorCode} and reference_index=#{referenceIndex}")
+    @Delete("delete from hxzy where candidate_id=#{candidateId} and school_code=#{schoolCode} and major_code=#{majorCode} and reference_index=#{referenceIndex}")
     void deleteByCandidateIdAndSchoolCodeAndMajorCode(
             @Param("candidateId") long candidateId
             , @Param("schoolCode") String schoolCode
