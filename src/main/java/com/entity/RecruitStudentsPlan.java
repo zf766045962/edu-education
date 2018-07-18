@@ -135,6 +135,16 @@ public class RecruitStudentsPlan implements Serializable {
      * 是否双一流
      */
     private String sfsyl;
+    /**
+     * 剩余招生计划数
+     */
+    private int zsjhsSy;
+    /**
+     * 招生专业，类似于xxx类（包含xxx专业）
+     */
+    private String zszymc;
+
+    private String nf;
 
     public Long getId() {
         return id;
@@ -446,6 +456,30 @@ public class RecruitStudentsPlan implements Serializable {
 
     public void setSfsyl(String sfsyl) {
         this.sfsyl = sfsyl;
+    }
+
+    public int getZsjhsSy() {
+        return zsjhsSy;
+    }
+
+    public void setZsjhsSy(int zsjhsSy) {
+        this.zsjhsSy = zsjhsSy;
+    }
+
+    public String getZszymc() {
+        return zszymc;
+    }
+
+    public void setZszymc(String zszymc) {
+        this.zszymc = zszymc;
+    }
+
+    public String getNf() {
+        return nf;
+    }
+
+    public void setNf(String nf) {
+        this.nf = nf;
     }
 
     @Override
