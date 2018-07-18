@@ -137,7 +137,7 @@ public class HxzyController {
             , @RequestParam("schoolCode") String schoolCode
             , @RequestParam("majorCode") String majorCode
             , @RequestParam("referenceIndex") BigDecimal referenceIndex) {
-        hxzyService.deleteByCandidateIdAndSchoolCodeAndMajorCode(id, schoolCode, majorCode,referenceIndex);
+        hxzyService.deleteByCandidateIdAndSchoolCodeAndMajorCode(id, schoolCode, majorCode, referenceIndex);
         return Result.success(true);
     }
 
@@ -150,7 +150,7 @@ public class HxzyController {
         Workbook workbook = new HSSFWorkbook();
         Sheet sheet = workbook.createSheet();
         Row row = sheet.createRow(0);
-        String[] cellHead = {"学校", "学校代码", "专业", "专业代码", "参考指数", "志愿类型"};
+        String[] cellHead = {"学校", "学校代码", "专业", "专业代码", "参考指数", "学制", "志愿类型"};
         Cell cell;
         for (int i = 0, len = cellHead.length; i < len; i++) {
             cell = row.createCell(i);
@@ -164,6 +164,7 @@ public class HxzyController {
         sheet.setColumnWidth(3, 256 * 31 + 184);
         sheet.setColumnWidth(4, 256 * 20 + 184);
         sheet.setColumnWidth(5, 256 * 9 + 184);
+        sheet.setColumnWidth(6, 256 * 9 + 184);
         for (HxzyVo aHxzyList : hxzyList) {
             row = sheet.createRow(k++);
             hxzyVo = aHxzyList;
@@ -186,6 +187,9 @@ public class HxzyController {
                         cell.setCellValue(BigDecimalUtil.convertBigDecimalToPercent(hxzyVo.getReferenceIndex()));
                         break;
                     case 5:
+                        cell.setCellValue(hxzyVo.getXzdm());
+                        break;
+                    case 6:
                         cell.setCellValue(hxzyVo.getStatusName());
                         break;
                     default:
@@ -193,7 +197,7 @@ public class HxzyController {
                 }
             }
         }
-        sheet.addMergedRegion(new CellRangeAddress(k, k, 0, 5));
+        sheet.addMergedRegion(new CellRangeAddress(k, k, 0, 6));
         row = sheet.createRow(k);
         row.setHeight((short) 1000);
         cell = row.createCell(0);
