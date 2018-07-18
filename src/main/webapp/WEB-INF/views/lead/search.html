@@ -76,10 +76,8 @@
     </fieldset>
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">意向专业</label>
-        <button class="layui-btn" data-type="chooseMajor">选择专业</button>
-        <span style="color:red;">(点击此按钮选择专业)</span>
-        <div class="layui-input-block">
-            <textarea placeholder="请选择意向专业" class="layui-textarea" disabled id="selectZY"></textarea>
+        <div class="layui-input-inline" style="width: 350px">
+            <input placeholder="请输入意向专业" class="layui-input" id="zymc">
         </div>
     </div>
     <div class="layui-form-item layui-form-text">
@@ -103,7 +101,6 @@
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn" data-type="search">生成志愿</button>
-            <!--<button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
         </div>
     </div>
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px;">
@@ -151,31 +148,6 @@
                 <input type="checkbox" name="pr" th:each="province : ${provinces}" th:value="${province.code}"
                        th:title="${province.name}" lay-skin="primary">
             </div>
-        </div>
-    </form>
-</div>
-<div class="m-modal" id="major" style="display: none;">
-    <div class="layui-form-item">
-        <div class="layui-inline">
-            <label class="layui-form-label">专业名称</label>
-            <div class="layui-input-inline">
-                <input type="text" class="layui-input" id="zymc">
-            </div>
-        </div>
-        <div class="layui-inline">
-            <label class="layui-form-label"></label>
-            <a href="javascript:;" class="layui-btn ayui-btn-normal bg-blue " data-type="reload">
-                <i class="iconfont">&#xe606;</i> 查询</a>
-        </div>
-    </div>
-    <form class="layui-form">
-        <div class="gkwh-tb">
-            <div class="layui-btn-group">
-                <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="addMajor"><i class="iconfont"></i>增加意向专业</a>
-                <a class="layui-btn layui-btn-primary  layui-btn-sm" data-type="clearMajor"><i
-                        class="iconfont"></i>清空意向专业</a>
-            </div>
-            <table id="wh-list"></table>
         </div>
     </form>
 </div>
@@ -227,40 +199,7 @@
 <script>
     layui.use(['table', 'form'], function () {
         var $ = layui.jquery
-            , table = layui.table
-            , $2 = layui.$
-            , form = layui.form;
-        var majors = [];
-        table.render({
-            elem: '#wh-list'
-            , url: '/major/'
-            , cols: [[
-                {field: 'id', title: 'id', checkbox: true, sort: true}
-                , {field: 'zymc', title: '专业名称', sort: true}
-            ]]
-            , id: 'idTest'
-            , request: {
-                pageName: 'currentPage' //页码的参数名称，默认：page
-                , limitName: 'pageSize' //每页数据量的参数名，默认：limit
-            }
-            , response: {
-                statusCode: 90000 //成功的状态码，默认：0
-                , countName: 'count' //数据总数的字段名称，默认：count
-                , dataName: 'data' //数据列表的字段名称，默认：data
-            }
-            , even: true
-            , page: {theme: '#2d5eb7'}
-            , done: function (res, curr, count) {
-                if (res.code == 30002) {
-                    layer.msg(res.msg);
-                    setTimeout(function () {
-                        top.location.href = "/login";
-                    }, 5000);
-                } else if (res.code != 90000) {
-                    layer.msg(res.msg);
-                }
-            }
-        });
+            , table = layui.table;
         table.render({
             elem: '#school-list'
             , url: '/school/'
@@ -291,8 +230,6 @@
                 }
             }
         });
-        var zyName = [];
-        var zyCode = [];
         var yxName = [];
         var yxCode = [];
         var active = {
@@ -317,13 +254,7 @@
                     return;
                 }
                 var provinceCode = $("#province_code").val();
-                var majorCode = "";
-                for (var i = 0, len = zyName.length; i < len; i++) {
-                    majorCode += "" + zyName[i];
-                    if (i < len - 1) {
-                        majorCode += ",";
-                    }
-                }
+                var zymc = $("#zymc").val();
                 var schoolCode = "";
                 for (var i = 0, len = yxCode.length; i < len; i++) {
                     schoolCode += "" + yxCode[i];
@@ -341,7 +272,7 @@
                     , "b_max": b_max
                     , "id": id
                     , "provinceCode": provinceCode
-                    , "majorCode": majorCode
+                    , "zymc": zymc
                     , "schoolCode": schoolCode
                 }, function (res) {
                     layer.closeAll();
@@ -360,13 +291,13 @@
                 });
             }
             , cSearch: function () {
-                changeToDetail(yxCode, zyName, '1');
+                changeToDetail(yxCode, '1');
             }
             , wSearch: function () {
-                changeToDetail(yxCode, zyName, '2');
+                changeToDetail(yxCode, '2');
             }
             , bSearch: function () {
-                changeToDetail(yxCode, zyName, '3');
+                changeToDetail(yxCode, '3');
             }
             , chooseProvince: function () {
                 layer.open({
@@ -440,39 +371,6 @@
                 });
 
             }
-            , reload: function () {
-                var zymc = $("#zymc").val();
-                table.reload('idTest', {
-                    page: {
-                        curr: 1
-                    }
-                    , where: {
-                        "zymc": zymc
-                    }
-                });
-            },
-            addMajor: function () {
-                var checkStatus = table.checkStatus('idTest');
-                var data = checkStatus.data;
-                if (data.length <= 0) {
-                    layer.msg("请选择专业");
-                    return;
-                }
-                for (var j = 0; j < data.length; j++) {
-                    //  var ids = data[j].zydm;
-                    var name = data[j].zymc;
-                    if (zyCode.in_array(name) == false) {
-                        //zyCode.push(ids);
-                        zyName.push(name);
-                    }
-                }
-                $("#selectZY").val(zyName);
-            }
-            , clearMajor: function () {
-                $("#selectZY").val("");
-                zyCode = [];
-                zyName = [];
-            }
             , addSchool: function () {
                 var checkStatus = table.checkStatus('schoolTable');
                 var data = checkStatus.data;
@@ -530,19 +428,29 @@
         });
     });
 
-    function changeToDetail(yxCode, zyName, type) {
-        var min = $("#b_min").val();
-        var max = $("#b_max").val();
+    function changeToDetail(yxCode, type) {
+        var zymc = $("#zymc").val();
+        var min = 0;
+        var max = 0;
+        if (type == 1) {
+            min = $("#c_min").val();
+            max = $("#c_max").val();
+        } else if (type == 2) {
+            min = $("#w_min").val();
+            max = $("#w_max").val();
+        } else {
+            min = $("#b_min").val();
+            max = $("#b_max").val();
+        }
         var id = $("#hid_id").val();
         var provinceCode = $("#province_code").val();
-        console.log(zyName);
         $.ajax({
             url: '/candidate/sendMsg'
             , type: 'post'
             , dataType: 'json'
             , data: {
                 "schoolCode": yxCode.toString(),
-                "majorCode": zyName.toString(),
+                "zymc": zymc,
                 "id": id
             }
             , success: function (data) {
