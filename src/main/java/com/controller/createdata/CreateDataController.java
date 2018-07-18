@@ -2,6 +2,7 @@ package com.controller.createdata;
 
 import com.common.result.Result;
 import com.service.MajorService;
+import com.service.RecruitStudentsPlanService;
 import com.service.SchoolService;
 import com.service.WntdqkHzService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class CreateDataController {
     private SchoolService schoolService;
     @Autowired
     private WntdqkHzService wntdqkHzService;
+    @Autowired
+    private RecruitStudentsPlanService recruitStudentsPlanService;
 
     @RequestMapping("/")
     public String toCreateData() {
@@ -58,7 +61,7 @@ public class CreateDataController {
     }
 
     /**
-     * 生成三年的投档数据平均值
+     * 生成投档数据
      *
      * @return 生成是否成功
      */
@@ -66,6 +69,42 @@ public class CreateDataController {
     @ResponseBody
     public Result createWntdqkHz(@RequestParam("year") String year) {
         wntdqkHzService.createWntdqkHz(year);
+        return Result.success(true);
+    }
+
+    /**
+     * 拆分投档数据
+     *
+     * @return 生成是否成功
+     */
+    @PostMapping("/wntdqk")
+    @ResponseBody
+    public Result splitWntdqkHz(@RequestParam("year") String year) {
+        wntdqkHzService.splitWntdqk(year);
+        return Result.success(true);
+    }
+
+    /**
+     * 拆分招生计划库数据
+     *
+     * @return 生成是否成功
+     */
+    @PostMapping("/rsP")
+    @ResponseBody
+    public Result splitRecruitStudentsPlan(@RequestParam("year") String year) {
+        recruitStudentsPlanService.splitRecruitStudentsPlan(year);
+        return Result.success(true);
+    }
+
+    /**
+     * 修改剩余招生计划数
+     *
+     * @return 生成是否成功
+     */
+    @PostMapping("/syzsjhs")
+    @ResponseBody
+    public Result generateSyzsjhs(@RequestParam("year") String year) {
+        recruitStudentsPlanService.generateSyzsjhs(year);
         return Result.success(true);
     }
 }
