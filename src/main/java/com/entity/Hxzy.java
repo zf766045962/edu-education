@@ -46,6 +46,10 @@ public class Hxzy implements Serializable {
      * 志愿类型 1 冲 2稳 3保
      */
     private String status;
+    /**
+     * 学制代码
+     */
+    private String xzdm;
 
     private Date gmtCreate;
 
@@ -137,6 +141,14 @@ public class Hxzy implements Serializable {
 
     public void setMajorCodeNew(String majorCodeNew) {
         this.majorCodeNew = majorCodeNew;
+    }
+
+    public String getXzdm() {
+        return xzdm;
+    }
+
+    public void setXzdm(String xzdm) {
+        this.xzdm = xzdm;
     }
 
     @Override
