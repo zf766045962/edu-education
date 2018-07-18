@@ -12,4 +12,11 @@ public interface WntdqkHzService {
      * @param year 年份
      */
     void createWntdqkHz(String year);
+
+    /**
+     * 拆分往年投档数据
+     *
+     * @param year 年份
+     */
+    void splitWntdqk(String year);
 }
