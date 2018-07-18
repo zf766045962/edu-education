@@ -144,7 +144,7 @@ public class CandidateController {
      * @param bMax         保位次最大值
      * @param id           考生id
      * @param provinceCode 省市名称
-     * @param majorCode    专业名称
+     * @param zymc         专业名称
      * @param schoolCode   院校名称
      * @return 志愿
      */
@@ -159,7 +159,7 @@ public class CandidateController {
             , @RequestParam("b_max") int bMax
             , @RequestParam("id") Long id
             , String provinceCode
-            , String majorCode
+            , String zymc
             , String schoolCode) {
         // 查询考生信息
         Candidate candidate = candidateService.getCandidateById(id);
@@ -168,8 +168,7 @@ public class CandidateController {
         }
         List<String> kms = dealWithKms(candidate);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
-        String s = simpleDateFormat.format(new Date());
-        String nf = (Integer.valueOf(s) - 1) + "";
+        String nf = simpleDateFormat.format(new Date());
         Map<String, Object> map = new HashMap<>(4);
         if (CommonUtils.isNotEmpty(provinceCode)) {
             String[] provinceCodes = provinceCode.split(",");
@@ -177,12 +176,7 @@ public class CandidateController {
                 map.put("provinceCodes", provinceCodes);
             }
         }
-        if (CommonUtils.isNotEmpty(majorCode)) {
-            String[] majorCodes = majorCode.split(",");
-            if (majorCodes.length > 0) {
-                map.put("majorCodes", majorCodes);
-            }
-        }
+        map.put("zymc", zymc);
         if (CommonUtils.isNotEmpty(schoolCode)) {
             String[] schoolCodes = schoolCode.split(",");
             if (schoolCodes.length > 0) {
@@ -191,19 +185,25 @@ public class CandidateController {
         }
         map.put("nf", nf);
         map.put("list", kms);
-        map.put("min", cMin);
-        map.put("max", cMax);
+
+        CandidateNum candidateNum = candidateNumService.getCandidateNum();
+        if (candidateNum == null) {
+            return Result.error(CodeMsg.CANDIDATE_NUM_NOT_EXISTS);
+        }
+        int num = candidateNum.getNum();
+        map.put("min", calculateCkzs(cMin, num));
+        map.put("max", calculateCkzs(cMax, num));
         // 查询冲志愿
         int cSchool = recruitStudentsPlanService.countSchool(map);
         int cMajor = recruitStudentsPlanService.countMajor(map);
         // 查询稳志愿
-        map.put("min", wMin);
-        map.put("max", wMax);
+        map.put("min", calculateCkzs(wMin, num));
+        map.put("max", calculateCkzs(wMax, num));
         int wSchool = recruitStudentsPlanService.countSchool(map);
         int wMajor = recruitStudentsPlanService.countMajor(map);
         // 查询保志愿
-        map.put("min", bMin);
-        map.put("max", bMax);
+        map.put("min", calculateCkzs(bMin, num));
+        map.put("max", calculateCkzs(bMax, num));
         int bSchool = recruitStudentsPlanService.countSchool(map);
         int bMajor = recruitStudentsPlanService.countMajor(map);
         map.clear();
@@ -235,7 +235,7 @@ public class CandidateController {
         model.addAttribute("max", max);
         model.addAttribute("id", id);
         model.addAttribute("provinceCode", provinceCode);
-        model.addAttribute("majorCode", httpSession.getAttribute(majorCodeSession));
+        model.addAttribute("zymc", httpSession.getAttribute(majorCodeSession));
         model.addAttribute("schoolCode", httpSession.getAttribute(schoolCodeSession));
         model.addAttribute("type", type);
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
@@ -247,12 +247,12 @@ public class CandidateController {
 
     @PostMapping("/sendMsg")
     @ResponseBody
-    public Result sendMsg(String schoolCode, String majorCode, @RequestParam("id") Long id, LoginUser user, HttpServletRequest request) {
+    public Result sendMsg(String schoolCode, String zymc, @RequestParam("id") Long id, LoginUser user, HttpServletRequest request) {
         HttpSession httpSession = request.getSession();
         String schoolCodeSessionId = "schoolCode" + user.getLoginUserName() + id + System.currentTimeMillis();
         String majorCodeSessionId = "majorCode" + user.getLoginUserName() + id + System.currentTimeMillis();
         httpSession.setAttribute(schoolCodeSessionId, schoolCode);
-        httpSession.setAttribute(majorCodeSessionId, majorCode);
+        httpSession.setAttribute(majorCodeSessionId, zymc);
         Map<String, Object> map = new HashMap<>();
         map.put("schoolCodeSession", schoolCodeSessionId);
         map.put("majorCodeSession", majorCodeSessionId);
@@ -273,7 +273,7 @@ public class CandidateController {
             , @RequestParam("max") int max
             , @RequestParam("id") Long id
             , String provinceCode
-            , String majorCode
+            , String zymc
             , @RequestParam("pageSize") int pageSize
             , @RequestParam("currentPage") int currentPage
             , String schoolName
@@ -286,26 +286,25 @@ public class CandidateController {
         }
         List<String> kms = dealWithKms(candidate);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
-        String s = simpleDateFormat.format(new Date());
-        String nf = (Integer.valueOf(s) - 1) + "";
+        String nf = simpleDateFormat.format(new Date());
         Map<String, Object> map = new HashMap<>(4);
+        CandidateNum candidateNum = candidateNumService.getCandidateNum();
+        if (candidateNum == null) {
+            return Result.error(CodeMsg.CANDIDATE_NUM_NOT_EXISTS);
+        }
+        int num = candidateNum.getNum();
         map.put("nf", nf);
         map.put("list", kms);
-        map.put("min", min);
-        map.put("max", max);
+        map.put("min", calculateCkzs(min, num));
+        map.put("max", calculateCkzs(max, num));
         map.put("schoolName", schoolName);
         map.put("majorName", majorName);
+        map.put("zymc", zymc);
         map.put("candidateId", id);
         if (CommonUtils.isNotEmpty(provinceCode)) {
             String[] provinceCodes = provinceCode.split(",");
             if (provinceCodes.length > 0) {
                 map.put("provinceCodes", provinceCodes);
-            }
-        }
-        if (CommonUtils.isNotEmpty(majorCode)) {
-            String[] majorCodes = majorCode.split(",");
-            if (majorCodes.length > 0) {
-                map.put("majorCodes", majorCodes);
             }
         }
         if (CommonUtils.isNotEmpty(schoolCode)) {
@@ -411,5 +410,11 @@ public class CandidateController {
             kms.add("09");
         }
         return kms;
+    }
+
+    private static double calculateCkzs(int ranking, int num) {
+        DecimalFormat dFormat = new DecimalFormat("#.0000");
+        String yearString = dFormat.format((double) (ranking) / num);
+        return Double.valueOf(yearString);
     }
 }
