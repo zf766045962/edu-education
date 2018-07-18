@@ -52,6 +52,7 @@ public class CodeMsg {
      */
     public static CodeMsg CANDIDATE_NOT_EXISTS = new CodeMsg(50001, "考生不存在");
     public static CodeMsg CANDIDATE_NUM_UNVALID = new CodeMsg(50002, "考生人数不合法");
+    public static CodeMsg CANDIDATE_NUM_NOT_EXISTS = new CodeMsg(50002, "考生人数未设置");
 
 
     private CodeMsg(int code, String msg) {
