@@ -1,7 +1,8 @@
 package com.dao;
 
 import com.entity.Wntdqk;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -34,12 +35,53 @@ public interface WntdqkMapper {
      *
      * @param year 年份
      */
-    void updateDsms(String year);
+    void updateDsms(@Param("year") String year);
 
     /**
      * 通过高考计划库，更新往年投档数据中的备注
      *
+     * @param year     年份
+     * @param planTime 招生计划库年份
+     */
+    void updateBz(@Param("year") String year, @Param("planTime") String planTime);
+
+    /**
+     * 通过备注查询专业信息
+     *
      * @param year 年份
      */
-    void updateBz(String year);
+    List<Wntdqk> findZymc(@Param("year") String year);
+
+    /**
+     * 删除临时数据
+     */
+    @Delete("truncate wntdqk_hz")
+    void deleteWntdqkTemp();
+
+    /**
+     * 将临时数据插入到正式表中
+     */
+    void insertTempToReal();
+
+    /**
+     * 根据备注删除原始数据
+     *
+     * @param year 年份
+     */
+    void deleteWntdqkByBz(@Param("year") String year);
+
+    /**
+     * 将数据插入到临时表中
+     *
+     * @param tempList 往年投档数据临时表对象
+     */
+    void insertWntdqkTempBatch(List<Wntdqk> tempList);
+
+    /**
+     * 根据年份删除往年投档数据
+     *
+     * @param nf 年份
+     */
+    @Delete("delete from wntdqk where nf=#{nf}")
+    void deleteByNf(@Param("nf") String nf);
 }
