@@ -80,10 +80,12 @@ public class WntdqkServiceImpl implements WntdqkService {
                     default:
                         break;
                 }
+                wntdqk.setZszymc(wntdqk.getZymc());
             }
             wdtdqkList.add(wntdqk);
         }
         if (wdtdqkList.size() > 0) {
+            wntdqkMapper.deleteByNf(year);
             int len = wdtdqkList.size();
             if (len <= Constants.EXCEL_BATCH_SIZE) {
                 wntdqkMapper.insertWntdqkBatch(wdtdqkList);
@@ -121,7 +123,32 @@ public class WntdqkServiceImpl implements WntdqkService {
     }
 
     @Override
-    public void updateBz(String year) {
-        wntdqkMapper.updateBz(year);
+    public void updateBz(String year, String planTime) {
+        wntdqkMapper.updateBz(year, planTime);
+    }
+
+    @Override
+    public List<Wntdqk> findZymc(String year) {
+        return wntdqkMapper.findZymc(year);
+    }
+
+    @Override
+    public void deleteWntdqkTemp() {
+        wntdqkMapper.deleteWntdqkTemp();
+    }
+
+    @Override
+    public void insertTempToReal() {
+        wntdqkMapper.insertTempToReal();
+    }
+
+    @Override
+    public void deleteWntdqkByBz(String year) {
+        wntdqkMapper.deleteWntdqkByBz(year);
+    }
+
+    @Override
+    public void insertWntdqkTempBatch(List<Wntdqk> tempList) {
+        wntdqkMapper.insertWntdqkTempBatch(tempList);
     }
 }

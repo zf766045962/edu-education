@@ -33,7 +33,7 @@ public class RecruitStudentsPlanServiceImpl implements RecruitStudentsPlanServic
     private RecruitStudentsPlanMapper recruitStudentsPlanMapper;
 
     @Override
-    public void uploadData(MultipartFile file) throws IOException, CustomException {
+    public void uploadData(MultipartFile file, String nf) throws IOException, CustomException {
         InputStream inp = file.getInputStream();
         String fileName = file.getOriginalFilename();
         Workbook workbook = AbstractExcelUtil.getExcel(inp, fileName);
@@ -171,34 +171,41 @@ public class RecruitStudentsPlanServiceImpl implements RecruitStudentsPlanServic
                 }
             }
             recruitStudentsPlan.setZydmNew(recruitStudentsPlan.getZydm() + "" + recruitStudentsPlan.getSbdm2());
+            recruitStudentsPlan.setNf(nf);
+            recruitStudentsPlan.setZszymc(recruitStudentsPlan.getZymc());
+            recruitStudentsPlan.setZsjhsSy(recruitStudentsPlan.getZsjhs());
             recruitStudentsPlans.add(recruitStudentsPlan);
         }
         if (recruitStudentsPlans.size() > 0) {
             //清空招生计划库
-            recruitStudentsPlanMapper.deleteRecruitStudentsPlan();
-            int len = recruitStudentsPlans.size();
-            if (len <= Constants.EXCEL_BATCH_SIZE) {
-                recruitStudentsPlanMapper.insertRecruitStudentsPlanBatch(recruitStudentsPlans);
-            }
-            List<RecruitStudentsPlan> temp = new ArrayList<>(Constants.EXCEL_BATCH_SIZE);
-            for (int i = 0; i < len; i++) {
-                if (i > 0 && i % Constants.EXCEL_BATCH_SIZE == 0) {
-                    recruitStudentsPlanMapper.insertRecruitStudentsPlanBatch(temp);
-                    temp.clear();
-                }
-                temp.add(recruitStudentsPlans.get(i));
-            }
-            if (temp.size() > 0) {
-                recruitStudentsPlanMapper.insertRecruitStudentsPlanBatch(temp);
-            }
-            temp.clear();
-            recruitStudentsPlans.clear();
-            recruitStudentsPlans = null;
-            temp = null;
+            dealWithRecruitStudentsPlan(nf, recruitStudentsPlans);
         }
         if (inp != null) {
             inp.close();
         }
+    }
+
+    private void dealWithRecruitStudentsPlan(String nf, List<RecruitStudentsPlan> recruitStudentsPlans) {
+        recruitStudentsPlanMapper.deleteRecruitStudentsPlan(nf);
+        int len = recruitStudentsPlans.size();
+        if (len <= Constants.EXCEL_BATCH_SIZE) {
+            recruitStudentsPlanMapper.insertRecruitStudentsPlanBatch(recruitStudentsPlans);
+        }
+        List<RecruitStudentsPlan> temp = new ArrayList<>(Constants.EXCEL_BATCH_SIZE);
+        for (int i = 0; i < len; i++) {
+            if (i > 0 && i % Constants.EXCEL_BATCH_SIZE == 0) {
+                recruitStudentsPlanMapper.insertRecruitStudentsPlanBatch(temp);
+                temp.clear();
+            }
+            temp.add(recruitStudentsPlans.get(i));
+        }
+        if (temp.size() > 0) {
+            recruitStudentsPlanMapper.insertRecruitStudentsPlanBatch(temp);
+        }
+        temp.clear();
+        recruitStudentsPlans.clear();
+        recruitStudentsPlans = null;
+        temp = null;
     }
 
     @Override
@@ -214,5 +221,159 @@ public class RecruitStudentsPlanServiceImpl implements RecruitStudentsPlanServic
     @Override
     public List<RecruitStudentsPlanVo> listRecruitStudentsPlan(Map<String, Object> map) {
         return recruitStudentsPlanMapper.listRecruitStudentsPlan(map);
+    }
+
+    @Override
+    public List<RecruitStudentsPlan> findZymc(String year) {
+        return recruitStudentsPlanMapper.findZymc(year);
+    }
+
+
+    private void insertRecruitStudentsPlanTempBatch(List<RecruitStudentsPlan> recruitStudentsPlans) {
+        int len = recruitStudentsPlans.size();
+        if (len <= Constants.EXCEL_BATCH_SIZE) {
+            recruitStudentsPlanMapper.insertRecruitStudentsPlanTempBatch(recruitStudentsPlans);
+        }
+        List<RecruitStudentsPlan> temp = new ArrayList<>(Constants.EXCEL_BATCH_SIZE);
+        for (int i = 0; i < len; i++) {
+            if (i > 0 && i % Constants.EXCEL_BATCH_SIZE == 0) {
+                recruitStudentsPlanMapper.insertRecruitStudentsPlanTempBatch(temp);
+                temp.clear();
+            }
+            temp.add(recruitStudentsPlans.get(i));
+        }
+        if (temp.size() > 0) {
+            recruitStudentsPlanMapper.insertRecruitStudentsPlanTempBatch(temp);
+        }
+        temp.clear();
+        recruitStudentsPlans.clear();
+        recruitStudentsPlans = null;
+        temp = null;
+    }
+
+    @Override
+    public void splitRecruitStudentsPlan(String year) {
+        List<RecruitStudentsPlan> list = recruitStudentsPlanMapper.findZymc(year);
+        if (list.size() > 0) {
+            List<RecruitStudentsPlan> tempList = new ArrayList<>();
+            RecruitStudentsPlan rSp;
+            for (RecruitStudentsPlan recruitStudentsPlan : list) {
+                String bz = recruitStudentsPlan.getBz();
+                bz = bz.substring(bz.indexOf("$") + 1, bz.lastIndexOf("$"));
+                String[] strs = bz.split("、");
+                for (String s : strs) {
+                    rSp = new RecruitStudentsPlan();
+                    setRecruitStudentsPlan(rSp, recruitStudentsPlan, s);
+                    tempList.add(rSp);
+                }
+            }
+            //插入到临时表
+            insertRecruitStudentsPlanTempBatch(tempList);
+            //根据备注删除数据
+            recruitStudentsPlanMapper.deleteRecruitStudentsPlanByBz(year);
+        }
+        //将临时表中的数据放回真实表中
+        recruitStudentsPlanMapper.insertTempToReal();
+        //删除临时表数据
+        recruitStudentsPlanMapper.deleteRecruitStudentsPlanTemp();
+    }
+
+    @Override
+    public void uploadNewData(MultipartFile file) throws IOException, CustomException {
+        InputStream inp = file.getInputStream();
+        String fileName = file.getOriginalFilename();
+        Workbook workbook = AbstractExcelUtil.getExcel(inp, fileName);
+        if (workbook == null) {
+            throw new CustomException(CodeMsg.FILE_DATA_EMPTY.getMsg());
+        }
+        Sheet sheet = workbook.getSheetAt(0);
+        Row row;
+        List<RecruitStudentsPlan> recruitStudentsPlans = new ArrayList<>();
+        RecruitStudentsPlan recruitStudentsPlan;
+        for (int i = 1, len = sheet.getLastRowNum(); i <= len; i++) {
+            row = sheet.getRow(i);
+            recruitStudentsPlan = new RecruitStudentsPlan();
+            for (int j = 0; j < 5; j++) {
+                String v = AbstractExcelUtil.getCellByType2(row.getCell(j));
+                switch (j) {
+                    case 0:
+                        recruitStudentsPlan.setYxdh(v);
+                        break;
+                    case 1:
+                        recruitStudentsPlan.setYxdhmc(v);
+                        break;
+                    case 2:
+                        recruitStudentsPlan.setZydm(v);
+                    case 3:
+                        recruitStudentsPlan.setZszymc(v);
+                        break;
+                    case 4:
+                        recruitStudentsPlan.setZsjhsSy(CommonUtils.convertStringToInteger(v));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            recruitStudentsPlan.setZydmNew(recruitStudentsPlan.getZydm());
+            recruitStudentsPlans.add(recruitStudentsPlan);
+        }
+        if (recruitStudentsPlans.size() > 0) {
+            recruitStudentsPlanMapper.deleteRecruitStudentsPlanTemp();
+            insertRecruitStudentsPlanTempBatch(recruitStudentsPlans);
+        }
+        if (inp != null) {
+            inp.close();
+        }
+    }
+
+    @Override
+    public void generateSyzsjhs(String year) {
+        //根据临时表更新剩余招生计划数
+        recruitStudentsPlanMapper.updateSyzsjhsByTemp(year);
+        //将临时表中不存在的数据更新为0
+        recruitStudentsPlanMapper.updateSyzsjhsToZero(year);
+        //清除临时表数据
+        recruitStudentsPlanMapper.deleteRecruitStudentsPlanTemp();
+    }
+
+    private void setRecruitStudentsPlan(RecruitStudentsPlan rSp, RecruitStudentsPlan old, String s) {
+        rSp.setYxdm(old.getYxdm());
+        rSp.setYxdh(old.getYxdh());
+        rSp.setYxdhmc(old.getYxdhmc());
+        rSp.setSzd(old.getSzd());
+        rSp.setSf985(old.getSf985());
+        rSp.setSf211(old.getSf211());
+        rSp.setSfsyl(old.getSfsyl());
+        rSp.setBxlxdm(old.getBxlxdm());
+        rSp.setBxlxmc(old.getBxlxmc());
+        rSp.setSsdm(old.getSsdm());
+        rSp.setSsmc(old.getSsmc());
+        rSp.setZgdm(old.getZgdm());
+        rSp.setCcdm(old.getCcdm());
+        rSp.setCcmc(old.getCcmc());
+        rSp.setZydm(old.getZydm());
+        rSp.setSbdm2(old.getSbdm2());
+        rSp.setZymc(s);
+        rSp.setXzdmxg(old.getXzdmxg());
+        rSp.setXzdm(old.getXzdm());
+        rSp.setXzmc(old.getXzmc());
+        rSp.setSfbz(old.getSfbz());
+        rSp.setKldm(old.getKldm());
+        rSp.setKsklmc(old.getKsklmc());
+        rSp.setPcdm(old.getPcdm());
+        rSp.setPcmc(old.getPcmc());
+        rSp.setKslxdm(old.getKslxdm());
+        rSp.setKslxmc(old.getKslxmc());
+        rSp.setXkkmyq(old.getXkkmyq());
+        rSp.setXkkmyqzw(old.getXkkmyqzw());
+        rSp.setZsjhs(old.getZsjhs());
+        rSp.setBz(old.getBz());
+        rSp.setKm1(old.getKm1());
+        rSp.setKm2(old.getKm2());
+        rSp.setKm3(old.getKm3());
+        rSp.setZydmNew(old.getZydmNew());
+        rSp.setZsjhsSy(old.getZsjhsSy());
+        rSp.setZszymc(old.getZszymc());
+        rSp.setNf(old.getNf());
     }
 }
