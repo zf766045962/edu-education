@@ -28,6 +28,8 @@
                 <a href="javascript:;" class="layui-btn ayui-btn-normal bg-blue " data-type="createSchool">
                     <i class="iconfont"></i> 生成院校数据</a>
             </div>
+        </div>
+        <div class="layui-form-item">
             <div class="layui-inline">
                 <label class="layui-form-label"></label>
                 <a href="javascript:;" class="layui-btn ayui-btn-normal bg-blue " data-type="createWntdqkHz">
@@ -35,6 +37,39 @@
                 <label class="layui-form-label" id="year_mc">年份</label>
                 <div class="layui-input-inline">
                     <input type="text" class="layui-input" id="year">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label"></label>
+                <a href="javascript:;" class="layui-btn ayui-btn-normal bg-blue " data-type="spiltWntdqk">
+                    <i class="iconfont"></i> 拆分投档数据</a>
+                <label class="layui-form-label">年份</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="year_split">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label"></label>
+                <a href="javascript:;" class="layui-btn ayui-btn-normal bg-blue " data-type="spiltRecruitStudentsPlan">
+                    <i class="iconfont"></i> 拆分招生计划库数据</a>
+                <label class="layui-form-label">年份</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="year_split_rsp">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label"></label>
+                <a href="javascript:;" class="layui-btn ayui-btn-normal bg-blue " data-type="generateSyzsjhs">
+                    <i class="iconfont"></i>更新招生计划库剩余招生计划数</a>
+                <label class="layui-form-label">年份</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="year_syzs">
                 </div>
             </div>
         </div>
@@ -48,7 +83,25 @@
             elem: '#year'
             , type: 'year'
             , format: 'yyyy'
-            , max: 0//可任意组合
+            , max: 0
+        });
+        laydate.render({
+            elem: '#year_split'
+            , type: 'year'
+            , format: 'yyyy'
+            , max: 0
+        });
+        laydate.render({
+            elem: '#year_split_rsp'
+            , type: 'year'
+            , format: 'yyyy'
+            , max: 0
+        });
+        laydate.render({
+            elem: '#year_syzs'
+            , type: 'year'
+            , format: 'yyyy'
+            , max: 0
         });
         var active = {
             createMajor: function () {
@@ -80,6 +133,44 @@
                     wntdqkHz(year);
                 }, function (index) {
                 });
+            }, spiltWntdqk: function () {
+                var year = $("#year_split").val();
+                if (year == null || year == "") {
+                    layer.msg("请选择拆分的年份");
+                    return;
+                }
+                layer.confirm('确定要拆分"' + year + '"年投档数据吗?', {
+                    btn: ['确定', '取消']
+                }, function (index, layero) {
+                    wntdqk(year);
+                }, function (index) {
+                });
+            }
+            , spiltRecruitStudentsPlan: function () {
+                var year = $("#year_split_rsp").val();
+                if (year == null || year == "") {
+                    layer.msg("请选择拆分的年份");
+                    return;
+                }
+                layer.confirm('确定要拆分"' + year + '"年招生计划数据吗?', {
+                    btn: ['确定', '取消']
+                }, function (index, layero) {
+                    recruitStudentsPlan(year);
+                }, function (index) {
+                });
+            },
+            generateSyzsjhs: function () {
+                var year = $("#year_syzs").val();
+                if (year == null || year == "") {
+                    layer.msg("请选择要更新的年份");
+                    return;
+                }
+                layer.confirm('确定要更新' + year + '年剩余招生计划数吗?', {
+                    btn: ['确定', '取消']
+                }, function (index, layero) {
+                    generateSyzsjhs(year);
+                }, function (index) {
+                });
             }
         };
         $('.layui-btn').on('click', function () {
@@ -98,9 +189,9 @@
                     top.location.href = "/login";
                 }, 5000);
             } else if (res.code != 90000) {
-                layer.msg(res.msg);
+                layer.alert(res.msg);
             } else {
-                layer.msg("生成成功");
+                layer.alert("生成成功");
             }
         });
     }
@@ -115,9 +206,9 @@
                     top.location.href = "/login";
                 }, 5000);
             } else if (res.code != 90000) {
-                layer.msg(res.msg);
+                layer.alert(res.msg);
             } else {
-                layer.msg("生成成功");
+                layer.alert("生成成功");
             }
         });
     }
@@ -132,9 +223,60 @@
                     top.location.href = "/login";
                 }, 5000);
             } else if (res.code != 90000) {
-                layer.msg(res.msg);
+                layer.alert(res.msg);
             } else {
-                layer.msg("生成成功");
+                layer.alert("生成成功");
+            }
+        });
+    }
+
+    function wntdqk(year) {
+        layer.load();
+        $.post("/createData/wntdqk", {"year": year}, function (res) {
+            layer.closeAll();
+            if (res.code == 30002) {
+                layer.msg(res.msg);
+                setTimeout(function () {
+                    top.location.href = "/login";
+                }, 5000);
+            } else if (res.code != 90000) {
+                layer.alert(res.msg);
+            } else {
+                layer.alert("拆分成功");
+            }
+        });
+    }
+
+    function recruitStudentsPlan(year) {
+        layer.load();
+        $.post("/createData/rsP", {"year": year}, function (res) {
+            layer.closeAll();
+            if (res.code == 30002) {
+                layer.alert(res.msg);
+                setTimeout(function () {
+                    top.location.href = "/login";
+                }, 5000);
+            } else if (res.code != 90000) {
+                layer.alert(res.msg);
+            } else {
+                layer.alert("拆分成功");
+            }
+        });
+    }
+
+    function generateSyzsjhs(year) {
+        layer.load();
+        $.post("/createData/syzsjhs", {"year": year}, function (res) {
+            layer.closeAll();
+            if (res.code == 30002) {
+                layer.msg(res.msg);
+                setTimeout(function () {
+                    top.location.href = "/login";
+                }, 5000);
+            } else if (res.code != 90000) {
+                layer.alert(res.msg);
+            } else {
+                layer.alert("修改成功");
             }
         });
     }
