@@ -13,21 +13,12 @@
         <result column="status" property="status" jdbcType="VARCHAR"/>
         <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
         <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+        <result column="xzdm" property="xzdm" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, candidate_id, school_code, school_name, major_code,major_code_new, major_name, reference_index,
-        status, gmt_create, gmt_modified
+        id, candidate_id, school_code, school_name, major_code, major_code_new, major_name, reference_index,
+        status, gmt_create, gmt_modified, xzdm
     </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
-        select
-        <include refid="Base_Column_List"/>
-        from hxzy
-        where id = #{id,jdbcType=BIGINT}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-        DELETE FROM hxzy
-        WHERE id = #{id,jdbcType=BIGINT}
-    </delete>
     <insert id="insertSelective" parameterType="com.entity.Hxzy">
         insert into hxzy
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -64,6 +55,9 @@
             <if test="gmtModified != null">
                 gmt_modified,
             </if>
+            <if test="xzdm != null">
+                xzdm,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -98,6 +92,9 @@
             </if>
             <if test="gmtModified != null">
                 #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="xzdm != null">
+                #{xzdm,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
