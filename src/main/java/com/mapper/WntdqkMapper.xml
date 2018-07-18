@@ -30,9 +30,20 @@
         from wntdqk
         where id = #{id,jdbcType=BIGINT}
     </select>
+    <select id="findZymc" resultType="com.entity.Wntdqk">
+        select *
+        from wntdqk
+        where nf = #{year}
+              and zymc like '%类%' and bz like '%$%'
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         DELETE FROM wntdqk
         WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+    <delete id="deleteWntdqkByBz">
+        delete from wntdqk
+        where nf = #{year}
+              and zymc like '%类%' and bz like '%$%'
     </delete>
     <insert id="insertWntdqkBatch" parameterType="java.util.List">
         insert into wntdqk (
@@ -51,6 +62,8 @@
         , ds
         ,zsjhs
         , gmt_create
+        ,zszymc
+        ,bz
         )
         values
         <foreach collection="list" item="item" separator=",">
@@ -70,6 +83,8 @@
             , #{item.ds,jdbcType=VARCHAR}
             , #{item.zsjhs,jdbcType=INTEGER}
             , #{item.gmtCreate,jdbcType=TIMESTAMP}
+            , #{item.zszymc,jdbcType=VARCHAR}
+            , #{item.bz,jdbcType=VARCHAR}
             )
         </foreach>
     </insert>
@@ -164,6 +179,93 @@
             </if>
         </trim>
     </insert>
+    <insert id="insertTempToReal">
+        insert into wntdqk (
+            school_code
+            , school_name
+            , zydm
+            , zymc
+            , kl
+            , nf
+            , tdrs
+            , pjf
+            , zdf
+            , tdmc
+            , pc
+            , ckzs
+            , ds
+            , dsms
+            , zsjhs
+            , gmt_create
+            , zszymc
+            , bz
+        )
+            select
+                school_code,
+                school_name,
+                zydm,
+                zymc,
+                kl,
+                nf,
+                tdrs,
+                pjf,
+                zdf,
+                tdmc,
+                pc,
+                ckzs,
+                ds,
+                dsms,
+                zsjhs,
+                now(),
+                zszymc,
+                bz
+            from wntdqk_hz
+    </insert>
+    <insert id="insertWntdqkTempBatch">
+        insert into wntdqk_hz (
+        school_code
+        , school_name
+        ,zydm
+        , zymc
+        , kl
+        , nf
+        , tdrs
+        , pjf
+        , zdf
+        , tdmc
+        , pc
+        ,ckzs
+        , bz
+        , ds
+        ,dsms
+        ,zsjhs
+        , gmt_create
+        ,zszymc
+        )
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.schoolCode,jdbcType=VARCHAR}
+            , #{item.schoolName,jdbcType=VARCHAR}
+            ,#{item.zydm,jdbcType=VARCHAR}
+            , #{item.zymc,jdbcType=VARCHAR}
+            , #{item.kl,jdbcType=VARCHAR}
+            , #{item.nf,jdbcType=VARCHAR}
+            , #{item.tdrs,jdbcType=INTEGER}
+            , #{item.pjf,jdbcType=INTEGER}
+            , #{item.zdf,jdbcType=INTEGER}
+            , #{item.tdmc,jdbcType=INTEGER}
+            , #{item.pc,jdbcType=INTEGER}
+            , #{item.ckzs,jdbcType=DECIMAL}
+            , #{item.bz,jdbcType=VARCHAR}
+            , #{item.ds,jdbcType=VARCHAR}
+            , #{item.dsms,jdbcType=VARCHAR}
+            , #{item.zsjhs,jdbcType=INTEGER}
+            , #{item.gmtCreate,jdbcType=TIMESTAMP}
+            , #{item.zszymc,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.entity.Wntdqk">
         update wntdqk
         <set>
@@ -212,24 +314,24 @@
     <update id="generateDsms" parameterType="java.lang.String">
         insert into wntdqk_hz (school_code, school_name, zymc, dsms)
             select
-                any_value(school_code),
+                school_code,
                 "",
                 zymc,
                 group_concat(ds, '指数：', format(ckzs * 100, 2), '%', '、计划数：', zsjhs)
             from wntdqk
             where nf = #{nf}
-            group by school_name, zymc, ds
+            group by school_code, zymc, ds
             having count(*) > 1
-            order by ds, school_name, zymc
+            order by ds, school_code, zymc
     </update>
     <update id="updateDsms" parameterType="java.lang.String">
         update wntdqk a, wntdqk_hz b
         set a.dsms = b.dsms
-        where a.school_code = b.school_code and a.zymc = b.zymc and a.nf = #{nf};
+        where a.school_code = b.school_code and a.zymc = b.zymc and a.nf = #{year}
     </update>
-    <update id="updateBz" parameterType="java.lang.String">
+    <update id="updateBz">
         UPDATE wntdqk a, recruit_students_plan b
         SET a.bz = b.bz
-        WHERE a.school_code = b.yxdh AND a.zymc = b.zymc AND nf = #{nf}
+        WHERE a.school_code = b.yxdh AND a.zymc = b.zymc AND a.nf = #{year} and b.nf = #{planTime}
     </update>
 </mapper>
