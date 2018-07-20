@@ -44,4 +44,9 @@ public class HxzyServiceImpl implements HxzyService {
     public void deleteByCandidateIdAndSchoolCodeAndMajorCode(long candidateId, String schoolCode, String majorCode, BigDecimal referenceIndex) {
         hxzyMapper.deleteByCandidateIdAndSchoolCodeAndMajorCode(candidateId, schoolCode, majorCode,referenceIndex);
     }
+
+    @Override
+    public Integer getHxzy(Hxzy hxzy) {
+        return hxzyMapper.getHxzy(hxzy);
+    }
 }
