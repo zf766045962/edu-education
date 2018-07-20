@@ -457,7 +457,7 @@
         CASE ifnull((SELECT c.id
         FROM hxzy c
         WHERE a.yxdh = c.school_code AND c.major_code = a.zydm and avg(b.ckzs)=c.reference_index and
-        c.candidate_id = #{candidateId}), 'aaa')
+        c.candidate_id = #{candidateId} limit 1), 'aaa')
         WHEN 'aaa'
         THEN '0'
         ELSE '1' END AS sfsc
