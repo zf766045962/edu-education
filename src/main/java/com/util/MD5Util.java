@@ -50,7 +50,7 @@ public class MD5Util {
     }
 
     public static String createDefaultPassword(String salt, String userName) {
-        return formPassToDBPass(inputPassToFormPass(DEFAULT_PASSWORD), salt);
+        return formPassToDBPass(inputPassToFormPass(userName+DEFAULT_PASSWORD), salt);
     }
 
     public static void main(String[] args) {
