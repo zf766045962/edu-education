@@ -4,6 +4,7 @@ import com.entity.Hxzy;
 import com.vo.HxzyVo;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -62,4 +63,14 @@ public interface HxzyMapper {
             , @Param("schoolCode") String schoolCode
             , @Param("majorCode") String majorCode
             , @Param("referenceIndex") BigDecimal referenceIndex);
+    /**
+     * 判断候选志愿是否已选择
+     * @param hxzy candidateId
+     *             schoolCode
+     *             majorCode
+     *             referenceIndex
+     * @return 是否存在
+     */
+    @Select("select count(*) from hxzy where candidate_id=#{candidateId} and school_code=#{schoolCode} and major_code=#{majorCode} and reference_index=#{referenceIndex}")
+    Integer getHxzy(Hxzy hxzy);
 }
