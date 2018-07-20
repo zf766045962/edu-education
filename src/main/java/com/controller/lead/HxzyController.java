@@ -119,7 +119,11 @@ public class HxzyController {
     public Result addHxzy(Hxzy hxzy) {
         hxzy.setGmtCreate(new Date());
         hxzy.setGmtModified(new Date());
-        hxzyService.insertSelective(hxzy);
+        //先查询该候选志愿是否已经存在
+        Integer count=hxzyService.getHxzy(hxzy);
+        if(count==null || count==0){
+            hxzyService.insertSelective(hxzy);
+        }
         return Result.success(true);
     }
 
