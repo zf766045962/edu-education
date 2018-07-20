@@ -66,7 +66,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">联系电话</label>
             <div class="layui-input-inline">
-                <input type="text" id="c_phone" required lay-verify="required" placeholder="请输入联系电话"
+                <input type="text" id="c_phone" required lay-verify="required" placeholder="非必填项"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
@@ -103,7 +103,6 @@
             <br>
             1.请同时输入分数、位次号、选考科目。<span style="color: red">输入机会还剩0次，请慎重填写！</span>（位次号示例：5-167475，请输入167475）
             <br>
-            2.其他功能可无限次调整使用
         </div>
     </form>
 </div>
@@ -251,10 +250,6 @@
         var totalScore = $("#c_totalScore").val();
         if (isEmpty(name)) {
             layer.msg("姓名不能为空!");
-            return;
-        }
-        if (isEmpty(phone)) {
-            layer.msg("联系电话不能为空!");
             return;
         }
         if (isEmpty(ranking)) {
