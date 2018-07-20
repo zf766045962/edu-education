@@ -50,4 +50,14 @@ public interface HxzyService {
      * @param majorCode   专业代码
      */
     void deleteByCandidateIdAndSchoolCodeAndMajorCode(long candidateId, String schoolCode, String majorCode, BigDecimal referenceIndex);
+
+    /**
+     * 判断候选志愿是否已选择
+     * @param hxzy candidateId
+     *             schoolCode
+     *             majorCode
+     *             referenceIndex
+     * @return 是否存在
+     */
+    Integer getHxzy(Hxzy hxzy);
 }
