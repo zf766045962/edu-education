@@ -376,7 +376,7 @@
             </foreach>
             )
         </if>
-        group by a.yxdh,a.zszymc having avg(b.ckzs)&lt;=#{max} and avg(b.ckzs)&gt;=#{min}
+        group by a.yxdh,a.zszymc,ds having avg(b.ckzs)&lt;=#{max} and avg(b.ckzs)&gt;=#{min}
         ) t
     </select>
     <select id="countMajor" resultType="int">
@@ -431,7 +431,7 @@
             </foreach>
             )
         </if>
-        group by a.yxdh,a.zszymc having avg(b.ckzs)&lt;=#{max} and avg(b.ckzs)&gt;=#{min}
+        group by a.yxdh,a.zszymc,ds having avg(b.ckzs)&lt;=#{max} and avg(b.ckzs)&gt;=#{min}
         ) a
     </select>
     <select id="listRecruitStudentsPlan" resultType="com.vo.RecruitStudentsPlanVo">
@@ -442,7 +442,7 @@
         a.xkkmyqzw,
         a.ccmc,
         concat(a.ssmc,'.',a.szd) AS ssmcSzd,
-        avg(b.ckzs) ckzs,
+        FORMAT(avg(b.ckzs),4) ckzs,
         a.zsjhs,
         a.yxdhmc,
         ifnull(a.bz,'') bz,
@@ -453,10 +453,10 @@
         END AS sf985Name,
         CASE a.sf211 WHEN 1 THEN '是' ELSE '否'
         END AS sf211Name,
-        concat(a.yxdh,'|',a.yxdhmc,'|',a.zydm,'|',a.zszymc,'|',avg(b.ckzs),'|',a.xzdm) AS zhcs,
+        concat(a.yxdh,'|',a.yxdhmc,'|',a.zydm,'|',a.zszymc,'|',FORMAT(avg(b.ckzs),4),'|',a.xzdm) AS zhcs,
         CASE ifnull((SELECT c.id
         FROM hxzy c
-        WHERE a.yxdh = c.school_code AND c.major_code = a.zydm and avg(b.ckzs)=c.reference_index and
+        WHERE a.yxdh = c.school_code AND c.major_code = a.zydm and FORMAT(avg(b.ckzs),4)=c.reference_index and
         c.candidate_id = #{candidateId} limit 1), 'aaa')
         WHEN 'aaa'
         THEN '0'
@@ -518,7 +518,7 @@
         <if test="majorName !=null and majorName !=''">
             AND a.zszymc LIKE concat(#{majorName},'%')
         </if>
-        group by a.yxdh,a.zszymc having avg(b.ckzs)&lt;=#{max} and avg(b.ckzs)&gt;=#{min}
+        group by a.yxdh,a.zszymc,ds having avg(b.ckzs)&lt;=#{max} and avg(b.ckzs)&gt;=#{min}
     </select>
     <select id="findZymc" resultType="com.entity.RecruitStudentsPlan">
         select *
