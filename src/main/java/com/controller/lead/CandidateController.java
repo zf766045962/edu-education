@@ -3,10 +3,8 @@ package com.controller.lead;
 import com.common.Constants;
 import com.common.result.CodeMsg;
 import com.common.result.Result;
-import com.entity.Candidate;
-import com.entity.CandidateNum;
-import com.entity.Cwbbl;
-import com.entity.Province;
+import com.entity.*;
+import com.entity.Dictionary;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.service.*;
@@ -55,6 +53,8 @@ public class CandidateController {
     private CwbblService cwbblService;
     @Autowired
     private CandidateNumService candidateNumService;
+    @Autowired
+    private DictionaryService dictionaryService;
 
     @RequestMapping("/")
     public String toCandidate() {
@@ -185,7 +185,6 @@ public class CandidateController {
         }
         map.put("nf", nf);
         map.put("list", kms);
-
         CandidateNum candidateNum = candidateNumService.getCandidateNum();
         if (candidateNum == null) {
             return Result.error(CodeMsg.CANDIDATE_NUM_NOT_EXISTS);
@@ -230,6 +229,7 @@ public class CandidateController {
             , HttpSession httpSession) {
         Candidate candidate = candidateService.getCandidateById(id);
         CandidateNum candidateNum = candidateNumService.getCandidateNum();
+        List<Dictionary> dictionaryList = dictionaryService.listDictionary(Constants.Dictionary.XZDM);
         model.addAttribute("candidate", candidate);
         model.addAttribute("min", min);
         model.addAttribute("max", max);
@@ -238,6 +238,7 @@ public class CandidateController {
         model.addAttribute("zymc", httpSession.getAttribute(majorCodeSession));
         model.addAttribute("schoolCode", httpSession.getAttribute(schoolCodeSession));
         model.addAttribute("type", type);
+        model.addAttribute("xzdms", dictionaryList);
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
         model.addAttribute("zs", (Double.valueOf(decimalFormat.format(((double) candidate.getRanking() / candidateNum.getNum() * 100))) + "%"));
         httpSession.removeAttribute(majorCodeSession);
@@ -262,9 +263,16 @@ public class CandidateController {
     /**
      * 查询冲稳保 中一种
      *
-     * @param min 最小名次
-     * @param max 最大名次
-     * @param id  考生编号
+     * @param min          最小名次
+     * @param max          最大名次
+     * @param id           考生编号
+     * @param bxlx         办学类型
+     * @param xzdm         学制代码
+     * @param schoolCode   院校代码
+     * @param schoolName   院校名称
+     * @param provinceCode 省市名称
+     * @param zymc         查询页面-专业名称
+     * @param majorName    培养专业名称
      * @return 专业详情
      */
     @RequestMapping("/detail")
@@ -278,7 +286,9 @@ public class CandidateController {
             , @RequestParam("currentPage") int currentPage
             , String schoolName
             , String majorName
-            , String schoolCode) {
+            , String schoolCode
+            , String bxlx
+            , String xzdm) {
         // 查询考生信息
         Candidate candidate = candidateService.getCandidateById(id);
         if (candidate == null) {
@@ -313,6 +323,8 @@ public class CandidateController {
                 map.put("schoolCodes", schoolCodes);
             }
         }
+        map.put("bxlx", bxlx);
+        map.put("xzdm", xzdm);
         //显示符合条件的志愿
         PageHelper.startPage(currentPage, pageSize);
         List<RecruitStudentsPlanVo> recruitStudentsPlanList = recruitStudentsPlanService.listRecruitStudentsPlan(map);
