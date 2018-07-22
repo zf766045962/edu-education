@@ -50,21 +50,43 @@
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label"></label>
-                <a href="javascript:;" class="layui-btn ayui-btn-normal bg-blue " data-type="reload">
-                    <i class="iconfont">&#xe606;</i> 查询</a>
+                <label class="layui-form-label">办学类型</label>
+                <div class="layui-input-inline">
+                    <select id="bxlx">
+                        <option value="">请选择办学类型</option>
+                        <option value="1">公办</option>
+                        <option value="2">民办</option>
+                        <option value="3">独立学院</option>
+                        <option value="4">中外合作</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">学制</label>
+                <div class="layui-input-inline">
+                    <select id="xzdm">
+                        <option value="">请选择学制</option>
+                        <option th:each="xzdm :${xzdms}" th:text="${xzdm.name}" th:value="${xzdm.code}"></option>
+                    </select>
+                </div>
             </div>
         </div>
-    </form>
-    <div class="line">
+        <div class="layui-inline">
+            <label class="layui-form-label"></label>
+            <a href="javascript:;" class="layui-btn ayui-btn-normal bg-blue " data-type="reload">
+                <i class="iconfont">&#xe606;</i> 查询</a>
+        </div>
+</div>
+</form>
+<div class="line">
         <span class=line-title>查询结果
             (<span th:if="${type eq '1'}">冲</span><span th:if="${type eq '2'}">稳</span><span
                     th:if="${type eq '3'}">保</span>)
         </span>
-    </div>
-    <div class="gkwh-tb">
-        <table id="wh-list" style=""></table>
-    </div>
+</div>
+<div class="gkwh-tb">
+    <table id="wh-list" style=""></table>
+</div>
 </div>
 <script type="text/html" id="checkboxTpl">
     <input type="checkbox" name="lock" value="{{d.zhcs}}" title="收藏" lay-filter="lockDemo" {{ d.sfsc== 1
@@ -211,6 +233,8 @@
             , reload: function () {
                 var schoolName = $("#schoolName").val();
                 var majorName = $("#majorName").val();
+                var bxlx = $("#bxlx").val();
+                var xzdm = $("#xzdm").val();
                 //执行重载
                 layer.load(1);
                 table.reload('idTest', {
@@ -219,7 +243,9 @@
                     }
                     , where: {
                         "schoolName": schoolName,
-                        "majorName": majorName
+                        "majorName": majorName,
+                        "bxlx": bxlx,
+                        "xzdm": xzdm
                     }
                 });
             }
