@@ -16,6 +16,19 @@
 <body th:inline="none">
 <div class="pad10">
     <input type="hidden" th:value="${candidateId}" id="hid_id">
+    <blockquote class="layui-elem-quote">
+        <span  th:text="${candidate.name}">209524</span> 成绩：位次：<span th:text="${candidate.ranking}">209524</span>&nbsp;&nbsp;
+        分数：<span
+            th:text="${candidate.totalScore}">400</span>&nbsp;&nbsp;
+        指数：<span th:text="${zs}">1%</span>&nbsp;&nbsp;
+        科目：<span
+            th:if="${candidate.physics eq 1}">物理&nbsp;</span>
+        <span th:if="${candidate.chemistry eq 1}">化学&nbsp;</span><span th:if="${candidate.biology eq 1}">生物&nbsp;</span>
+        <span th:if="${candidate.technology eq 1}">技术&nbsp;</span>
+        <span th:if="${candidate.history eq 1}">历史&nbsp;</span>
+        <span th:if="${candidate.geography eq 1}">地理&nbsp;</span>
+        <span th:if="${candidate.politics eq 1}">政治&nbsp;</span>
+    </blockquote>
     <form class="layui-form" action="">
         <div class="layui-form-item">
             <div class="layui-inline">
