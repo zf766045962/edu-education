@@ -443,7 +443,7 @@
         a.ccmc,
         concat(a.ssmc,'.',a.szd) AS ssmcSzd,
         FORMAT(avg(b.ckzs),4) ckzs,
-        a.zsjhs,
+        a.zsjhs_sy as zsjhs,
         a.yxdhmc,
         ifnull(a.bz,'') bz,
         a.bxlxmc,
@@ -518,7 +518,13 @@
         <if test="majorName !=null and majorName !=''">
             AND a.zszymc LIKE concat(#{majorName},'%')
         </if>
-        group by a.yxdh,a.zszymc,ds having avg(b.ckzs)&lt;=#{max} and avg(b.ckzs)&gt;=#{min}
+        <if test="xzdm !=null and xzdm !=''">
+            AND a.xzdm =#{xzdm,jdbcType=VARCHAR}
+        </if>
+        <if test="bxlx !=null and bxlx !=''">
+            AND a.bxlxdm =#{bxlx,jdbcType=VARCHAR}
+        </if>
+        group by a.yxdh,a.zszymc,ds having avg(b.ckzs)&lt;=#{max} and avg(b.ckzs)&gt;=#{min} order by avg(b.ckzs)
     </select>
     <select id="findZymc" resultType="com.entity.RecruitStudentsPlan">
         select *
