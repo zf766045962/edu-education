@@ -5,7 +5,7 @@ package com.common;
  *
  * @author pgs
  */
-public class Constants {
+public interface Constants {
     public static final String SIMPLIFY_TIMESTAMP_PATTERN = "yyyyMMddHHmmss";
 
     public static final String TIMESTAMP_PATTERN = "yyyy-MM-dd HH:mm:ss";
@@ -37,4 +37,11 @@ public class Constants {
      * 新增普高计划数据-用于更新普高计划剩余招生人数
      */
     public static final String FILE_TYPE_PLAN_NEW = "3";
+
+    static class Dictionary {
+        /**
+         * 学制代码
+         */
+        public static final String XZDM = "xzdm";
+    }
 }
