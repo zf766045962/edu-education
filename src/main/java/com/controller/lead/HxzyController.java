@@ -2,9 +2,11 @@ package com.controller.lead;
 
 import com.common.result.Result;
 import com.entity.Candidate;
+import com.entity.CandidateNum;
 import com.entity.Hxzy;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.service.CandidateNumService;
 import com.service.CandidateService;
 import com.service.HxzyService;
 import com.util.excel.DownLoad;
@@ -26,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,10 +47,18 @@ public class HxzyController {
     private HxzyService hxzyService;
     @Autowired
     private CandidateService candidateService;
+    @Autowired
+    private CandidateNumService candidateNumService;
 
     @RequestMapping("/searchHx/{id}")
     public String searchHx(@PathVariable("id") Long candidateId, Model model) {
+        Candidate candidate = candidateService.getCandidateById(candidateId);
+        Integer ranking = candidate.getRanking();
+        CandidateNum candidateNum = candidateNumService.getCandidateNum();
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        model.addAttribute("zs", (Double.valueOf(decimalFormat.format(((double) ranking / candidateNum.getNum() * 100))) + "%"));
         model.addAttribute("candidateId", candidateId);
+        model.addAttribute("candidate", candidate);
         return "/lead/hxzy";
     }
 
@@ -120,8 +131,8 @@ public class HxzyController {
         hxzy.setGmtCreate(new Date());
         hxzy.setGmtModified(new Date());
         //先查询该候选志愿是否已经存在
-        Integer count=hxzyService.getHxzy(hxzy);
-        if(count==null || count==0){
+        Integer count = hxzyService.getHxzy(hxzy);
+        if (count == null || count == 0) {
             hxzyService.insertSelective(hxzy);
         }
         return Result.success(true);
