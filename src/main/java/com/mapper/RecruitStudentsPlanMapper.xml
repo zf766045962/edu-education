@@ -51,15 +51,15 @@
     <update id="updateSyzsjhsByTemp">
         update recruit_students_plan a, recruit_students_plan_temp b
         set a.zsjhs_sy = b.zsjhs_sy
-        where a.yxdh = b.yxdh and a.zszymc = b.zszymc and a.nf = #{year}
+        where a.yxdh = b.yxdh
+          and a.zszymc = b.zszymc
+          and a.nf = #{year}
     </update>
     <update id="updateSyzsjhsToZero">
         update recruit_students_plan a
         set zsjhs_sy = 0
-        where a.nf = #{year} and (yxdh, zszymc) not in (select
-                                                            yxdh,
-                                                            zszymc
-                                                        from recruit_students_plan_temp)
+        where a.nf = #{year}
+          and (yxdh, zszymc) not in (select yxdh, zszymc from recruit_students_plan_temp)
     </update>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -240,86 +240,85 @@
         </foreach>
     </insert>
     <insert id="insertTempToReal">
-        insert into recruit_students_plan (
-            yxdm
-            , yxdh
-            , yxdhmc
-            , szd
-            , sf985
-            , sf211
-            , sfsyl
-            , bxlxdm
-            , bxlxmc
-            , ssdm
-            , ssmc
-            , zgdm
-            , zgmc
-            , ccdm
-            , ccmc
-            , zydm
-            , sbdm2
-            , zymc
-            , xzdmxg
-            , xzdm
-            , xzmc
-            , sfbz
-            , kldm
-            , ksklmc
-            , pcdm
-            , pcmc
-            , kslxdm
-            , kslxmc
-            , xkkmyq
-            , xkkmyqzw
-            , zsjhs
-            , bz
-            , km1
-            , km2
-            , km3
-            , zydm_new
-            , nf
-            , zsjhs_sy
-            , zszymc) select
-                          yxdm,
-                          yxdh,
-                          yxdhmc,
-                          szd,
-                          sf985,
-                          sf211,
-                          sfsyl,
-                          bxlxdm,
-                          bxlxmc,
-                          ssdm,
-                          ssmc,
-                          zgdm,
-                          zgmc,
-                          ccdm,
-                          ccmc,
-                          zydm,
-                          sbdm2,
-                          zymc,
-                          xzdmxg,
-                          xzdm,
-                          xzmc,
-                          sfbz,
-                          kldm,
-                          ksklmc,
-                          pcdm,
-                          pcmc,
-                          kslxdm,
-                          kslxmc,
-                          xkkmyq,
-                          xkkmyqzw,
-                          zsjhs,
-                          bz,
-                          km1,
-                          km2,
-                          km3,
-                          zydm_new,
-                          nf,
-                          zsjhs_sy,
-                          zszymc
-                      from recruit_students_plan_temp
+        insert into recruit_students_plan (yxdm,
+                                           yxdh,
+                                           yxdhmc,
+                                           szd,
+                                           sf985,
+                                           sf211,
+                                           sfsyl,
+                                           bxlxdm,
+                                           bxlxmc,
+                                           ssdm,
+                                           ssmc,
+                                           zgdm,
+                                           zgmc,
+                                           ccdm,
+                                           ccmc,
+                                           zydm,
+                                           sbdm2,
+                                           zymc,
+                                           xzdmxg,
+                                           xzdm,
+                                           xzmc,
+                                           sfbz,
+                                           kldm,
+                                           ksklmc,
+                                           pcdm,
+                                           pcmc,
+                                           kslxdm,
+                                           kslxmc,
+                                           xkkmyq,
+                                           xkkmyqzw,
+                                           zsjhs,
+                                           bz,
+                                           km1,
+                                           km2,
+                                           km3,
+                                           zydm_new,
+                                           nf,
+                                           zsjhs_sy,
+                                           zszymc)
+        select yxdm,
+               yxdh,
+               yxdhmc,
+               szd,
+               sf985,
+               sf211,
+               sfsyl,
+               bxlxdm,
+               bxlxmc,
+               ssdm,
+               ssmc,
+               zgdm,
+               zgmc,
+               ccdm,
+               ccmc,
+               zydm,
+               sbdm2,
+               zymc,
+               xzdmxg,
+               xzdm,
+               xzmc,
+               sfbz,
+               kldm,
+               ksklmc,
+               pcdm,
+               pcmc,
+               kslxdm,
+               kslxmc,
+               xkkmyq,
+               xkkmyqzw,
+               zsjhs,
+               bz,
+               km1,
+               km2,
+               km3,
+               zydm_new,
+               nf,
+               zsjhs_sy,
+               zszymc
+        from recruit_students_plan_temp
     </insert>
     <select id="countSchool" resultType="int">
         SELECT count(distinct yxdh)
@@ -449,11 +448,13 @@
         a.bxlxmc,
         a.sfsyl,
         b.dsms,
+        b.ds,
         CASE a.sf985 WHEN 1 THEN '是' ELSE '否'
         END AS sf985Name,
         CASE a.sf211 WHEN 1 THEN '是' ELSE '否'
         END AS sf211Name,
-        concat(a.yxdh,'|',a.yxdhmc,'|',a.zydm,'|',a.zszymc,'|',FORMAT(avg(b.ckzs),4),'|',a.xzdm) AS zhcs,
+        concat(a.yxdh,'|',a.yxdhmc,'|',a.zydm,'|',a.zszymc,'|',FORMAT(avg(b.ckzs),4),'|',ifnull(a.xzdm,''),'|',ifnull(a.szd,''),'|',ifnull(a.sfbz,''),'|',a.zsjhs_sy,'|',ifnull(a.bz,''))
+        AS zhcs,
         CASE ifnull((SELECT c.id
         FROM hxzy c
         WHERE a.yxdh = c.school_code AND c.major_code = a.zydm and FORMAT(avg(b.ckzs),4)=c.reference_index and
@@ -530,11 +531,14 @@
         select *
         from recruit_students_plan
         where nf = #{year}
-              and zymc like '%类%' and bz like '%$%'
+          and zymc like '%类%'
+          and bz like '%$%'
     </select>
     <delete id="deleteRecruitStudentsPlanByBz">
-        delete from recruit_students_plan
+        delete
+        from recruit_students_plan
         where nf = #{year}
-              and zymc like '%类%' and bz like '%$%'
+          and zymc like '%类%'
+          and bz like '%$%'
     </delete>
 </mapper>
