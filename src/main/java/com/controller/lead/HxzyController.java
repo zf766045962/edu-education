@@ -11,6 +11,7 @@ import com.service.CandidateService;
 import com.service.HxzyService;
 import com.util.excel.DownLoad;
 import com.util.normal.BigDecimalUtil;
+import com.util.normal.StringUtils;
 import com.vo.HxzyVo;
 import com.vo.LoginUser;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -133,6 +134,9 @@ public class HxzyController {
         //先查询该候选志愿是否已经存在
         Integer count = hxzyService.getHxzy(hxzy);
         if (count == null || count == 0) {
+            if(StringUtils.isEmpty(hxzy.getBz())){
+                hxzy.setBz("");
+            }
             hxzyService.insertSelective(hxzy);
         }
         return Result.success(true);
