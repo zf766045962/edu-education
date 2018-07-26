@@ -110,6 +110,10 @@
                     , "majorName": v[3]
                     , "referenceIndex": v[4]
                     , "xzdm": v[5]
+                    , "szd": v[6]
+                    , "sfbz": v[7]
+                    , "zsjhs": v[8]
+                    , "bz": v[9]
                     , "status": $("#type").val()
                 }, function (data) {
                     if (data.code != '90000') {
@@ -134,6 +138,7 @@
             , url: '/candidate/detail'
             , cols: [[
                 {field: 'lock', title: '收藏志愿', width: 110, templet: '#checkboxTpl', unresize: true}
+                , {field: 'ds', title: '段数', width: 80, sort: true}
                 , {
                     field: 'yxdhmc',
                     title: '学校名称',
