@@ -12,7 +12,7 @@ import java.util.Date;
  * @since 1.0.0
  */
 public class Hxzy implements Serializable {
-    private static final long serialVersionUID = 3932217024207957775L;
+    private static final long serialVersionUID = 527241088724250183L;
     private Long id;
     /**
      * 考试Id
@@ -50,7 +50,22 @@ public class Hxzy implements Serializable {
      * 学制代码
      */
     private String xzdm;
-
+    /**
+     * 所在地
+     */
+    private String szd;
+    /**
+     * 收费标准
+     */
+    private String sfbz;
+    /**
+     * 招生计划数
+     */
+    private int zsjhs;
+    /**
+     * 备注
+     */
+    private String bz;
     private Date gmtCreate;
 
     private Date gmtModified;
@@ -149,6 +164,38 @@ public class Hxzy implements Serializable {
 
     public void setXzdm(String xzdm) {
         this.xzdm = xzdm;
+    }
+
+    public String getSzd() {
+        return szd;
+    }
+
+    public void setSzd(String szd) {
+        this.szd = szd;
+    }
+
+    public String getSfbz() {
+        return sfbz;
+    }
+
+    public void setSfbz(String sfbz) {
+        this.sfbz = sfbz;
+    }
+
+    public int getZsjhs() {
+        return zsjhs;
+    }
+
+    public void setZsjhs(int zsjhs) {
+        this.zsjhs = zsjhs;
+    }
+
+    public String getBz() {
+        return bz;
+    }
+
+    public void setBz(String bz) {
+        this.bz = bz;
     }
 
     @Override
