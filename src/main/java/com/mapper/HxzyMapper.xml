@@ -14,10 +14,14 @@
         <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
         <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
         <result column="xzdm" property="xzdm" jdbcType="VARCHAR"/>
+        <result column="szd" property="szd" jdbcType="VARCHAR"/>
+        <result column="sfbz" property="sfbz" jdbcType="VARCHAR"/>
+        <result column="zsjhs" property="zsjhs" jdbcType="INTEGER"/>
+        <result column="bz" property="bz" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, candidate_id, school_code, school_name, major_code, major_code_new, major_name, reference_index,
-        status, gmt_create, gmt_modified, xzdm
+        status, gmt_create, gmt_modified, xzdm, szd, sfbz, zsjhs, bz
     </sql>
     <insert id="insertSelective" parameterType="com.entity.Hxzy">
         insert into hxzy
@@ -58,6 +62,18 @@
             <if test="xzdm != null">
                 xzdm,
             </if>
+            <if test="szd != null">
+                szd,
+            </if>
+            <if test="sfbz != null">
+                sfbz,
+            </if>
+            <if test="zsjhs != null">
+                zsjhs,
+            </if>
+            <if test="bz != null">
+                bz,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -96,6 +112,18 @@
             <if test="xzdm != null">
                 #{xzdm,jdbcType=VARCHAR},
             </if>
+            <if test="szd != null">
+                #{szd,jdbcType=VARCHAR},
+            </if>
+            <if test="sfbz != null">
+                #{sfbz,jdbcType=VARCHAR},
+            </if>
+            <if test="zsjhs != null">
+                #{zsjhs,jdbcType=VARCHAR},
+            </if>
+            <if test="bz != null">
+                #{bz,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
     <select id="listHxzyByCandidateId" resultType="com.vo.HxzyVo">
@@ -116,7 +144,8 @@
         order by reference_index
     </select>
     <select id="deleteAllByCandidateId">
-        DELETE FROM hxzy
+        DELETE
+        FROM hxzy
         WHERE candidate_id = #{candidateId}
     </select>
     <select id="deleteByIds">
