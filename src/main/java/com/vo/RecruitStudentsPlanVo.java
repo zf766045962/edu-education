@@ -39,6 +39,8 @@ public class RecruitStudentsPlanVo extends RecruitStudentsPlan {
      */
     private String dsms;
 
+    private String ds;
+
     public BigDecimal getCkzs() {
         return ckzs;
     }
@@ -101,5 +103,13 @@ public class RecruitStudentsPlanVo extends RecruitStudentsPlan {
 
     public void setDsms(String dsms) {
         this.dsms = dsms;
+    }
+
+    public String getDs() {
+        return ds;
+    }
+
+    public void setDs(String ds) {
+        this.ds = ds;
     }
 }
