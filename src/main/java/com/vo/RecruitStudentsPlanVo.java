@@ -40,6 +40,10 @@ public class RecruitStudentsPlanVo extends RecruitStudentsPlan {
     private String dsms;
 
     private String ds;
+    /**
+     * 是否为新专业
+     */
+    private int newMajor;
 
     public BigDecimal getCkzs() {
         return ckzs;
@@ -111,5 +115,13 @@ public class RecruitStudentsPlanVo extends RecruitStudentsPlan {
 
     public void setDs(String ds) {
         this.ds = ds;
+    }
+
+    public int getNewMajor() {
+        return newMajor;
+    }
+
+    public void setNewMajor(int newMajor) {
+        this.newMajor = newMajor;
     }
 }
