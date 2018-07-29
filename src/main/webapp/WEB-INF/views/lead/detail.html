@@ -81,7 +81,7 @@
 <div class="line">
         <span class=line-title>查询结果
             (<span th:if="${type eq '1'}">冲</span><span th:if="${type eq '2'}">稳</span><span
-                    th:if="${type eq '3'}">保</span>)
+                    th:if="${type eq '3'}">保</span>)红色的专业为新专业
         </span>
 </div>
 <div class="gkwh-tb">
@@ -91,6 +91,13 @@
 <script type="text/html" id="checkboxTpl">
     <input type="checkbox" name="lock" value="{{d.zhcs}}" title="收藏" lay-filter="lockDemo" {{ d.sfsc== 1
            ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="zszymcTpl">
+    {{#  if(d.newMajor === 1){ }}
+    <span style="color: #F581B1;" title="{{d.zszymc}}">{{ d.zszymc }}</span>
+    {{#  } else { }}
+    {{ d.zszymc }}
+    {{#  } }}
 </script>
 <script>
     layui.use(['table', 'form'], function () {
@@ -150,7 +157,7 @@
                     field: 'zszymc',
                     title: '专业名称',
                     width: 140,
-                    templet: '<div><span title="{{d.zszymc}}">{{d.zszymc}}</span></div>',
+                    templet: '#zszymcTpl',
                     sort: true
                 }
                 , {field: 'ckzsName', title: '参考指数', width: 80, sort: true}
