@@ -449,6 +449,7 @@
         a.sfsyl,
         b.dsms,
         b.ds,
+        b.new_major,
         CASE a.sf985 WHEN 1 THEN '是' ELSE '否'
         END AS sf985Name,
         CASE a.sf211 WHEN 1 THEN '是' ELSE '否'
