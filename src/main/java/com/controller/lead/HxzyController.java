@@ -169,7 +169,7 @@ public class HxzyController {
         Workbook workbook = new HSSFWorkbook();
         Sheet sheet = workbook.createSheet();
         Row row = sheet.createRow(0);
-        String[] cellHead = {"学校", "学校代码", "专业", "专业代码", "参考指数", "学制", "志愿类型"};
+        String[] cellHead = {"学校", "学校代码", "专业", "专业代码", "参考指数", "学制", "志愿类型","所在地","收费标准","招生计划","备注"};
         Cell cell;
         for (int i = 0, len = cellHead.length; i < len; i++) {
             cell = row.createCell(i);
@@ -184,6 +184,10 @@ public class HxzyController {
         sheet.setColumnWidth(4, 256 * 20 + 184);
         sheet.setColumnWidth(5, 256 * 9 + 184);
         sheet.setColumnWidth(6, 256 * 9 + 184);
+        sheet.setColumnWidth(7, 256 * 9 + 184);
+        sheet.setColumnWidth(8, 256 * 9 + 184);
+        sheet.setColumnWidth(9, 256 * 9 + 184);
+        sheet.setColumnWidth(10, 256 * 31 + 184);
         for (HxzyVo aHxzyList : hxzyList) {
             row = sheet.createRow(k++);
             hxzyVo = aHxzyList;
@@ -210,6 +214,18 @@ public class HxzyController {
                         break;
                     case 6:
                         cell.setCellValue(hxzyVo.getStatusName());
+                        break;
+                    case 7:
+                        cell.setCellValue(hxzyVo.getSzd());
+                        break;
+                    case 8:
+                        cell.setCellValue(hxzyVo.getSfbz());
+                        break;
+                    case 9:
+                        cell.setCellValue(hxzyVo.getZsjhs());
+                        break;
+                    case 10:
+                        cell.setCellValue(hxzyVo.getBz());
                         break;
                     default:
                         break;
