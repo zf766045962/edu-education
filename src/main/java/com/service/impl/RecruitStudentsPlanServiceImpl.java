@@ -293,7 +293,7 @@ public class RecruitStudentsPlanServiceImpl implements RecruitStudentsPlanServic
         for (int i = 1, len = sheet.getLastRowNum(); i <= len; i++) {
             row = sheet.getRow(i);
             recruitStudentsPlan = new RecruitStudentsPlan();
-            for (int j = 0; j < 5; j++) {
+            for (int j = 0; j < 9; j++) {
                 String v = AbstractExcelUtil.getCellByType2(row.getCell(j));
                 switch (j) {
                     case 0:
@@ -308,7 +308,16 @@ public class RecruitStudentsPlanServiceImpl implements RecruitStudentsPlanServic
                         recruitStudentsPlan.setZszymc(v);
                         break;
                     case 4:
+                        recruitStudentsPlan.setXzdm(v);
+                        break;
+                    case 5:
+                        recruitStudentsPlan.setCcmc(v);
+                        break;
+                    case 6:
                         recruitStudentsPlan.setZsjhsSy(CommonUtils.convertStringToInteger(v));
+                        break;
+                    case 7:
+                        recruitStudentsPlan.setSfbz(v);
                         break;
                     default:
                         break;
