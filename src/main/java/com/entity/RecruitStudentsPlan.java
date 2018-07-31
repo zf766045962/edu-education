@@ -55,7 +55,9 @@ public class RecruitStudentsPlan implements Serializable {
     private String zgmc;
 
     private Integer ccdm;
-
+    /**
+     * 本科、专科
+     */
     private String ccmc;
     /**
      * 专业代码
