@@ -53,13 +53,14 @@
         set a.zsjhs_sy = b.zsjhs_sy
         where a.yxdh = b.yxdh
           and a.zszymc = b.zszymc
+          and a.xzdm = b.xzdm
           and a.nf = #{year}
     </update>
     <update id="updateSyzsjhsToZero">
         update recruit_students_plan a
         set zsjhs_sy = 0
         where a.nf = #{year}
-          and (yxdh, zszymc) not in (select yxdh, zszymc from recruit_students_plan_temp)
+          and (yxdh, zszymc, xzdm) not in (select yxdh, zszymc, xzdm from recruit_students_plan_temp)
     </update>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
